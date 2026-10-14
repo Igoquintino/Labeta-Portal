@@ -1,0 +1,214 @@
+import { useState } from 'react';
+import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, HelpCircle } from 'lucide-react';
+import equipmentData from '../data/equipment.json';
+import './Booking.css';
+
+export function Booking() {
+    const [activeTab, setActiveTab] = useState('catalogo'); // 'catalogo' | 'agenda'
+    const [selectedEquipment, setSelectedEquipment] = useState(null);
+
+    return (
+        <main className="booking-page" id="main-content">
+            <div className="booking-container">
+
+                {/* Cabeçalho da Página */}
+                <header className="booking-header">
+                    <div className="booking-badge">
+                        <Calendar size={16} />
+                        <span>Acesso Acadêmico</span>
+                    </div>
+                    <h1 className="booking-title">Portal de Agendamento do LABETA</h1>
+                    <p className="booking-subtitle">
+                        Ambiente exclusivo para solicitação de uso de microscópios, bancadas e equipamentos analíticos vinculados às pesquisas científicas da UFOPA.
+                    </p>
+
+                    {/* Banner de Restrição Institucional */}
+                    <aside className="restriction-banner" role="alert">
+                        <div className="restriction-icon-box">
+                            <ShieldCheck size={24} />
+                        </div>
+                        <div className="restriction-text">
+                            <strong>Acesso Restrito à Comunidade UFOPA</strong>
+                            <p>
+                                O uso das dependências e equipamentos é concedido apenas a docentes, discentes orientados e pesquisadores com projetos ativos cadastrados no LABETA. O agendamento deve ser realizado com antecedência mínima de 48 horas úteis.
+                            </p>
+                        </div>
+                    </aside>
+
+                    {/* Abas de Navegação do Portal */}
+                    <nav className="booking-nav-tabs" aria-label="Navegação do Portal de Agendamento">
+                        <button
+                            type="button"
+                            className={`booking-tab-btn ${activeTab === 'catalogo' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('catalogo')}
+                        >
+                            <Microscope size={16} />
+                            Catálogo de Equipamentos ({equipmentData.length})
+                        </button>
+                        <button
+                            type="button"
+                            className={`booking-tab-btn ${activeTab === 'agenda' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('agenda')}
+                        >
+                            <Clock size={16} />
+                            Consultar Agenda & Reservar
+                        </button>
+                    </nav>
+                </header>
+
+                {/* Conteúdo da Aba: Catálogo de Equipamentos */}
+                {activeTab === 'catalogo' && (
+                    <section className="equipment-catalog-section" aria-label="Catálogo de Equipamentos Disponíveis">
+                        <div className="equipment-grid">
+                            {equipmentData.map((eq) => {
+                                const isAvailable = eq.status === 'disponivel';
+                                return (
+                                    <article key={eq.id} className="equipment-card">
+                                        <div className="equipment-card-header">
+                                            <div className="equipment-meta">
+                                                <span className="equipment-category">{eq.category}</span>
+                                                <span className="equipment-code">{eq.code}</span>
+                                            </div>
+                                            <span className={`status-tag ${isAvailable ? 'tag-available' : 'tag-maintenance'}`}>
+                                                {isAvailable ? 'Disponível' : 'Manutenção'}
+                                            </span>
+                                        </div>
+
+                                        <h2 className="equipment-name">{eq.name}</h2>
+                                        <p className="equipment-desc">{eq.description}</p>
+
+                                        <div className="capacity-info">
+                                            <span className="capacity-label">Capacidade:</span>
+                                            <span className="capacity-value">{eq.capacity}</span>
+                                        </div>
+
+                                        <div className="requirements-box">
+                                            <span className="requirements-title">Critérios & Requisitos:</span>
+                                            <ul className="requirements-list">
+                                                {eq.requirements.map((req, idx) => (
+                                                    <li key={idx} className="requirement-item">
+                                                        <CheckCircle size={13} className="req-icon" />
+                                                        <span>{req}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            className="select-reserve-btn"
+                                            disabled={!isAvailable}
+                                            onClick={() => {
+                                                setSelectedEquipment(eq);
+                                                setActiveTab('agenda');
+                                            }}
+                                        >
+                                            {isAvailable ? 'Reservar este Equipamento' : 'Indisponível no Momento'}
+                                        </button>
+                                    </article>
+                                );
+                            })}
+                        </div>
+                    </section>
+                )}
+
+                {/* Conteúdo da Aba: Consulta de Agenda e Solicitação */}
+                {activeTab === 'agenda' && (
+                    <section className="schedule-section" aria-label="Painel de Agendamento e Horários">
+
+                        {selectedEquipment && (
+                            <div className="selected-equipment-alert">
+                                <span>Equipamento selecionado: <strong>{selectedEquipment.name}</strong> ({selectedEquipment.code})</span>
+                                <button
+                                    type="button"
+                                    className="clear-selection-btn"
+                                    onClick={() => setSelectedEquipment(null)}
+                                >
+                                    Trocar equipamento
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="schedule-layout-grid">
+
+                            {/* Calendário de Disponibilidade (Google Agenda Mock/Embed) */}
+                            <div className="calendar-panel">
+                                <div className="panel-header">
+                                    <Clock size={18} className="panel-icon" />
+                                    <div>
+                                        <h2 className="panel-title">1. Consultar Horários Ocupados</h2>
+                                        <p className="panel-subtitle">Verifique no calendário abaixo os horários com reservas já confirmadas.</p>
+                                    </div>
+                                </div>
+
+                                <div className="calendar-embed-container">
+                                    {/* Placeholder pronto para receber o iframe real do Google Calendar */}
+                                    {/* <div className="calendar-placeholder">
+                                        <Calendar size={48} className="placeholder-icon" />
+                                        
+                                        <h3>Google Agenda do LABETA</h3>
+                                        <p>O calendário sincronizado do laboratório exibe todos os turnos de bancada ocupados em tempo real.</p>
+                                        <span className="calendar-note">
+                                            *Atualizações automáticas coordenadas pela equipe técnica do LABETA.
+                                        </span>
+                                    </div> */
+
+                                        <iframe
+                                            src="https://calendar.google.com/calendar/embed?height=380&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&src=aWdvY2FzdHJvLjE1QGdtYWlsLmNvbQ&src=Y19jbGFzc3Jvb20wZmE4NmU5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21kODBjYTNmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTA4NzI2NDEyNDYxOTI1NTU4MDA3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cHQuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21mMzU1NTEwY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21yNWZiYzE1NUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTE0MzY1NTQwNzY0MDI0NTI0NTM1QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%237986cb&color=%23c26401&color=%237627bb&color=%23137333&color=%237986cb&color=%231967d2&color=%23c26401&color=%23202124&color=%231967d2"
+                                            className="calendar-iframe"
+                                            width="554"
+                                            height="380"
+                                            title="Google Agenda do LABETA - Horários de Bancada e Equipamentos"
+                                            frameBorder="0"
+                                            scrolling="no"
+                                            loading="lazy"
+                                        />
+
+                                    }
+                                </div>
+                            </div>
+
+                            {/* Painel do Formulário de Reserva */}
+                            <div className="form-panel">
+                                <div className="panel-header">
+                                    <Calendar size={18} className="panel-icon" />
+                                    <div>
+                                        <h2 className="panel-title">2. Solicitar Reserva de Horário</h2>
+                                        <p className="panel-subtitle">Preencha o formulário institucional com seus dados de pesquisa.</p>
+                                    </div>
+                                </div>
+
+                                <div className="form-action-box">
+                                    <div className="form-notice">
+                                        <HelpCircle size={18} className="notice-icon" />
+                                        <p>
+                                            As solicitações são analisadas pela coordenação. Você receberá um e-mail com a confirmação e orientações para retirada da chave/acesso à sala.
+                                        </p>
+                                    </div>
+
+                                    <ul className="booking-steps-list">
+                                        <li><strong>Passo 1:</strong> Escolha um horário livre no calendário ao lado.</li>
+                                        <li><strong>Passo 2:</strong> Tenha em mãos seu número de matrícula ou SIAPE da UFOPA.</li>
+                                        <li><strong>Passo 3:</strong> Submeta o formulário de reserva para homologação.</li>
+                                    </ul>
+
+                                    <a
+                                        href="https://forms.google.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="open-form-btn"
+                                    >
+                                        <span>Abrir Formulário de Agendamento (Google Forms)</span>
+                                        <ExternalLink size={16} />
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                )}
+
+            </div>
+        </main>
+    );
+}

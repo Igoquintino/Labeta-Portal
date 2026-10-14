@@ -1,0 +1,70 @@
+[
+    {
+        "id": "trab-01",
+        "title": "Levantamento Florístico e Distribuição Espacial de Diatomáceas Epilíticas no Baixo Rio Tapajós",
+        "status": "em_andamento",
+        "authors": "Sousa, R. C.; Silva, M. A.; Coordenação LABETA",
+        "year": "2026",
+        "category": "Taxonomia & Morfologia",
+        "summary": "Estudo taxonômico focado na identificação morfológica via microscopia óptica e eletrônica de frústulas de diatomáceas coletadas em substratos rochosos ao longo do gradiente fluvial de Santarém.",
+        "tags": [
+            "Diatomáceas",
+            "Rio Tapajós",
+            "Taxonomia",
+            "Bioindicadores"
+        ],
+        "doi": null,
+        "externalUrl": null
+    },
+    {
+        "id": "trab-02",
+        "title": "Dinâmica Sazonal do Fitoplâncton em Lagos de Várzea sob Influência do Pulso de Inundação Amazônico",
+        "status": "em_andamento",
+        "authors": "Oliveira, F. T.; Sousa, R. C.",
+        "year": "2026",
+        "category": "Ecologia Aquática",
+        "summary": "Avaliação das alterações estruturais da comunidade fitoplanctônica durante os períodos de cheia e vazante, correlacionando parâmetros físico-químicos e biomassa de clorofila-a.",
+        "tags": [
+            "Fitoplâncton",
+            "Várzea",
+            "Pulso de Inundação",
+            "Ecologia"
+        ],
+        "doi": null,
+        "externalUrl": null
+    },
+    {
+        "id": "trab-03",
+        "title": "Novas Ocorrências de Desmídias (Zygnematophyceae) em Ecossistemas Hídricos de Igarapés de Terra Firme",
+        "status": "concluidos",
+        "authors": "Sousa, R. C.; Silva, M. A.; Pereira, A. L.",
+        "year": "2025",
+        "category": "Taxonomia & Biodiversidade",
+        "summary": "Inventário de espécies de desmídias em igarapés protegidos na Floresta Nacional do Tapajós, registrando primeiras ocorrências para o estado do Pará com pranchas taxonômicas detalhadas.",
+        "tags": [
+            "Desmídias",
+            "Igarapés",
+            "FLONA Tapajós",
+            "Novos Registros"
+        ],
+        "doi": "10.1016/j.algal.2025.103450",
+        "externalUrl": "https://doi.org/10.1016/j.algal.2025.103450"
+    },
+    {
+        "id": "trab-04",
+        "title": "Bioindicação da Qualidade da Água Utilizando Associações de Microalgas em Áreas Urbanizadas de Santarém",
+        "status": "concluidos",
+        "authors": "Coordenação LABETA; Santos, K. V.",
+        "year": "2024",
+        "category": "Ecologia Aplicada",
+        "summary": "Aplicação de índices bióticos diatomológicos para diagnóstico de impacto antrópico e enriquecimento de nutrientes em cursos hídricos da malha urbana de Santarém.",
+        "tags": [
+            "Bioindicação",
+            "Qualidade da Água",
+            "Microalgas",
+            "Santarém"
+        ],
+        "doi": "10.1590/1676-0611-bn-2024-0012",
+        "externalUrl": "https://doi.org/10.1590/1676-0611-bn-2024-0012"
+    }
+]

@@ -1,0 +1,483 @@
+.booking-page {
+    width: 100%;
+    min-height: calc(100vh - 160px);
+    background-color: var(--bg-primary);
+    padding: 3.5rem 1.5rem 5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.booking-container {
+    max-width: 1100px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.booking-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.booking-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-gold);
+    background-color: rgba(214, 194, 143, 0.1);
+    border: 1px solid var(--border-gold);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+}
+
+.booking-title {
+    font-size: 2.2rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.booking-subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 720px;
+    line-height: 1.7;
+}
+
+/* Banner de Restrição Institucional */
+.restriction-banner {
+    margin-top: 1.75rem;
+    max-width: 820px;
+    width: 100%;
+    background-color: rgba(22, 91, 51, 0.22);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: left;
+}
+
+.restriction-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-brand);
+    color: var(--color-gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.restriction-text strong {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.restriction-text p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Abas de Navegação */
+.booking-nav-tabs {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    background-color: var(--bg-surface);
+    padding: 6px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.booking-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.booking-tab-btn:hover {
+    color: var(--text-main);
+}
+
+.booking-tab-btn.active {
+    background-color: var(--color-brand);
+    color: #ffffff;
+    border: 1px solid var(--border-gold);
+}
+
+/* Grid de Equipamentos */
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+}
+
+.equipment-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+    transition: border-color var(--transition-fast);
+}
+
+.equipment-card:hover {
+    border-color: var(--border-gold);
+}
+
+.equipment-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.equipment-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.equipment-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-gold);
+    font-weight: 700;
+}
+
+.equipment-code {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.status-tag {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.tag-available {
+    background-color: rgba(78, 168, 110, 0.15);
+    color: var(--color-accent);
+    border: 1px solid rgba(78, 168, 110, 0.35);
+}
+
+.tag-maintenance {
+    background-color: rgba(214, 194, 143, 0.15);
+    color: var(--color-gold);
+    border: 1px solid rgba(214, 194, 143, 0.35);
+}
+
+.equipment-name {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+
+.equipment-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.capacity-info {
+    background-color: var(--bg-primary);
+    padding: 0.6rem 0.85rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.capacity-label {
+    color: var(--text-muted);
+}
+
+.capacity-value {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.requirements-box {
+    background-color: var(--bg-surface-elevated);
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.requirements-title {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.requirements-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.req-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.select-reserve-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-brand);
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.88rem;
+    border: 1px solid var(--border-gold);
+    transition: all var(--transition-fast);
+}
+
+.select-reserve-btn:hover:not(:disabled) {
+    background-color: var(--color-accent);
+    color: var(--bg-primary);
+}
+
+.select-reserve-btn:disabled {
+    background-color: var(--bg-surface-elevated);
+    border-color: var(--border-subtle);
+    color: var(--text-muted);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Aba da Agenda & Reserva */
+.schedule-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.selected-equipment-alert {
+    background-color: rgba(22, 91, 51, 0.3);
+    border: 1px solid var(--color-gold);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.clear-selection-btn {
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.schedule-layout-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.calendar-panel,
+.form-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.panel-title {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.panel-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.calendar-embed-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.calendar-iframe {
+    width: 554px;
+    max-width: 100%;
+    /* Garante que se a tela for menor que 554px (celular), ele não quebre */
+    height: 380px;
+    border: none;
+    border-radius: var(--radius-sm);
+    display: block;
+}
+
+.placeholder-icon {
+    color: var(--color-gold);
+}
+
+.calendar-placeholder h3 {
+    font-size: 1.15rem;
+    color: var(--text-main);
+}
+
+.calendar-placeholder p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.calendar-note {
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    font-style: italic;
+}
+
+.form-action-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-notice {
+    background-color: var(--bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.notice-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.form-notice p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.booking-steps-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.booking-steps-list strong {
+    color: var(--text-main);
+}
+
+.open-form-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    background-color: var(--color-brand);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-gold);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    text-align: center;
+}
+
+.open-form-btn:hover {
+    background-color: var(--color-accent);
+    color: var(--bg-primary);
+}
+
+@media (max-width: 900px) {
+    .schedule-layout-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-title {
+        font-size: 1.75rem;
+    }
+}

@@ -1,0 +1,312 @@
+.works-page {
+    width: 100%;
+    min-height: calc(100vh - 160px);
+    background-color: var(--bg-primary);
+    padding: 3.5rem 1.5rem 5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.works-container {
+    max-width: 960px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.works-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.works-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-gold);
+    background-color: rgba(214, 194, 143, 0.1);
+    border: 1px solid var(--border-gold);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+}
+
+.works-title {
+    font-size: 2.2rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.works-subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 680px;
+    line-height: 1.7;
+}
+
+/* Barra de Busca de Trabalhos */
+.works-search-bar {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1rem;
+    transition: border-color var(--transition-fast);
+}
+
+.works-search-bar:focus-within {
+    border-color: var(--color-gold);
+}
+
+.works-search-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+}
+
+.works-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.works-search-input::placeholder {
+    color: var(--text-muted);
+}
+
+.works-clear-btn {
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.works-clear-btn:hover {
+    color: var(--text-main);
+}
+
+.no-works-box {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+}
+
+.no-works-box strong {
+    color: var(--text-main);
+}
+
+.no-works-box span {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Abas de Filtro */
+.works-filter-nav {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    background-color: var(--bg-surface);
+    padding: 6px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.filter-tab-btn:hover {
+    color: var(--text-main);
+}
+
+.filter-tab-btn.active {
+    background-color: var(--color-brand);
+    color: #ffffff;
+    border: 1px solid var(--border-gold);
+}
+
+/* Cards de Trabalhos */
+.works-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.work-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.work-card:hover {
+    border-color: var(--border-gold);
+    transform: translateY(-2px);
+}
+
+.work-card-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: var(--radius-sm);
+}
+
+.status-ongoing {
+    background-color: rgba(214, 194, 143, 0.15);
+    color: var(--color-gold);
+    border: 1px solid rgba(214, 194, 143, 0.35);
+}
+
+.status-completed {
+    background-color: rgba(78, 168, 110, 0.15);
+    color: var(--color-accent);
+    border: 1px solid rgba(78, 168, 110, 0.35);
+}
+
+.work-category {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.work-year {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.work-item-title {
+    font-size: 1.35rem;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+
+.work-authors {
+    font-size: 0.9rem;
+    color: var(--color-gold);
+}
+
+.work-authors strong {
+    color: var(--text-muted);
+}
+
+.work-summary {
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.work-tags-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+}
+
+.work-tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background-color: var(--bg-surface-elevated);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.work-card-footer {
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+.work-doi-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(214, 194, 143, 0.08);
+    border: 1px solid rgba(214, 194, 143, 0.25);
+    transition: all var(--transition-fast);
+}
+
+.work-doi-link:hover {
+    background-color: var(--color-gold);
+    color: var(--bg-primary);
+}
+
+.work-ongoing-notice {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .work-card {
+        padding: 1.25rem;
+    }
+
+    .works-title {
+        font-size: 1.75rem;
+    }
+
+    .work-item-title {
+        font-size: 1.15rem;
+    }
+
+    .work-year {
+        margin-left: 0;
+    }
+}

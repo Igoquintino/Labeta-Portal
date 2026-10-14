@@ -1,0 +1,57 @@
+[
+    {
+        "id": "coord-01",
+        "name": "Profa. Dra. Andréia Cavalcante Pereira",
+        "role": "Coordenação Geral & Docência",
+        "category": "coordenacao",
+        "researchArea": "Taxonomia e Sistemática de Diatomáceas",
+        "bio": "Docente da UFOPA com ampla experiência em florística de algas continentais amazônicas, ecologia de ecossistemas aquáticos e microscopia avançada.",
+        "email": "diatomaceas@gmail.com",
+        "lattes": "http://lattes.cnpq.br/7088943165048531",
+        "avatar": "membros/membro-coord.jpg"
+    },
+    {
+        "id": "pesq-02",
+        "name": "Dra. Pesquisadora Associada",
+        "role": "Pesquisadora Associada",
+        "category": "pesquisadores",
+        "researchArea": "Ecologia Fitoplanctônica & Qualidade da Água",
+        "bio": "Doutora em Recursos Naturais com foco na resposta das comunidades fitoplanctônicas a variações hidrológicas em rios de águas claras e barrentas.",
+        "email": "pesquisa.fitoplancton@ufopa.edu.br",
+        "lattes": "http://lattes.cnpq.br/0000000000000000",
+        "avatar": ""
+    },
+    {
+        "id": "posgrad-03",
+        "name": "Mestrando em Biociências",
+        "role": "Pós-Graduando (Mestrado)",
+        "category": "discentes",
+        "researchArea": "Diatomáceas Epilíticas de Igarapés",
+        "bio": "Biólogo investigando padrões de distribuição de diatomáceas perifíticas em substratos rochosos sob diferentes níveis de preservação ripária.",
+        "email": "mestrado.algas@ufopa.edu.br",
+        "lattes": "http://lattes.cnpq.br/0000000000000000",
+        "avatar": ""
+    },
+    {
+        "id": "ic-04",
+        "name": "Bolsista de Iniciação Científica",
+        "role": "Discente / Bolsista PIBIC",
+        "category": "discentes",
+        "researchArea": "Curadoria de Lâminas e Amostragem",
+        "bio": "Graduando em Ciências Biológicas/Sistemas na UFOPA, atuando na triagem laboratorial, montagem de lâminas permanentes e suporte à base de dados.",
+        "email": "apoio.projeto@ufopa.edu.br",
+        "lattes": "http://lattes.cnpq.br/0000000000000000",
+        "avatar": ""
+    },
+    {
+         "id": "ic-05",
+        "name": "Igo Quintino Castro Prata",
+        "role": "Discente / Voluntário",
+        "category": "discentes",
+        "researchArea": "Tecnológia da Informação",
+        "bio": "Graduando em Sistemas de informação/ Instituto de Engenharia e Geociências, estudante ingresso em 2020 na ufopa, que atua como suporte relacionado a t.i no LABETA, também ajudando em baixa escala em trabalhos pacionais em campo e dentro no laboratório.",
+        "email": "igocastro.15@gmail.com",
+        "lattes": "http://lattes.cnpq.br/8704420753293453",
+        "avatar": "membros/Aluno1.jpeg"
+    }
+]

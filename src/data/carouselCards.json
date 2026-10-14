@@ -1,0 +1,29 @@
+[
+  {
+    "id": "trabalhos",
+    "title": "Trabalhos e Pesquisas",
+    "tag": "Produção Científica",
+    "image": "/placeholders/bancada.svg",
+    "description": "Consulte as publicações em periódicos, pesquisas concluídas e projetos em andamento sobre a diversidade de algas na Amazônia.",
+    "link": "/trabalhos",
+    "ctaText": "Ver Todos os Trabalhos"
+  },
+  {
+    "id": "pessoas",
+    "title": "Corpo de Investigação",
+    "tag": "Equipe e Membros",
+    "image": "/placeholders/microscopio.svg",
+    "description": "Conheça os docentes, discentes e pesquisadores vinculados ao LABETA, incluindo percursos acadêmicos e links para o Currículo Lattes.",
+    "link": "/pessoas",
+    "ctaText": "Conhecer a Equipe"
+  },
+  {
+    "id": "laboratorio",
+    "title": "Infraestrutura e Espaço",
+    "tag": "Instalações Físicas",
+    "image": "/placeholders/campo.svg",
+    "description": "Explore as bancadas analíticas, microscópios ópticos, lupas de precisão e a rotina diária das atividades no campus da UFOPA.",
+    "link": "/laboratorio",
+    "ctaText": "Explorar o Laboratório"
+  }
+]

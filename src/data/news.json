@@ -1,0 +1,60 @@
+{
+    "announcements": [
+        {
+            "id": "com-01",
+            "title": "Abertura de Seleção para Bolsista PIBIC/UFOPA",
+            "date": "28/09/2026",
+            "tag": "Edital & Oportunidade",
+            "content": "O LABETA abre processo seletivo para 1 (uma) vaga de Iniciação Científica no projeto de taxonomia de diatomáceas de igarapés. Interessados devem enviar histórico acadêmico até 10/10."
+        },
+        {
+            "id": "com-02",
+            "title": "Calibração e Manutenção Preventiva dos Microscópios",
+            "date": "20/09/2026",
+            "tag": "Manutenção Técnica",
+            "content": "Informamos que nos dias 05 e 06 de outubro as estações de microscopia óptica passarão por revisão ótica e limpeza técnica especializada. O agendamento estará suspenso nessas datas."
+        },
+        {
+            "id": "com-03",
+            "title": "Recepção de Amostras da Expedição Baixo Amazonas",
+            "date": "12/09/2026",
+            "tag": "Rotina do Laboratório",
+            "content": "Concluída a triagem das primeiras 45 amostras fitoplanctônicas coletadas na campanha de águas baixas. O material já está disponível para preparo e oxidação na bancada 2."
+        }
+    ],
+    "scientificRadar": [
+        {
+            "id": "rad-01",
+            "title": "New diatom species from oligotrophic blackwater rivers in the Tapajós basin",
+            "journal": "Phytotaxa",
+            "year": "2026",
+            "date": "Setembro de 2026",
+            "authors": "Sousa, R. C., et al.",
+            "doi": "10.11646/phytotaxa.582.1.3",
+            "url": "https://doi.org/10.11646/phytotaxa.582.1.3",
+            "summary": "Descrição de duas novas espécies de diatomáceas do gênero Eunotia coletadas em rios de águas pretas, com ultraestrutura analisada por microscopia de varredura."
+        },
+        {
+            "id": "rad-02",
+            "title": "Seasonal shifts in phytoplankton functional groups in Amazonian floodplain lakes",
+            "journal": "Hydrobiologia",
+            "year": "2025",
+            "date": "Novembro de 2025",
+            "authors": "Oliveira, F. T., Silva, M. A.",
+            "doi": "10.1007/s10750-025-05112-x",
+            "url": "https://doi.org/10.1007/s10750-025-05112-x",
+            "summary": "Estudo sobre como as variações de conectividade hídrica entre o rio e os lagos de várzea determinam a dominância de cianobactérias e diatomáceas."
+        },
+        {
+            "id": "rad-03",
+            "title": "Periphytic algae as bioindicators of environmental integrity in Eastern Amazon streams",
+            "journal": "Ecological Indicators",
+            "year": "2025",
+            "date": "Agosto de 2025",
+            "authors": "Coordenação LABETA, et al.",
+            "doi": "10.1016/j.ecolind.2025.110245",
+            "url": "https://doi.org/10.1016/j.ecolind.2025.110245",
+            "summary": "Proposta de índice multimétrico baseado em assembleias de algas bentônicas para monitoramento de impactos agrícolas e perda de mata ripária."
+        }
+    ]
+}

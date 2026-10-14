@@ -1,0 +1,62 @@
+{
+  "spaces": [
+    {
+      "id": "bancadas-triagem",
+      "title": "Bancadas de Triagem e Amostragem",
+      "tag": "Preparação Inicial",
+      "description": "Área destinada ao recebimento, fracionamento e triagem de amostras fitoplanctônicas e perifíticas coletadas nas bacias amazônicas.",
+      "equipment": [
+        "Lupas estereoscópicas binoculares",
+        "Cubas de sedimentação e câmaras de Utermöhl",
+        "Vidrarias volumétricas e frascaria calibrada"
+      ],
+      "image": "/placeholders/bancada.svg"
+    },
+    {
+      "id": "sala-microscopia",
+      "title": "Sala de Microscopia e Fotodocumentação",
+      "tag": "Ambiente Climatizado",
+      "description": "Espaço de iluminação controlada para análise de frústulas de diatomáceas, contagem de fitoplâncton e captura de microfotografias em alta resolução.",
+      "equipment": [
+        "Microscópios ópticos de campo claro e contraste de fase",
+        "Sistemas de captura digital acoplados",
+        "Estações com software de micrometria e análise morfométrica"
+      ],
+      "image": "/placeholders/microscopio.svg"
+    },
+    {
+      "id": "capela-oxidacao",
+      "title": "Área de Oxidação Química e Digestão",
+      "tag": "Uso Restrito & EPIs",
+      "description": "Ambiente específico para digestão de matéria orgânica com peróxido de hidrogênio (H₂O₂) e ácidos a quente, viabilizando o estudo de frústulas limpas.",
+      "equipment": [
+        "Capela de exaustão química de gases",
+        "Chapas aquecedoras termorreguladas",
+        "Equipamentos de proteção respiratória e química pesada"
+      ],
+      "image": "/placeholders/campo.svg"
+    }
+  ],
+  "protocols": [
+    {
+      "step": "01",
+      "name": "Coleta e Fixação de Campo",
+      "details": "Amostragem em rios e igarapés utilizando redes de plâncton (20 µm) e raspagem de perifíton em substratos naturais, com fixação imediata em solução de Transeau ou Lugol."
+    },
+    {
+      "step": "02",
+      "name": "Oxidação Ácida de Amostras",
+      "details": "Remoção de conteúdo celular e matéria orgânica via digestão química controlada em capela de exaustão, expondo a ornamentação de sílica das diatomáceas."
+    },
+    {
+      "step": "03",
+      "name": "Montagem de Lâminas Permanentes",
+      "details": "Confecção de lâminas definitivas utilizando meio de montagem com alto índice de refração (Naphrax, IR ≈ 1,73) sob aquecimento para secagem e fixação permanente."
+    },
+    {
+      "step": "04",
+      "name": "Identificação e Registro Curatorial",
+      "details": "Análise das estrias e campos de poros ao microscópio óptico sob lente de imersão (1000x), confrontação bibliográfica e tombamento na coleção de lâminas do LABETA."
+    }
+  ]
+}

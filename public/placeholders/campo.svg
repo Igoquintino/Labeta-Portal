@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgField" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0C120F"/>
+      <stop offset="50%" stop-color="#14241B"/>
+      <stop offset="100%" stop-color="#165B33"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bgField)"/>
+  <!-- River Waves and Sun Rays -->
+  <g fill="none" stroke="rgba(214, 194, 143, 0.15)" stroke-width="2">
+    <path d="M 0 340 Q 200 310, 400 340 T 800 340"/>
+    <path d="M 0 380 Q 200 350, 400 380 T 800 380"/>
+    <path d="M 0 420 Q 200 390, 400 420 T 800 420"/>
+  </g>
+  <!-- Field Boat & Plankton Net -->
+  <g fill="none" stroke="#D6C28F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Small Boat Profile -->
+    <path d="M 280 340 L 520 340 C 490 380, 310 380, 280 340 Z" fill="rgba(22, 91, 51, 0.4)"/>
+    <line x1="420" y1="280" x2="420" y2="340"/>
+    <!-- Plankton Cone Net -->
+    <path d="M 500 350 L 560 370 L 550 395 L 490 365 Z" stroke="#4EA86E"/>
+    <circle cx="560" cy="385" r="8" fill="#4EA86E"/>
+    <!-- Sun Horizon -->
+    <circle cx="400" cy="220" r="50" stroke="#D6C28F" stroke-width="2" stroke-dasharray="5,5"/>
+  </g>
+  <text x="400" y="475" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="22" font-weight="700" fill="#F4F7F4" text-anchor="middle" letter-spacing="3">COLETA EM CAMPO</text>
+  <text x="400" y="510" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" fill="#A0B0A4" text-anchor="middle" letter-spacing="1">EXPEDIÇÕES LIMNOLÓGICAS NAS BACIAS DO TAPAJÓS</text>
+</svg>

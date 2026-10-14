@@ -1,0 +1,124 @@
+.rules-section {
+    width: 100%;
+    background-color: var(--bg-primary);
+    padding: 4rem 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.rules-container {
+    max-width: 900px;
+    width: 100%;
+}
+
+.rules-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.rules-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-gold);
+    background-color: rgba(214, 194, 143, 0.1);
+    border: 1px solid var(--border-gold);
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+}
+
+.rules-title {
+    font-size: 2rem;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.rules-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.rules-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.rule-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    transition: border-color var(--transition-fast);
+}
+
+.rule-card[open] {
+    border-color: var(--border-gold);
+    background-color: var(--bg-surface-elevated);
+}
+
+.rule-summary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.rule-summary::-webkit-details-marker {
+    display: none;
+}
+
+.rule-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rule-icon-box.danger {
+    background-color: rgba(200, 60, 60, 0.15);
+    color: #ff6b6b;
+}
+
+.rule-icon-box.warning {
+    background-color: rgba(214, 194, 143, 0.15);
+    color: var(--color-gold);
+}
+
+.rule-icon-box.neutral {
+    background-color: rgba(78, 168, 110, 0.15);
+    color: var(--color-accent);
+}
+
+.rule-name {
+    font-size: 1.15rem;
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.rule-body {
+    margin-top: 1rem;
+    padding-left: 3.4rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.rule-body strong {
+    color: var(--text-main);
+}
+
+.rule-list {
+    margin-top: 0.5rem;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}

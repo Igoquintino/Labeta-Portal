@@ -1,0 +1,56 @@
+[
+    {
+        "id": "eq-micro-01",
+        "name": "Microscópio Óptico de Campo Claro / Contraste de Fase",
+        "category": "Microscopia",
+        "code": "LABETA-MIC-01",
+        "status": "disponivel",
+        "capacity": "1 pesquisador por turno",
+        "description": "Equipamento para análise e contagem de frústulas de diatomáceas e fitoplâncton. Objetivas de até 100x (imersão).",
+        "requirements": [
+            "Treinamento prévio em microscopia óptica",
+            "Obrigatório o uso de óleo de imersão padrão",
+            "Limpeza imediata da lente com papel óptico após o uso"
+        ]
+    },
+    {
+        "id": "eq-lupa-02",
+        "name": "Lupa Estereoscópica Binocular",
+        "category": "Triagem",
+        "code": "LABETA-LUP-02",
+        "status": "disponivel",
+        "capacity": "1 pesquisador por turno",
+        "description": "Indicada para triagem morfológica, separação inicial de macroalgas e perifíton em substratos naturais.",
+        "requirements": [
+            "Manter iluminação desligada ao finalizar a sessão",
+            "Uso exclusivo em bancada seca"
+        ]
+    },
+    {
+        "id": "eq-estufa-03",
+        "name": "Estufa de Secagem e Esterilização Digital",
+        "category": "Processamento",
+        "code": "LABETA-EST-03",
+        "status": "disponivel",
+        "capacity": "Compartilhado (bandejas identificadas)",
+        "description": "Utilizada para evaporação controlada de lâminas montadas com Naphrax e secagem de vidrarias limpas.",
+        "requirements": [
+            "Identificação obrigatória com etiqueta térmica e data",
+            "Respeitar o limite máximo de 70°C para montagem de resinas"
+        ]
+    },
+    {
+        "id": "eq-capela-04",
+        "name": "Capela de Exaustão de Gases Químicos",
+        "category": "Digestão Química",
+        "code": "LABETA-CAP-04",
+        "status": "manutencao_preventiva",
+        "capacity": "1 pesquisador com acompanhamento",
+        "description": "Área para oxidação ácida a quente e manipulação de reagentes voláteis ou oxidantes concentrados.",
+        "requirements": [
+            "Uso obrigatório de todos os EPIs (óculos, luvas nitrílicas e máscara)",
+            "Ligação do exaustor 5 minutos antes de iniciar qualquer reação",
+            "Descarte de resíduos em bombonas específicas"
+        ]
+    }
+]
