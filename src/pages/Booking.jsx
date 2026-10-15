@@ -191,15 +191,26 @@ export function Booking() {
 
                                 <div className="calendar-embed-container">
                                     <iframe
-                                        src="https://calendar.google.com/calendar/embed?height=380&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&src=aWdvY2FzdHJvLjE1QGdtYWlsLmNvbQ&src=Y19jbGFzc3Jvb20wZmE4NmU5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21kODBjYTNmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTA4NzI2NDEyNDYxOTI1NTU4MDA3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cHQuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21mMzU1NTEwY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21yNWZiYzE1NUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTE0MzY1NTQwNzY0MDI0NTI0NTM1QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%237986cb&color=%23c26401&color=%237627bb&color=%23137333&color=%237986cb&color=%231967d2&color=%23c26401&color=%23202124&color=%231967d2"
+                                        src="https://calendar.google.com/calendar/embed?height=400&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&color=%23165B33&color=%23D6C28F"
                                         className="calendar-iframe"
-                                        width="554"
-                                        height="380"
+                                        width="100%"
+                                        height="400"
                                         title="Google Agenda do LABETA - Horários de Bancada e Equipamentos"
-                                        frameBorder="0"
-                                        scrolling="no"
                                         loading="lazy"
                                     />
+                                </div>
+                                <div className="calendar-footer-hint">
+                                    <span>Visualização otimizada para web. </span>
+                                    <a
+                                        href="https://calendar.google.com/calendar/embed?ctz=America%2FSao_Paulo"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="calendar-direct-link"
+                                        aria-label="Abrir Google Agenda do laboratório em nova aba"
+                                    >
+                                        <span>Abrir agenda em tela cheia</span>
+                                        <ExternalLink size={13} aria-hidden="true" />
+                                    </a>
                                 </div>
                             </div>
 

@@ -377,13 +377,35 @@
 }
 
 .calendar-iframe {
-    width: 554px;
-    max-width: 100%;
-    /* Garante que se a tela for menor que 554px (celular), ele não quebre */
-    height: 380px;
+    width: 100%;
+    min-height: 400px;
     border: none;
     border-radius: var(--radius-sm);
     display: block;
+}
+
+.calendar-footer-hint {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.calendar-direct-link {
+    color: var(--color-gold);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+}
+
+.calendar-direct-link:hover {
+    color: var(--color-green-light);
 }
 
 .placeholder-icon {
