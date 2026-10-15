@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Users, GraduationCap, FlaskConical, ExternalLink, Mail, Award, Plus, Edit2, Trash2 } from 'lucide-react';
+import { Users, GraduationCap, FlaskConical, ExternalLink, Mail, Award, Plus, Edit2, Trash2, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
 import membersData from '../data/members.json';
@@ -122,27 +122,35 @@ export function People() {
                 {/* Grid de Membros */}
                 <section className="people-grid" aria-label="Lista de integrantes do laboratório">
                     {filteredMembers.map((member) => (
-                        <article key={member.id} className="person-card" style={{ position: 'relative' }}>
+                        <article key={member.id} className="person-card">
 
-                            {/* Botões de Ação do Card (Admin) */}
+                            {/* Barra de Ações Administrativas do Card */}
                             {isAdmin && (
                                 <div className="card-admin-actions">
-                                    <button
-                                        type="button"
-                                        className="admin-action-btn edit"
-                                        title={`Editar dados de ${member.name}`}
-                                        onClick={() => openEditModal(member)}
-                                    >
-                                        <Edit2 size={14} />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="admin-action-btn delete"
-                                        title={`Remover ${member.name}`}
-                                        onClick={() => openDeleteModal(member)}
-                                    >
-                                        <Trash2 size={14} />
-                                    </button>
+                                    <span className="card-admin-badge">
+                                        <ShieldCheck size={12} aria-hidden="true" />
+                                        <span>Gestão</span>
+                                    </span>
+                                    <div className="card-admin-btns-group">
+                                        <button
+                                            type="button"
+                                            className="admin-action-btn edit"
+                                            title={`Editar dados de ${member.name}`}
+                                            onClick={() => openEditModal(member)}
+                                        >
+                                            <Edit2 size={13} />
+                                            <span>Editar</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="admin-action-btn delete"
+                                            title={`Remover ${member.name}`}
+                                            onClick={() => openDeleteModal(member)}
+                                        >
+                                            <Trash2 size={13} />
+                                            <span>Excluir</span>
+                                        </button>
+                                    </div>
                                 </div>
                             )}
 

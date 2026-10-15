@@ -102,27 +102,35 @@ export function Lab() {
 
                         <div className="spaces-cards-list">
                             {labData.spaces.map((space) => (
-                                <article key={space.id} className="space-card" style={{ position: 'relative' }}>
+                                <article key={space.id} className="space-card">
 
-                                    {/* Botões de Ação do Card de Espaço (Admin) */}
+                                    {/* Barra de Ações Administrativas do Card */}
                                     {isAdmin && (
                                         <div className="card-admin-actions">
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn edit"
-                                                title={`Editar: ${space.title}`}
-                                                onClick={() => openEditModal('space', space)}
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn delete"
-                                                title={`Excluir: ${space.title}`}
-                                                onClick={() => openDeleteModal(space)}
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
+                                            <span className="card-admin-badge">
+                                                <ShieldCheck size={12} aria-hidden="true" />
+                                                <span>Gestão</span>
+                                            </span>
+                                            <div className="card-admin-btns-group">
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
+                                                    title={`Editar: ${space.title}`}
+                                                    onClick={() => openEditModal('space', space)}
+                                                >
+                                                    <Edit2 size={13} />
+                                                    <span>Editar</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
+                                                    title={`Excluir: ${space.title}`}
+                                                    onClick={() => openDeleteModal(space)}
+                                                >
+                                                    <Trash2 size={13} />
+                                                    <span>Excluir</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
 
@@ -136,7 +144,7 @@ export function Lab() {
                                     <div className="space-equipment-box">
                                         <span className="equipment-list-label">Principais Equipamentos:</span>
                                         <ul className="equipment-items-list">
-                                            {space.equipments.map((eq, idx) => (
+                                            {(space.equipment || space.equipments || []).map((eq, idx) => (
                                                 <li key={idx} className="equipment-item">
                                                     <Check size={13} className="check-icon" aria-hidden="true" />
                                                     <span>{eq}</span>
@@ -161,27 +169,35 @@ export function Lab() {
 
                         <div className="timeline-wrapper">
                             {labData.protocols.map((proto) => (
-                                <article key={proto.step} className="protocol-step-card" style={{ position: 'relative' }}>
+                                <article key={proto.step} className="protocol-step-card">
 
-                                    {/* Botões de Ação da Etapa Metodológica (Admin) */}
+                                    {/* Barra de Ações Administrativas do Card */}
                                     {isAdmin && (
                                         <div className="card-admin-actions">
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn edit"
-                                                title={`Editar etapa: ${proto.name}`}
-                                                onClick={() => openEditModal('protocol', proto)}
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn delete"
-                                                title={`Excluir etapa: ${proto.name}`}
-                                                onClick={() => openDeleteModal(proto)}
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
+                                            <span className="card-admin-badge">
+                                                <ShieldCheck size={12} aria-hidden="true" />
+                                                <span>Gestão</span>
+                                            </span>
+                                            <div className="card-admin-btns-group">
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
+                                                    title={`Editar etapa: ${proto.name}`}
+                                                    onClick={() => openEditModal('protocol', proto)}
+                                                >
+                                                    <Edit2 size={13} />
+                                                    <span>Editar</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
+                                                    title={`Excluir etapa: ${proto.name}`}
+                                                    onClick={() => openDeleteModal(proto)}
+                                                >
+                                                    <Trash2 size={13} />
+                                                    <span>Excluir</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
 

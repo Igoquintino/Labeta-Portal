@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { BookOpen, Clock, CheckCircle2, ExternalLink, Tag, Search, X, Plus, Edit2, Trash2 } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle2, ExternalLink, Tag, Search, X, Plus, Edit2, Trash2, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
 import worksData from '../data/works.json';
@@ -156,27 +156,35 @@ export function Works() {
                         filteredWorks.map((work) => {
                             const isOngoing = work.status === 'em_andamento';
                             return (
-                                <article key={work.id} className="work-card" style={{ position: 'relative' }}>
+                                <article key={work.id} className="work-card">
 
-                                    {/* Botões de Ação do Card (Admin) */}
+                                    {/* Barra de Ações Administrativas do Card */}
                                     {isAdmin && (
                                         <div className="card-admin-actions">
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn edit"
-                                                title={`Editar: ${work.title}`}
-                                                onClick={() => openEditModal(work)}
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn delete"
-                                                title={`Excluir: ${work.title}`}
-                                                onClick={() => openDeleteModal(work)}
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
+                                            <span className="card-admin-badge">
+                                                <ShieldCheck size={12} aria-hidden="true" />
+                                                <span>Gestão</span>
+                                            </span>
+                                            <div className="card-admin-btns-group">
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
+                                                    title={`Editar: ${work.title}`}
+                                                    onClick={() => openEditModal(work)}
+                                                >
+                                                    <Edit2 size={13} />
+                                                    <span>Editar</span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
+                                                    title={`Excluir: ${work.title}`}
+                                                    onClick={() => openDeleteModal(work)}
+                                                >
+                                                    <Trash2 size={13} />
+                                                    <span>Excluir</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
 

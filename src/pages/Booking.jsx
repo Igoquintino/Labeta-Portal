@@ -135,27 +135,35 @@ export function Booking() {
                             {equipmentData.map((eq) => {
                                 const isAvailable = eq.status === 'disponivel';
                                 return (
-                                    <article key={eq.id} className="equipment-card" style={{ position: 'relative' }}>
+                                    <article key={eq.id} className="equipment-card">
 
-                                        {/* Botões de Ação do Card (Admin) */}
+                                        {/* Barra de Ações Administrativas do Card */}
                                         {isAdmin && (
                                             <div className="card-admin-actions">
-                                                <button
-                                                    type="button"
-                                                    className="admin-action-btn edit"
-                                                    title={`Editar: ${eq.name}`}
-                                                    onClick={() => openEditModal(eq)}
-                                                >
-                                                    <Edit2 size={14} />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="admin-action-btn delete"
-                                                    title={`Excluir: ${eq.name}`}
-                                                    onClick={() => openDeleteModal(eq)}
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
+                                                <span className="card-admin-badge">
+                                                    <ShieldCheck size={12} aria-hidden="true" />
+                                                    <span>Gestão</span>
+                                                </span>
+                                                <div className="card-admin-btns-group">
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn edit"
+                                                        title={`Editar: ${eq.name}`}
+                                                        onClick={() => openEditModal(eq)}
+                                                    >
+                                                        <Edit2 size={13} />
+                                                        <span>Editar</span>
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn delete"
+                                                        title={`Excluir: ${eq.name}`}
+                                                        onClick={() => openDeleteModal(eq)}
+                                                    >
+                                                        <Trash2 size={13} />
+                                                        <span>Excluir</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
 

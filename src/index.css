@@ -32,45 +32,77 @@
   transform: translateY(-1px);
 }
 
-/* Contentor flutuante de ações em cada Card */
+/* Barra de Ações Administrativas por Card (In-flow, sem sobreposição de elementos) */
 .card-admin-actions {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   display: flex;
-  gap: 6px;
-  background-color: rgba(12, 18, 15, 0.85);
-  backdrop-filter: blur(4px);
-  padding: 4px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px 10px;
+  background-color: rgba(20, 36, 27, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(214, 194, 143, 0.25);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
-  z-index: 10;
+  margin-bottom: 0.85rem;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.card-admin-actions:hover {
+  border-color: rgba(214, 194, 143, 0.45);
+  background-color: rgba(20, 36, 27, 0.9);
+}
+
+.card-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-gold);
+}
+
+.card-admin-btns-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .admin-action-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
   transition: all var(--transition-fast);
 }
 
 .admin-action-btn.edit {
   color: var(--color-gold);
+  border-color: rgba(214, 194, 143, 0.3);
+  background-color: rgba(214, 194, 143, 0.08);
 }
 
 .admin-action-btn.edit:hover {
-  background-color: rgba(214, 194, 143, 0.2);
+  background-color: var(--color-gold);
+  color: var(--bg-primary);
 }
 
 .admin-action-btn.delete {
-  color: #E07A5F;
+  color: var(--color-danger, #E07A5F);
+  border-color: rgba(224, 122, 95, 0.3);
+  background-color: rgba(224, 122, 95, 0.08);
 }
 
 .admin-action-btn.delete:hover {
-  background-color: rgba(224, 122, 95, 0.2);
+  background-color: var(--color-danger, #E07A5F);
+  color: #ffffff;
 }
+

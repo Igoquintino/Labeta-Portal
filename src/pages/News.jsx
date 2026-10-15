@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles, Plus, Edit2, Trash2, Search, Eye, X } from 'lucide-react';
+import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles, Plus, Edit2, Trash2, Search, Eye, X, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
 import newsData from '../data/news.json';
@@ -150,26 +150,34 @@ export function News() {
                                 </div>
                             ) : (
                                 filteredAnnouncements.map((item) => (
-                                    <article key={item.id} className="news-card announcement-card" style={{ position: 'relative' }}>
-                                        {/* Botões de Ação do Card (Admin) */}
+                                    <article key={item.id} className="news-card announcement-card">
+                                        {/* Barra de Ações Administrativas do Card */}
                                         {isAdmin && (
                                             <div className="card-admin-actions">
-                                                <button
-                                                    type="button"
-                                                    className="admin-action-btn edit"
-                                                    title="Editar comunicado"
-                                                    onClick={() => openEditModal('announcement', item)}
-                                                >
-                                                    <Edit2 size={14} />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="admin-action-btn delete"
-                                                    title="Excluir comunicado"
-                                                    onClick={() => openDeleteModal(item)}
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
+                                                <span className="card-admin-badge">
+                                                    <ShieldCheck size={12} aria-hidden="true" />
+                                                    <span>Gestão</span>
+                                                </span>
+                                                <div className="card-admin-btns-group">
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn edit"
+                                                        title="Editar comunicado"
+                                                        onClick={() => openEditModal('announcement', item)}
+                                                    >
+                                                        <Edit2 size={13} />
+                                                        <span>Editar</span>
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn delete"
+                                                        title="Excluir comunicado"
+                                                        onClick={() => openDeleteModal(item)}
+                                                    >
+                                                        <Trash2 size={13} />
+                                                        <span>Excluir</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
 
@@ -223,26 +231,34 @@ export function News() {
                                 </div>
                             ) : (
                                 filteredRadar.map((article) => (
-                                    <article key={article.id} className="news-card radar-card" style={{ position: 'relative' }}>
-                                        {/* Botões de Ação do Card (Admin) */}
+                                    <article key={article.id} className="news-card radar-card">
+                                        {/* Barra de Ações Administrativas do Card */}
                                         {isAdmin && (
                                             <div className="card-admin-actions">
-                                                <button
-                                                    type="button"
-                                                    className="admin-action-btn edit"
-                                                    title="Editar artigo do radar"
-                                                    onClick={() => openEditModal('radar', article)}
-                                                >
-                                                    <Edit2 size={14} />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    className="admin-action-btn delete"
-                                                    title="Excluir artigo"
-                                                    onClick={() => openDeleteModal(article)}
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
+                                                <span className="card-admin-badge">
+                                                    <ShieldCheck size={12} aria-hidden="true" />
+                                                    <span>Gestão</span>
+                                                </span>
+                                                <div className="card-admin-btns-group">
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn edit"
+                                                        title="Editar artigo do radar"
+                                                        onClick={() => openEditModal('radar', article)}
+                                                    >
+                                                        <Edit2 size={13} />
+                                                        <span>Editar</span>
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn delete"
+                                                        title="Excluir artigo"
+                                                        onClick={() => openDeleteModal(article)}
+                                                    >
+                                                        <Trash2 size={13} />
+                                                        <span>Excluir</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
 
