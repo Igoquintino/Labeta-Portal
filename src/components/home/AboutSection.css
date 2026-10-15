@@ -66,8 +66,10 @@
 }
 
 .about-text {
-    text-align: justify;
-    text-justify: inter-word;
+    text-align: left;
+    line-height: 1.8;
+    max-width: 68ch;
+    margin: 0 auto;
 }
 
 @media (max-width: 768px) {
