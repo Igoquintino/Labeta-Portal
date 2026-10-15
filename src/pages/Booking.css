@@ -503,3 +503,82 @@
         font-size: 1.75rem;
     }
 }
+
+
+/* ==========================================================================
+   GUIA VISUAL DE TURNOS DE BANCADA
+   ========================================================================== */
+.shifts-guide-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.shift-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.shift-card:hover {
+    border-color: var(--color-gold);
+    transform: translateY(-2px);
+}
+
+.shift-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shift-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.shift-badge.morning {
+    color: var(--color-gold);
+    background-color: rgba(214, 194, 143, 0.15);
+    border: 1px solid rgba(214, 194, 143, 0.3);
+}
+
+.shift-badge.afternoon {
+    color: var(--color-accent);
+    background-color: rgba(78, 168, 110, 0.15);
+    border: 1px solid rgba(78, 168, 110, 0.3);
+}
+
+.shift-badge.night {
+    color: #5bb3ff;
+    background-color: rgba(91, 179, 255, 0.15);
+    border: 1px solid rgba(91, 179, 255, 0.3);
+}
+
+.shift-hours {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.shift-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .shifts-guide-panel {
+        grid-template-columns: 1fr;
+    }
+}

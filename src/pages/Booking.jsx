@@ -232,6 +232,31 @@ export function Booking() {
                             </div>
                         )}
 
+                        {/* Guia Visual de Turnos de Bancada */}
+                        <div className="shifts-guide-panel" aria-label="Guia de Turnos de Bancada">
+                            <div className="shift-card">
+                                <div className="shift-header">
+                                    <span className="shift-badge morning">Manhã</span>
+                                    <span className="shift-hours">08:00 – 12:00</span>
+                                </div>
+                                <p className="shift-desc">Triagem, preparação e lavagem de amostras ficológicas.</p>
+                            </div>
+                            <div className="shift-card">
+                                <div className="shift-header">
+                                    <span className="shift-badge afternoon">Tarde</span>
+                                    <span className="shift-hours">14:00 – 18:00</span>
+                                </div>
+                                <p className="shift-desc">Microscopia óptica avançada, contagem celular e capturas digitais.</p>
+                            </div>
+                            <div className="shift-card">
+                                <div className="shift-header">
+                                    <span className="shift-badge night">Noite</span>
+                                    <span className="shift-hours">18:00 – 21:00</span>
+                                </div>
+                                <p className="shift-desc">Oxidação química, estufa e processos de longa duração (Pós-graduação).</p>
+                            </div>
+                        </div>
+
                         <div className="schedule-layout-grid">
 
                             {/* Calendário de Disponibilidade */}
