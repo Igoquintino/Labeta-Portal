@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, BookOpen, Users, ShieldAlert, Newspaper, ArrowRight, Microscope } from 'lucide-react';
+import { Search, X, BookOpen, Users, ShieldAlert, Newspaper, ArrowRight, Microscope, ShieldCheck } from 'lucide-react';
 import membersData from '../../data/members.json';
 import worksData from '../../data/works.json';
 import newsData from '../../data/news.json';
@@ -145,13 +145,25 @@ export function SpotlightSearch({ isOpen, onClose }) {
   // Filtro reativo em tempo real
   const filteredResults = useMemo(() => {
     const normalizedQuery = query.toLowerCase().trim();
-    return searchableBase.filter((item) => {
+    const results = searchableBase.filter((item) => {
       const matchCategory = activeCategory === 'Todos' || item.category === activeCategory;
       const matchText = normalizedQuery === '' ||
         item.title.toLowerCase().includes(normalizedQuery) ||
         item.subtitle.toLowerCase().includes(normalizedQuery);
       return matchCategory && matchText;
     });
+
+    if (normalizedQuery === ':admin' || normalizedQuery === 'admin') {
+      results.unshift({
+        id: 'admin-entry',
+        category: 'Gestão',
+        title: 'Painel Administrativo do LABETA',
+        subtitle: 'Acesso restrito para coordenação e equipe autorizada',
+        link: '/admin'
+      });
+    }
+
+    return results;
   }, [searchableBase, query, activeCategory]);
 
   const handleSelect = (link) => {
@@ -186,6 +198,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
       case 'Equipamentos': return <Microscope size={14} aria-hidden="true" />;
       case 'Biossegurança': return <ShieldAlert size={14} aria-hidden="true" />;
       case 'Notícias': return <Newspaper size={14} aria-hidden="true" />;
+      case 'Gestão': return <ShieldCheck size={14} aria-hidden="true" />;
       default: return <Search size={14} aria-hidden="true" />;
     }
   };
