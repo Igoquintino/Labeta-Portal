@@ -222,6 +222,112 @@
     color: var(--bg-primary);
 }
 
+/* Barra de Busca de Notícias & Radar */
+.news-search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 580px;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.news-search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.news-search-input {
+    width: 100%;
+    padding: 0.75rem 2.75rem 0.75rem 2.75rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    color: var(--text-main);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.news-search-input:focus {
+    border-color: var(--border-gold);
+    box-shadow: 0 0 0 3px rgba(214, 194, 143, 0.15);
+}
+
+.news-search-input::placeholder {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.news-search-clear {
+    position: absolute;
+    right: 0.85rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.news-search-clear:hover {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Botão de Leitura Integral */
+.read-announcement-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--color-accent);
+    background: transparent;
+    border: 1px solid rgba(78, 168, 110, 0.25);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.read-announcement-btn:hover {
+    background-color: rgba(78, 168, 110, 0.15);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+/* Estado Vazio de Busca */
+.news-empty-state {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    background-color: var(--bg-surface);
+    border: 1px dashed var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.announcement-reading-view {
+    display: flex;
+    flex-direction: column;
+}
+
+.announcement-full-body {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
 @media (max-width: 900px) {
     .news-grid-columns {
         grid-template-columns: 1fr;

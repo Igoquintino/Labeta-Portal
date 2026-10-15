@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles, Plus, Edit2, Trash2 } from 'lucide-react';
+import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles, Plus, Edit2, Trash2, Search, Eye, X } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
 import newsData from '../data/news.json';
@@ -8,6 +8,8 @@ import './News.css';
 export function News() {
     const { isAdmin } = useAuth();
     const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', type: '', data: null });
+    const [readingAnnouncement, setReadingAnnouncement] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const openCreateModal = (type) => {
         setModalConfig({
@@ -46,6 +48,27 @@ export function News() {
         closeModal();
     };
 
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
+    const filteredAnnouncements = newsData.announcements.filter((item) => {
+        if (!normalizedQuery) return true;
+        return (
+            item.title?.toLowerCase().includes(normalizedQuery) ||
+            item.content?.toLowerCase().includes(normalizedQuery) ||
+            item.tag?.toLowerCase().includes(normalizedQuery)
+        );
+    });
+
+    const filteredRadar = newsData.scientificRadar.filter((article) => {
+        if (!normalizedQuery) return true;
+        return (
+            article.title?.toLowerCase().includes(normalizedQuery) ||
+            article.summary?.toLowerCase().includes(normalizedQuery) ||
+            article.journal?.toLowerCase().includes(normalizedQuery) ||
+            article.authors?.toLowerCase().includes(normalizedQuery)
+        );
+    });
+
     return (
         <main className="news-page" id="main-content">
             <div className="news-container">
@@ -60,6 +83,29 @@ export function News() {
                     <p className="news-subtitle">
                         Acompanhe comunicados operacionais do laboratório e os principais artigos científicos publicados sobre algas e ecossistemas aquáticos amazônicos.
                     </p>
+
+                    {/* Barra de Busca e Filtragem Rápida */}
+                    <div className="news-search-wrapper" role="search">
+                        <Search size={18} className="news-search-icon" aria-hidden="true" />
+                        <input
+                            type="search"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Buscar comunicados ou artigos por palavras-chave, tag, autores..."
+                            className="news-search-input"
+                            aria-label="Filtrar comunicados e artigos científicos"
+                        />
+                        {searchQuery && (
+                            <button
+                                type="button"
+                                className="news-search-clear"
+                                onClick={() => setSearchQuery('')}
+                                aria-label="Limpar pesquisa"
+                            >
+                                <X size={16} />
+                            </button>
+                        )}
+                    </div>
                 </header>
 
                 {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
@@ -98,45 +144,63 @@ export function News() {
                         </div>
 
                         <div className="cards-stack">
-                            {newsData.announcements.map((item) => (
-                                <article key={item.id} className="news-card announcement-card" style={{ position: 'relative' }}>
-                                    {/* Botões de Ação do Card (Admin) */}
-                                    {isAdmin && (
-                                        <div className="card-admin-actions">
+                            {filteredAnnouncements.length === 0 ? (
+                                <div className="news-empty-state">
+                                    <p>Nenhum comunicado encontrado{searchQuery ? ` para "${searchQuery}"` : ''}.</p>
+                                </div>
+                            ) : (
+                                filteredAnnouncements.map((item) => (
+                                    <article key={item.id} className="news-card announcement-card" style={{ position: 'relative' }}>
+                                        {/* Botões de Ação do Card (Admin) */}
+                                        {isAdmin && (
+                                            <div className="card-admin-actions">
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
+                                                    title="Editar comunicado"
+                                                    onClick={() => openEditModal('announcement', item)}
+                                                >
+                                                    <Edit2 size={14} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
+                                                    title="Excluir comunicado"
+                                                    onClick={() => openDeleteModal(item)}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        <div className="news-card-meta">
+                                            <span className="news-tag announcement-tag">
+                                                <Tag size={12} />
+                                                {item.tag}
+                                            </span>
+                                            <span className="news-date">
+                                                <Calendar size={13} />
+                                                {item.date}
+                                            </span>
+                                        </div>
+
+                                        <h3 className="news-item-title">{item.title}</h3>
+                                        <p className="news-item-content">{item.content}</p>
+
+                                        <div className="news-card-footer">
                                             <button
                                                 type="button"
-                                                className="admin-action-btn edit"
-                                                title="Editar comunicado"
-                                                onClick={() => openEditModal('announcement', item)}
+                                                className="read-announcement-btn"
+                                                onClick={() => setReadingAnnouncement(item)}
+                                                aria-label={`Ler comunicado completo: ${item.title}`}
                                             >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn delete"
-                                                title="Excluir comunicado"
-                                                onClick={() => openDeleteModal(item)}
-                                            >
-                                                <Trash2 size={14} />
+                                                <Eye size={13} />
+                                                <span>Ler na íntegra</span>
                                             </button>
                                         </div>
-                                    )}
-
-                                    <div className="news-card-meta">
-                                        <span className="news-tag announcement-tag">
-                                            <Tag size={12} />
-                                            {item.tag}
-                                        </span>
-                                        <span className="news-date">
-                                            <Calendar size={13} />
-                                            {item.date}
-                                        </span>
-                                    </div>
-
-                                    <h3 className="news-item-title">{item.title}</h3>
-                                    <p className="news-item-content">{item.content}</p>
-                                </article>
-                            ))}
+                                    </article>
+                                ))
+                            )}
                         </div>
                     </section>
 
@@ -153,64 +217,106 @@ export function News() {
                         </div>
 
                         <div className="cards-stack">
-                            {newsData.scientificRadar.map((article) => (
-                                <article key={article.id} className="news-card radar-card" style={{ position: 'relative' }}>
-                                    {/* Botões de Ação do Card (Admin) */}
-                                    {isAdmin && (
-                                        <div className="card-admin-actions">
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn edit"
-                                                title="Editar artigo do radar"
-                                                onClick={() => openEditModal('radar', article)}
-                                            >
-                                                <Edit2 size={14} />
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn delete"
-                                                title="Excluir artigo"
-                                                onClick={() => openDeleteModal(article)}
-                                            >
-                                                <Trash2 size={14} />
-                                            </button>
+                            {filteredRadar.length === 0 ? (
+                                <div className="news-empty-state">
+                                    <p>Nenhum artigo encontrado{searchQuery ? ` para "${searchQuery}"` : ''}.</p>
+                                </div>
+                            ) : (
+                                filteredRadar.map((article) => (
+                                    <article key={article.id} className="news-card radar-card" style={{ position: 'relative' }}>
+                                        {/* Botões de Ação do Card (Admin) */}
+                                        {isAdmin && (
+                                            <div className="card-admin-actions">
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
+                                                    title="Editar artigo do radar"
+                                                    onClick={() => openEditModal('radar', article)}
+                                                >
+                                                    <Edit2 size={14} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
+                                                    title="Excluir artigo"
+                                                    onClick={() => openDeleteModal(article)}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        <div className="news-card-meta">
+                                            <span className="news-tag radar-tag">
+                                                <FileText size={12} />
+                                                {article.journal} ({article.year})
+                                            </span>
+                                            <span className="news-date">
+                                                <Calendar size={13} />
+                                                {article.date}
+                                            </span>
                                         </div>
-                                    )}
 
-                                    <div className="news-card-meta">
-                                        <span className="news-tag radar-tag">
-                                            <FileText size={12} />
-                                            {article.journal} ({article.year})
-                                        </span>
-                                        <span className="news-date">
-                                            <Calendar size={13} />
-                                            {article.date}
-                                        </span>
-                                    </div>
+                                        <h3 className="news-item-title radar-title">{article.title}</h3>
+                                        <p className="radar-authors"><strong>Autores:</strong> {article.authors}</p>
+                                        <p className="news-item-content">{article.summary}</p>
 
-                                    <h3 className="news-item-title radar-title">{article.title}</h3>
-                                    <p className="radar-authors"><strong>Autores:</strong> {article.authors}</p>
-                                    <p className="news-item-content">{article.summary}</p>
-
-                                    <div className="news-card-footer">
-                                        <a
-                                            href={article.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="doi-badge-link"
-                                            title="Acessar publicação no periódico (abre em nova aba)"
-                                            aria-label={`Acessar artigo ${article.title} com DOI ${article.doi} (abre em nova aba)`}
-                                        >
-                                            <span>Acessar Artigo (DOI: {article.doi})</span>
-                                            <ExternalLink size={13} />
-                                        </a>
-                                    </div>
-                                </article>
-                            ))}
+                                        <div className="news-card-footer">
+                                            <a
+                                                href={article.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="doi-badge-link"
+                                                title="Acessar publicação no periódico (abre em nova aba)"
+                                                aria-label={`Acessar artigo ${article.title} com DOI ${article.doi} (abre em nova aba)`}
+                                            >
+                                                <span>Acessar Artigo (DOI: {article.doi})</span>
+                                                <ExternalLink size={13} />
+                                            </a>
+                                        </div>
+                                    </article>
+                                ))
+                            )}
                         </div>
                     </section>
 
                 </div>
+
+                {/* Modal de Leitura Integral de Comunicado */}
+                <AdminModal
+                    isOpen={!!readingAnnouncement}
+                    onClose={() => setReadingAnnouncement(null)}
+                    title={readingAnnouncement?.title || 'Comunicado Oficial'}
+                >
+                    {readingAnnouncement && (
+                        <div className="announcement-reading-view">
+                            <div className="news-card-meta" style={{ marginBottom: '1.25rem' }}>
+                                <span className="news-tag announcement-tag">
+                                    <Tag size={12} />
+                                    {readingAnnouncement.tag}
+                                </span>
+                                <span className="news-date">
+                                    <Calendar size={13} />
+                                    {readingAnnouncement.date}
+                                </span>
+                            </div>
+                            <div className="announcement-full-body">
+                                <p style={{ fontSize: '0.98rem', lineHeight: 1.8, color: 'var(--text-main)', whiteSpace: 'pre-line' }}>
+                                    {readingAnnouncement.content}
+                                </p>
+                            </div>
+                            <div className="admin-form-actions" style={{ marginTop: '1.75rem', justifyContent: 'flex-end' }}>
+                                <button
+                                    type="button"
+                                    className="admin-btn-primary"
+                                    onClick={() => setReadingAnnouncement(null)}
+                                >
+                                    Fechar Leitura
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </AdminModal>
 
                 {/* Modal Administrativo Unificado */}
                 <AdminModal
