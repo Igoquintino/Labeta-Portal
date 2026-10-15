@@ -152,7 +152,7 @@ export function People() {
                             </div>
 
                             <footer className="person-card-footer">
-                                {member.lattes && !member.lattes.includes('0000000000000000') ? (
+                                {member.lattes && member.lattes.startsWith('http') && !member.lattes.includes('0000000000000000') ? (
                                     <a
                                         href={member.lattes}
                                         target="_blank"
@@ -165,7 +165,12 @@ export function People() {
                                         <ExternalLink size={13} aria-hidden="true" />
                                     </a>
                                 ) : (
-                                    <span className="person-lattes-link disabled" title="Currículo Lattes em atualização">
+                                    <span 
+                                        className="person-lattes-link disabled" 
+                                        title="Currículo Lattes em atualização"
+                                        aria-disabled="true"
+                                        role="note"
+                                    >
                                         <span>Lattes em atualização</span>
                                     </span>
                                 )}
