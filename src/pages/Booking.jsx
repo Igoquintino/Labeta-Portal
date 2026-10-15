@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, HelpCircle, Plus, Edit2, Trash2, Settings } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { AdminModal } from '../components/admin/AdminModal';
 import equipmentData from '../data/equipment.json';
 import './Booking.css';
 
@@ -8,6 +9,52 @@ export function Booking() {
     const { isAdmin } = useAuth();
     const [activeTab, setActiveTab] = useState('catalogo'); // 'catalogo' | 'agenda'
     const [selectedEquipment, setSelectedEquipment] = useState(null);
+    const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', type: '', data: null });
+
+    const openCreateModal = () => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Cadastrar Novo Equipamento Analítico',
+            type: 'create',
+            data: null
+        });
+    };
+
+    const openConfigModal = () => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Configurações de Agenda e Formulário',
+            type: 'config',
+            data: null
+        });
+    };
+
+    const openEditModal = (eq) => {
+        setModalConfig({
+            isOpen: true,
+            title: `Editar: ${eq.name}`,
+            type: 'edit',
+            data: eq
+        });
+    };
+
+    const openDeleteModal = (eq) => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Confirmar Remoção de Equipamento',
+            type: 'delete',
+            data: eq
+        });
+    };
+
+    const closeModal = () => {
+        setModalConfig({ isOpen: false, title: '', type: '', data: null });
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        closeModal();
+    };
 
     return (
         <main className="booking-page" id="main-content">
@@ -45,7 +92,7 @@ export function Booking() {
                             onClick={() => setActiveTab('catalogo')}
                         >
                             <Microscope size={16} />
-                            Catálogo de Equipamentos ({equipmentData.length})
+                            <span>1. Catálogo de Equipamentos ({equipmentData.length})</span>
                         </button>
                         <button
                             type="button"
@@ -53,7 +100,7 @@ export function Booking() {
                             onClick={() => setActiveTab('agenda')}
                         >
                             <Clock size={16} />
-                            Consultar Agenda & Reservar
+                            <span>2. Agenda e Solicitação</span>
                         </button>
                     </nav>
                 </header>
@@ -62,18 +109,18 @@ export function Booking() {
                 {isAdmin && (
                     <div className="admin-toolbar" style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
                         {activeTab === 'catalogo' ? (
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className="admin-btn-primary"
-                                onClick={() => alert("Abrir modal: Cadastrar Novo Equipamento")}
+                                onClick={openCreateModal}
                             >
                                 <Plus size={16} /> Novo Equipamento
                             </button>
                         ) : (
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className="admin-btn-primary"
-                                onClick={() => alert("Abrir modal: Configurar Links da Agenda e Formulário")}
+                                onClick={openConfigModal}
                             >
                                 <Settings size={16} /> Configurar Agenda / Formulário
                             </button>
@@ -89,23 +136,23 @@ export function Booking() {
                                 const isAvailable = eq.status === 'disponivel';
                                 return (
                                     <article key={eq.id} className="equipment-card" style={{ position: 'relative' }}>
-                                        
+
                                         {/* Botões de Ação do Card (Admin) */}
                                         {isAdmin && (
                                             <div className="card-admin-actions">
-                                                <button 
-                                                    type="button" 
-                                                    className="admin-action-btn edit" 
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
                                                     title={`Editar: ${eq.name}`}
-                                                    onClick={() => alert(`Editar equipamento: ${eq.name}`)}
+                                                    onClick={() => openEditModal(eq)}
                                                 >
                                                     <Edit2 size={14} />
                                                 </button>
-                                                <button 
-                                                    type="button" 
-                                                    className="admin-action-btn delete" 
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
                                                     title={`Excluir: ${eq.name}`}
-                                                    onClick={() => alert(`Excluir equipamento ID: ${eq.id}`)}
+                                                    onClick={() => openDeleteModal(eq)}
                                                 >
                                                     <Trash2 size={14} />
                                                 </button>
@@ -117,24 +164,30 @@ export function Booking() {
                                                 <span className="equipment-category">{eq.category}</span>
                                                 <span className="equipment-code">{eq.code}</span>
                                             </div>
-                                            <span className={`status-tag ${isAvailable ? 'tag-available' : 'tag-maintenance'}`}>
-                                                {isAvailable ? 'Disponível' : 'Manutenção'}
+                                            <span className={`status-badge ${isAvailable ? 'available' : 'maintenance'}`}>
+                                                {isAvailable ? 'Disponível' : 'Em Manutenção'}
                                             </span>
                                         </div>
 
                                         <h2 className="equipment-name">{eq.name}</h2>
                                         <p className="equipment-desc">{eq.description}</p>
 
-                                        <div className="capacity-info">
-                                            <span className="capacity-label">Capacidade:</span>
-                                            <span className="capacity-value">{eq.capacity}</span>
+                                        <div className="specs-list">
+                                            <div className="spec-row">
+                                                <span className="spec-label">Capacidade Máxima:</span>
+                                                <span className="spec-value">{eq.capacity}</span>
+                                            </div>
+                                            <div className="spec-row">
+                                                <span className="spec-label">Localização:</span>
+                                                <span className="spec-value">{eq.location}</span>
+                                            </div>
                                         </div>
 
                                         <div className="requirements-box">
-                                            <span className="requirements-title">Critérios & Requisitos:</span>
-                                            <ul className="requirements-list">
+                                            <span className="req-title">Requisitos de Biossegurança:</span>
+                                            <ul className="req-list">
                                                 {eq.requirements.map((req, idx) => (
-                                                    <li key={idx} className="requirement-item">
+                                                    <li key={idx} className="req-item">
                                                         <CheckCircle size={13} className="req-icon" />
                                                         <span>{req}</span>
                                                     </li>
@@ -142,17 +195,19 @@ export function Booking() {
                                             </ul>
                                         </div>
 
-                                        <button
-                                            type="button"
-                                            className="select-reserve-btn"
-                                            disabled={!isAvailable}
-                                            onClick={() => {
-                                                setSelectedEquipment(eq);
-                                                setActiveTab('agenda');
-                                            }}
-                                        >
-                                            {isAvailable ? 'Reservar este Equipamento' : 'Indisponível no Momento'}
-                                        </button>
+                                        <div className="equipment-card-footer">
+                                            <button
+                                                type="button"
+                                                className="select-equipment-btn"
+                                                onClick={() => {
+                                                    setSelectedEquipment(eq);
+                                                    setActiveTab('agenda');
+                                                }}
+                                            >
+                                                <span>Ver Disponibilidade na Agenda</span>
+                                                <ExternalLink size={14} />
+                                            </button>
+                                        </div>
                                     </article>
                                 );
                             })}
@@ -160,19 +215,19 @@ export function Booking() {
                     </section>
                 )}
 
-                {/* Conteúdo da Aba: Consulta de Agenda e Solicitação */}
+                {/* Conteúdo da Aba: Calendário e Formulário */}
                 {activeTab === 'agenda' && (
                     <section className="schedule-section" aria-label="Painel de Agendamento e Horários">
 
                         {selectedEquipment && (
                             <div className="selected-equipment-alert">
-                                <span>Equipamento selecionado: <strong>{selectedEquipment.name}</strong> ({selectedEquipment.code})</span>
+                                <span>Equipamento pré-selecionado: <strong>{selectedEquipment.name}</strong> ({selectedEquipment.code})</span>
                                 <button
                                     type="button"
                                     className="clear-selection-btn"
                                     onClick={() => setSelectedEquipment(null)}
                                 >
-                                    Trocar equipamento
+                                    Limpar seleção
                                 </button>
                             </div>
                         )}
@@ -253,6 +308,106 @@ export function Booking() {
                         </div>
                     </section>
                 )}
+
+                {/* Modal Administrativo Unificado */}
+                <AdminModal
+                    isOpen={modalConfig.isOpen}
+                    onClose={closeModal}
+                    title={modalConfig.title}
+                >
+                    {modalConfig.type === 'delete' ? (
+                        <div className="admin-delete-box">
+                            <p className="admin-delete-notice">
+                                Tem certeza de que deseja remover o equipamento <strong className="admin-delete-highlight">"{modalConfig.data?.name}"</strong>?
+                            </p>
+                            <div className="admin-form-actions">
+                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button type="button" className="admin-btn-submit" style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }} onClick={closeModal}>
+                                    Confirmar Exclusão
+                                </button>
+                            </div>
+                        </div>
+                    ) : modalConfig.type === 'config' ? (
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">URL Embed do Google Calendar</label>
+                                <input
+                                    type="url"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue="https://calendar.google.com/calendar/embed?..."
+                                />
+                            </div>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Link do Google Formulários</label>
+                                <input
+                                    type="url"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue="https://forms.google.com"
+                                />
+                            </div>
+                            <div className="admin-form-actions">
+                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button type="submit" className="admin-btn-submit">Salvar Configurações</button>
+                            </div>
+                        </form>
+                    ) : (
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Nome do Equipamento</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.name || ''}
+                                    placeholder="Ex.: Microscópio Óptico Trinocular..."
+                                />
+                            </div>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Código Patrimonial / Sigla</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.code || ''}
+                                    placeholder="Ex.: LABETA-MIC-01"
+                                />
+                            </div>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Categoria</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.category || ''}
+                                    placeholder="Ex.: Microscopia, Bancada, Esterilização..."
+                                />
+                            </div>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Status de Uso</label>
+                                <select className="admin-form-select" defaultValue={modalConfig.data?.status || 'disponivel'}>
+                                    <option value="disponivel">Disponível</option>
+                                    <option value="manutencao">Em Manutenção</option>
+                                </select>
+                            </div>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Descrição e Capacidade</label>
+                                <textarea
+                                    rows="3"
+                                    required
+                                    className="admin-form-textarea"
+                                    defaultValue={modalConfig.data?.description || ''}
+                                    placeholder="Especificações de lentes, aumento e uso..."
+                                />
+                            </div>
+                            <div className="admin-form-actions">
+                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button type="submit" className="admin-btn-submit">Salvar Equipamento</button>
+                            </div>
+                        </form>
+                    )}
+                </AdminModal>
 
             </div>
         </main>

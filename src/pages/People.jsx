@@ -1,48 +1,77 @@
 import { useState, useMemo } from 'react';
 import { Users, GraduationCap, FlaskConical, ExternalLink, Mail, Award, Plus, Edit2, Trash2 } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { AdminModal } from '../components/admin/AdminModal';
 import membersData from '../data/members.json';
 import './People.css';
 
 export function People() {
     const { isAdmin } = useAuth();
     const [activeCategory, setActiveCategory] = useState('todos');
+    const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', type: '', data: null });
+
+    const openCreateModal = () => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Cadastrar Novo Integrante da Equipe',
+            type: 'create',
+            data: null
+        });
+    };
+
+    const openEditModal = (member) => {
+        setModalConfig({
+            isOpen: true,
+            title: `Editar: ${member.name}`,
+            type: 'edit',
+            data: member
+        });
+    };
+
+    const openDeleteModal = (member) => {
+        setModalConfig({
+            isOpen: true,
+            title: 'Confirmar Remoção de Integrante',
+            type: 'delete',
+            data: member
+        });
+    };
+
+    const closeModal = () => {
+        setModalConfig({ isOpen: false, title: '', type: '', data: null });
+    };
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        closeModal();
+    };
 
     const filteredMembers = useMemo(() => {
         if (activeCategory === 'todos') return membersData;
-        return membersData.filter((member) => member.category === activeCategory);
+        return membersData.filter((m) => m.category === activeCategory);
     }, [activeCategory]);
 
-    const countCoord = membersData.filter(m => m.category === 'coordenacao').length;
-    const countPesq = membersData.filter(m => m.category === 'pesquisadores').length;
-    const countDisc = membersData.filter(m => m.category === 'discentes').length;
-
-    const getCategoryLabel = (cat) => {
-        switch (cat) {
-            case 'coordenacao': return 'Coordenação';
-            case 'pesquisadores': return 'Pesquisadores';
-            case 'discentes': return 'Discentes & Bolsistas';
-            default: return 'Integrante';
-        }
-    };
+    const countCoord = useMemo(() => membersData.filter((m) => m.category === 'coordenacao').length, []);
+    const countPesq = useMemo(() => membersData.filter((m) => m.category === 'pesquisadores').length, []);
+    const countDisc = useMemo(() => membersData.filter((m) => m.category === 'discentes').length, []);
 
     return (
         <main className="people-page" id="main-content">
             <div className="people-container">
 
-                {/* Cabeçalho da Página */}
+                {/* Cabeçalho */}
                 <header className="people-header">
                     <div className="people-badge">
                         <Users size={16} />
-                        <span>Corpo Científico</span>
+                        <span>Recursos Humanos &amp; Pesquisa</span>
                     </div>
-                    <h1 className="people-title">Equipe e Pesquisadores</h1>
+                    <h1 className="people-title">Equipe &amp; Pesquisadores</h1>
                     <p className="people-subtitle">
-                        Conheça os docentes, pós-graduandos e discentes responsáveis pelo avanço dos estudos ecológicos e taxonômicos de algas no LABETA / UFOPA.
+                        Conheça o corpo docente, pós-graduandos, pesquisadores e bolsistas que compõem o quadro científico do LABETA.
                     </p>
 
-                    {/* Filtro por Categoria */}
-                    <nav className="people-filter-nav" aria-label="Filtrar integrantes por função">
+                    {/* Filtros por Categoria */}
+                    <nav className="people-category-nav" aria-label="Filtrar por papel acadêmico">
                         <button
                             type="button"
                             className={`people-filter-btn ${activeCategory === 'todos' ? 'active' : ''}`}
@@ -72,7 +101,7 @@ export function People() {
                             onClick={() => setActiveCategory('discentes')}
                         >
                             <GraduationCap size={15} />
-                            Discentes & Bolsistas ({countDisc})
+                            Discentes &amp; Bolsistas ({countDisc})
                         </button>
                     </nav>
                 </header>
@@ -80,10 +109,10 @@ export function People() {
                 {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
                 {isAdmin && (
                     <div className="admin-toolbar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             className="admin-btn-primary"
-                            onClick={() => alert("Abrir modal: Cadastrar Novo Membro")}
+                            onClick={openCreateModal}
                         >
                             <Plus size={16} /> Novo Membro
                         </button>
@@ -98,19 +127,19 @@ export function People() {
                             {/* Botões de Ação do Card (Admin) */}
                             {isAdmin && (
                                 <div className="card-admin-actions">
-                                    <button 
-                                        type="button" 
-                                        className="admin-action-btn edit" 
+                                    <button
+                                        type="button"
+                                        className="admin-action-btn edit"
                                         title={`Editar dados de ${member.name}`}
-                                        onClick={() => alert(`Editar membro: ${member.name}`)}
+                                        onClick={() => openEditModal(member)}
                                     >
                                         <Edit2 size={14} />
                                     </button>
-                                    <button 
-                                        type="button" 
-                                        className="admin-action-btn delete" 
+                                    <button
+                                        type="button"
+                                        className="admin-action-btn delete"
                                         title={`Remover ${member.name}`}
-                                        onClick={() => alert(`Excluir membro ID: ${member.id}`)}
+                                        onClick={() => openDeleteModal(member)}
                                     >
                                         <Trash2 size={14} />
                                     </button>
@@ -128,24 +157,21 @@ export function People() {
                                             height="60"
                                         />
                                     ) : (
-                                        <div className="person-avatar-placeholder">
+                                        <div className="person-avatar-initial">
                                             {member.name.charAt(0)}
                                         </div>
                                     )}
                                 </figure>
-                                <div className="person-identity">
-                                    <span className={`person-category-badge category-${member.category}`}>
-                                        {getCategoryLabel(member.category)}
-                                    </span>
+                                <div>
+                                    <span className="person-role-tag">{member.role}</span>
                                     <h2 className="person-name">{member.name}</h2>
-                                    <span className="person-role">{member.role}</span>
                                 </div>
                             </div>
 
-                            <div className="person-body">
-                                <div className="person-field-box">
-                                    <span className="field-label">Linha de Pesquisa:</span>
-                                    <p className="field-value">{member.researchArea}</p>
+                            <div className="person-card-body">
+                                <div className="person-area-box">
+                                    <span className="area-label">Linha de Pesquisa:</span>
+                                    <p className="area-value">{member.researchArea}</p>
                                 </div>
 
                                 <p className="person-bio">{member.bio}</p>
@@ -165,8 +191,8 @@ export function People() {
                                         <ExternalLink size={13} aria-hidden="true" />
                                     </a>
                                 ) : (
-                                    <span 
-                                        className="person-lattes-link disabled" 
+                                    <span
+                                        className="person-lattes-link disabled"
                                         title="Currículo Lattes em atualização"
                                         aria-disabled="true"
                                         role="note"
@@ -188,6 +214,97 @@ export function People() {
                         </article>
                     ))}
                 </section>
+
+                {/* Modal Administrativo Unificado */}
+                <AdminModal
+                    isOpen={modalConfig.isOpen}
+                    onClose={closeModal}
+                    title={modalConfig.title}
+                >
+                    {modalConfig.type === 'delete' ? (
+                        <div className="admin-delete-box">
+                            <p className="admin-delete-notice">
+                                Tem certeza de que deseja remover <strong className="admin-delete-highlight">"{modalConfig.data?.name}"</strong> da listagem do laboratório?
+                            </p>
+                            <div className="admin-form-actions">
+                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button type="button" className="admin-btn-submit" style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }} onClick={closeModal}>
+                                    Confirmar Exclusão
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <form onSubmit={handleFormSubmit}>
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Nome Completo</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.name || ''}
+                                    placeholder="Ex.: Dr. Nome do Pesquisador..."
+                                />
+                            </div>
+
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Papel / Categoria</label>
+                                <select className="admin-form-select" defaultValue={modalConfig.data?.category || 'discentes'}>
+                                    <option value="coordenacao">Coordenação</option>
+                                    <option value="pesquisadores">Pesquisador Associado</option>
+                                    <option value="discentes">Discente / Bolsista</option>
+                                </select>
+                            </div>
+
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Cargo / Função Exibida</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.role || ''}
+                                    placeholder="Ex.: Pós-Graduando (Mestrado)"
+                                />
+                            </div>
+
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Linha de Pesquisa</label>
+                                <input
+                                    type="text"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.researchArea || ''}
+                                    placeholder="Ex.: Diatomáceas de Água Doce..."
+                                />
+                            </div>
+
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">E-mail de Contato</label>
+                                <input
+                                    type="email"
+                                    required
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.email || ''}
+                                    placeholder="usuario@ufopa.edu.br"
+                                />
+                            </div>
+
+                            <div className="admin-form-group">
+                                <label className="admin-form-label">Link do Currículo Lattes</label>
+                                <input
+                                    type="url"
+                                    className="admin-form-input"
+                                    defaultValue={modalConfig.data?.lattes || ''}
+                                    placeholder="http://lattes.cnpq.br/..."
+                                />
+                            </div>
+
+                            <div className="admin-form-actions">
+                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button type="submit" className="admin-btn-submit">Salvar Integrante</button>
+                            </div>
+                        </form>
+                    )}
+                </AdminModal>
 
             </div>
         </main>
