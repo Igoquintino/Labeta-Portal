@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../services/supabase';
+import { supabase, isSupabaseConfigured } from '../services/supabase';
 import { AuthContext } from './authContext';
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(isSupabaseConfigured);
 
     // Consulta se o e-mail está na whitelist do banco
     const checkAdminStatus = async (userEmail) => {
-        if (!userEmail) {
+        if (!userEmail || !isSupabaseConfigured) {
             setIsAdmin(false);
             return;
         }
@@ -32,6 +32,10 @@ export function AuthProvider({ children }) {
     };
 
     useEffect(() => {
+        if (!isSupabaseConfigured) {
+            return;
+        }
+
         // 1. Verifica se já existe uma sessão salva no navegador
         supabase.auth.getSession().then(({ data: { session } }) => {
             const currentUser = session?.user ?? null;
@@ -39,6 +43,8 @@ export function AuthProvider({ children }) {
             if (currentUser?.email) {
                 checkAdminStatus(currentUser.email);
             }
+            setLoading(false);
+        }).catch(() => {
             setLoading(false);
         });
 
@@ -54,7 +60,7 @@ export function AuthProvider({ children }) {
             setLoading(false);
         });
 
-        return () => subscription.unsubscribe();
+        return () => subscription?.unsubscribe?.();
     }, []);
 
     // Envia o link mágico para o e-mail
