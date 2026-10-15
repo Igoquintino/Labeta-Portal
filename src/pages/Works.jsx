@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { BookOpen, Clock, CheckCircle2, ExternalLink, Tag, Search, X } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle2, ExternalLink, Tag, Search, X, Plus, Edit2, Trash2 } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 import worksData from '../data/works.json';
 import './Works.css';
 
 export function Works() {
+    const { isAdmin } = useAuth();
     const [filter, setFilter] = useState('todos'); // 'todos' | 'em_andamento' | 'concluidos'
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -89,13 +91,49 @@ export function Works() {
                     </nav>
                 </header>
 
+                {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
+                {isAdmin && (
+                    <div className="admin-toolbar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+                        <button 
+                            type="button" 
+                            className="admin-btn-primary"
+                            onClick={() => alert("Abrir modal: Cadastrar Novo Trabalho / Projeto")}
+                        >
+                            <Plus size={16} /> Novo Trabalho / Projeto
+                        </button>
+                    </div>
+                )}
+
                 {/* Listagem de Artigos e Trabalhos */}
                 <section className="works-list" aria-label="Lista de trabalhos científicos">
                     {filteredWorks.length > 0 ? (
                         filteredWorks.map((work) => {
                             const isOngoing = work.status === 'em_andamento';
                             return (
-                                <article key={work.id} className="work-card">
+                                <article key={work.id} className="work-card" style={{ position: 'relative' }}>
+                                    
+                                    {/* Botões de Ação do Card (Admin) */}
+                                    {isAdmin && (
+                                        <div className="card-admin-actions">
+                                            <button 
+                                                type="button" 
+                                                className="admin-action-btn edit" 
+                                                title={`Editar: ${work.title}`}
+                                                onClick={() => alert(`Editar trabalho: ${work.title}`)}
+                                            >
+                                                <Edit2 size={14} />
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                className="admin-action-btn delete" 
+                                                title={`Excluir: ${work.title}`}
+                                                onClick={() => alert(`Excluir trabalho ID: ${work.id}`)}
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="work-card-top">
                                         <span className={`status-pill ${isOngoing ? 'status-ongoing' : 'status-completed'}`}>
                                             {isOngoing ? <Clock size={13} aria-hidden="true" /> : <CheckCircle2 size={13} aria-hidden="true" />}

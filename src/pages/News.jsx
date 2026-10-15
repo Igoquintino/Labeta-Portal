@@ -1,8 +1,11 @@
-import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles } from 'lucide-react';
+import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles, Plus, Edit2, Trash2 } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 import newsData from '../data/news.json';
 import './News.css';
 
 export function News() {
+    const { isAdmin } = useAuth();
+
     return (
         <main className="news-page" id="main-content">
             <div className="news-container">
@@ -18,6 +21,26 @@ export function News() {
                         Acompanhe comunicados operacionais do laboratório e os principais artigos científicos publicados sobre algas e ecossistemas aquáticos amazônicos.
                     </p>
                 </header>
+
+                {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
+                {isAdmin && (
+                    <div className="admin-toolbar" style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+                        <button
+                            type="button"
+                            className="admin-btn-primary"
+                            onClick={() => alert("Abrir modal: Novo Comunicado")}
+                        >
+                            <Plus size={16} /> Novo Comunicado
+                        </button>
+                        <button
+                            type="button"
+                            className="admin-btn-primary"
+                            onClick={() => alert("Abrir modal: Novo Artigo Radar")}
+                        >
+                            <Plus size={16} /> Novo Artigo Radar
+                        </button>
+                    </div>
+                )}
 
                 {/* Layout em Duas Colunas */}
                 <div className="news-grid-columns">
@@ -36,7 +59,29 @@ export function News() {
 
                         <div className="cards-stack">
                             {newsData.announcements.map((item) => (
-                                <article key={item.id} className="news-card announcement-card">
+                                <article key={item.id} className="news-card announcement-card" style={{ position: 'relative' }}>
+                                    {/* Botões de Ação do Card (Admin) */}
+                                    {isAdmin && (
+                                        <div className="card-admin-actions">
+                                            <button
+                                                type="button"
+                                                className="admin-action-btn edit"
+                                                title="Editar comunicado"
+                                                onClick={() => alert(`Editar comunicado: ${item.title}`)}
+                                            >
+                                                <Edit2 size={14} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="admin-action-btn delete"
+                                                title="Excluir comunicado"
+                                                onClick={() => alert(`Excluir comunicado ID: ${item.id}`)}
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="news-card-meta">
                                         <span className="news-tag announcement-tag">
                                             <Tag size={12} />
@@ -69,7 +114,29 @@ export function News() {
 
                         <div className="cards-stack">
                             {newsData.scientificRadar.map((article) => (
-                                <article key={article.id} className="news-card radar-card">
+                                <article key={article.id} className="news-card radar-card" style={{ position: 'relative' }}>
+                                    {/* Botões de Ação do Card (Admin) */}
+                                    {isAdmin && (
+                                        <div className="card-admin-actions">
+                                            <button
+                                                type="button"
+                                                className="admin-action-btn edit"
+                                                title="Editar artigo do radar"
+                                                onClick={() => alert(`Editar artigo: ${article.title}`)}
+                                            >
+                                                <Edit2 size={14} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="admin-action-btn delete"
+                                                title="Excluir artigo"
+                                                onClick={() => alert(`Excluir artigo ID: ${article.id}`)}
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="news-card-meta">
                                         <span className="news-tag radar-tag">
                                             <FileText size={12} />

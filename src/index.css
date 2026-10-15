@@ -1,1 +1,76 @@
 @import './styles/theme.css';
+
+/* ==========================================================================
+   ESTILOS GLOBAIS - MODO ADMINISTRADOR INVISÍVEL
+   ========================================================================== */
+
+/* Barra ou botão superior de adicionar item */
+.admin-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.admin-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(22, 91, 51, 0.4);
+  color: var(--color-gold);
+  border: 1px dashed var(--color-gold);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.admin-btn-primary:hover {
+  background-color: var(--color-green-moss);
+  border-style: solid;
+  transform: translateY(-1px);
+}
+
+/* Contentor flutuante de ações em cada Card */
+.card-admin-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 6px;
+  background-color: rgba(12, 18, 15, 0.85);
+  backdrop-filter: blur(4px);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  z-index: 10;
+}
+
+.admin-action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.admin-action-btn.edit {
+  color: var(--color-gold);
+}
+
+.admin-action-btn.edit:hover {
+  background-color: rgba(214, 194, 143, 0.2);
+}
+
+.admin-action-btn.delete {
+  color: #E07A5F;
+}
+
+.admin-action-btn.delete:hover {
+  background-color: rgba(224, 122, 95, 0.2);
+}

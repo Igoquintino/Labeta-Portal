@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Microscope, Layers, ShieldCheck, Check, ArrowRight, MapPin } from 'lucide-react';
+import { Microscope, Layers, ShieldCheck, Check, ArrowRight, MapPin, Plus, Edit2, Trash2 } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 import labData from '../data/labFacilities.json';
 import './Lab.css';
 
 export function Lab() {
+    const { isAdmin } = useAuth();
+
     return (
         <main className="lab-page" id="main-content">
             <div className="lab-container">
@@ -24,6 +27,26 @@ export function Lab() {
                     </div>
                 </header>
 
+                {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
+                {isAdmin && (
+                    <div className="admin-toolbar" style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+                        <button 
+                            type="button" 
+                            className="admin-btn-primary"
+                            onClick={() => alert("Abrir modal: Cadastrar Novo Espaço / Equipamento")}
+                        >
+                            <Plus size={16} /> Novo Espaço / Equipamento
+                        </button>
+                        <button 
+                            type="button" 
+                            className="admin-btn-primary"
+                            onClick={() => alert("Abrir modal: Adicionar Etapa Metodológica")}
+                        >
+                            <Plus size={16} /> Nova Etapa / Protocolo
+                        </button>
+                    </div>
+                )}
+
                 {/* Layout em Duas Colunas */}
                 <div className="lab-grid-layout">
 
@@ -39,7 +62,30 @@ export function Lab() {
 
                         <div className="spaces-cards-list">
                             {labData.spaces.map((space) => (
-                                <article key={space.id} className="space-card">
+                                <article key={space.id} className="space-card" style={{ position: 'relative' }}>
+                                    
+                                    {/* Botões de Ação do Card de Espaço (Admin) */}
+                                    {isAdmin && (
+                                        <div className="card-admin-actions">
+                                            <button 
+                                                type="button" 
+                                                className="admin-action-btn edit" 
+                                                title={`Editar: ${space.title}`}
+                                                onClick={() => alert(`Editar espaço: ${space.title}`)}
+                                            >
+                                                <Edit2 size={14} />
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                className="admin-action-btn delete" 
+                                                title={`Excluir: ${space.title}`}
+                                                onClick={() => alert(`Excluir espaço ID: ${space.id}`)}
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="space-card-top">
                                         <span className="space-tag">{space.tag}</span>
                                         <h3 className="space-title">{space.title}</h3>
@@ -75,7 +121,30 @@ export function Lab() {
 
                         <div className="timeline-wrapper">
                             {labData.protocols.map((proto) => (
-                                <article key={proto.step} className="protocol-step-card">
+                                <article key={proto.step} className="protocol-step-card" style={{ position: 'relative' }}>
+                                    
+                                    {/* Botões de Ação da Etapa Metodológica (Admin) */}
+                                    {isAdmin && (
+                                        <div className="card-admin-actions">
+                                            <button 
+                                                type="button" 
+                                                className="admin-action-btn edit" 
+                                                title={`Editar etapa: ${proto.name}`}
+                                                onClick={() => alert(`Editar protocolo: ${proto.name}`)}
+                                            >
+                                                <Edit2 size={14} />
+                                            </button>
+                                            <button 
+                                                type="button" 
+                                                className="admin-action-btn delete" 
+                                                title={`Excluir etapa: ${proto.name}`}
+                                                onClick={() => alert(`Excluir protocolo etapa: ${proto.step}`)}
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="step-number-badge">{proto.step}</div>
                                     <div className="step-content">
                                         <h3 className="step-title">{proto.name}</h3>

@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, HelpCircle } from 'lucide-react';
+import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, HelpCircle, Plus, Edit2, Trash2, Settings } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 import equipmentData from '../data/equipment.json';
 import './Booking.css';
 
 export function Booking() {
+    const { isAdmin } = useAuth();
     const [activeTab, setActiveTab] = useState('catalogo'); // 'catalogo' | 'agenda'
     const [selectedEquipment, setSelectedEquipment] = useState(null);
 
@@ -56,6 +58,29 @@ export function Booking() {
                     </nav>
                 </header>
 
+                {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
+                {isAdmin && (
+                    <div className="admin-toolbar" style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+                        {activeTab === 'catalogo' ? (
+                            <button 
+                                type="button" 
+                                className="admin-btn-primary"
+                                onClick={() => alert("Abrir modal: Cadastrar Novo Equipamento")}
+                            >
+                                <Plus size={16} /> Novo Equipamento
+                            </button>
+                        ) : (
+                            <button 
+                                type="button" 
+                                className="admin-btn-primary"
+                                onClick={() => alert("Abrir modal: Configurar Links da Agenda e Formulário")}
+                            >
+                                <Settings size={16} /> Configurar Agenda / Formulário
+                            </button>
+                        )}
+                    </div>
+                )}
+
                 {/* Conteúdo da Aba: Catálogo de Equipamentos */}
                 {activeTab === 'catalogo' && (
                     <section className="equipment-catalog-section" aria-label="Catálogo de Equipamentos Disponíveis">
@@ -63,7 +88,30 @@ export function Booking() {
                             {equipmentData.map((eq) => {
                                 const isAvailable = eq.status === 'disponivel';
                                 return (
-                                    <article key={eq.id} className="equipment-card">
+                                    <article key={eq.id} className="equipment-card" style={{ position: 'relative' }}>
+                                        
+                                        {/* Botões de Ação do Card (Admin) */}
+                                        {isAdmin && (
+                                            <div className="card-admin-actions">
+                                                <button 
+                                                    type="button" 
+                                                    className="admin-action-btn edit" 
+                                                    title={`Editar: ${eq.name}`}
+                                                    onClick={() => alert(`Editar equipamento: ${eq.name}`)}
+                                                >
+                                                    <Edit2 size={14} />
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    className="admin-action-btn delete" 
+                                                    title={`Excluir: ${eq.name}`}
+                                                    onClick={() => alert(`Excluir equipamento ID: ${eq.id}`)}
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        )}
+
                                         <div className="equipment-card-header">
                                             <div className="equipment-meta">
                                                 <span className="equipment-category">{eq.category}</span>
@@ -131,7 +179,7 @@ export function Booking() {
 
                         <div className="schedule-layout-grid">
 
-                            {/* Calendário de Disponibilidade (Google Agenda Mock/Embed) */}
+                            {/* Calendário de Disponibilidade */}
                             <div className="calendar-panel">
                                 <div className="panel-header">
                                     <Clock size={18} className="panel-icon" />
@@ -142,29 +190,16 @@ export function Booking() {
                                 </div>
 
                                 <div className="calendar-embed-container">
-                                    {/* Placeholder pronto para receber o iframe real do Google Calendar */}
-                                    {/* <div className="calendar-placeholder">
-                                        <Calendar size={48} className="placeholder-icon" />
-                                        
-                                        <h3>Google Agenda do LABETA</h3>
-                                        <p>O calendário sincronizado do laboratório exibe todos os turnos de bancada ocupados em tempo real.</p>
-                                        <span className="calendar-note">
-                                            *Atualizações automáticas coordenadas pela equipe técnica do LABETA.
-                                        </span>
-                                    </div> */
-
-                                        <iframe
-                                            src="https://calendar.google.com/calendar/embed?height=380&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&src=aWdvY2FzdHJvLjE1QGdtYWlsLmNvbQ&src=Y19jbGFzc3Jvb20wZmE4NmU5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21kODBjYTNmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTA4NzI2NDEyNDYxOTI1NTU4MDA3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cHQuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21mMzU1NTEwY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21yNWZiYzE1NUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTE0MzY1NTQwNzY0MDI0NTI0NTM1QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%237986cb&color=%23c26401&color=%237627bb&color=%23137333&color=%237986cb&color=%231967d2&color=%23c26401&color=%23202124&color=%231967d2"
-                                            className="calendar-iframe"
-                                            width="554"
-                                            height="380"
-                                            title="Google Agenda do LABETA - Horários de Bancada e Equipamentos"
-                                            frameBorder="0"
-                                            scrolling="no"
-                                            loading="lazy"
-                                        />
-
-                                    }
+                                    <iframe
+                                        src="https://calendar.google.com/calendar/embed?height=380&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&src=aWdvY2FzdHJvLjE1QGdtYWlsLmNvbQ&src=Y19jbGFzc3Jvb20wZmE4NmU5ZEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21kODBjYTNmYUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTA4NzI2NDEyNDYxOTI1NTU4MDA3QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&src=cHQuYnJhemlsaWFuI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21mMzU1NTEwY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y19jbGFzc3Jvb21yNWZiYzE1NUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&src=Y2xhc3Nyb29tMTE0MzY1NTQwNzY0MDI0NTI0NTM1QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%237986cb&color=%23c26401&color=%237627bb&color=%23137333&color=%237986cb&color=%231967d2&color=%23c26401&color=%23202124&color=%231967d2"
+                                        className="calendar-iframe"
+                                        width="554"
+                                        height="380"
+                                        title="Google Agenda do LABETA - Horários de Bancada e Equipamentos"
+                                        frameBorder="0"
+                                        scrolling="no"
+                                        loading="lazy"
+                                    />
                                 </div>
                             </div>
 

@@ -10,6 +10,7 @@ import { People } from './pages/People';
 import { Lab } from './pages/Lab';
 import { Booking } from './pages/Booking';
 import { News } from './pages/News';
+import AdminLogin from './pages/AdminLogin';
 
 export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/laboratorio" element={<Lab />} />
         <Route path="/agendamento" element={<Booking />} />
         <Route path="/noticias" element={<News />} />
+        <Route path="/admin" element={<AdminLogin />} />
         <Route path="*" element={<Home />} />
       </Routes>
 

@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react';
-import { Users, GraduationCap, FlaskConical, ExternalLink, Mail, Award } from 'lucide-react';
+import { Users, GraduationCap, FlaskConical, ExternalLink, Mail, Award, Plus, Edit2, Trash2 } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 import membersData from '../data/members.json';
 import './People.css';
 
 export function People() {
+    const { isAdmin } = useAuth();
     const [activeCategory, setActiveCategory] = useState('todos');
 
     const filteredMembers = useMemo(() => {
@@ -75,14 +77,48 @@ export function People() {
                     </nav>
                 </header>
 
+                {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
+                {isAdmin && (
+                    <div className="admin-toolbar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+                        <button 
+                            type="button" 
+                            className="admin-btn-primary"
+                            onClick={() => alert("Abrir modal: Cadastrar Novo Membro")}
+                        >
+                            <Plus size={16} /> Novo Membro
+                        </button>
+                    </div>
+                )}
+
                 {/* Grid de Membros */}
                 <section className="people-grid" aria-label="Lista de integrantes do laboratório">
                     {filteredMembers.map((member) => (
-                        <article key={member.id} className="person-card">
+                        <article key={member.id} className="person-card" style={{ position: 'relative' }}>
+
+                            {/* Botões de Ação do Card (Admin) */}
+                            {isAdmin && (
+                                <div className="card-admin-actions">
+                                    <button 
+                                        type="button" 
+                                        className="admin-action-btn edit" 
+                                        title={`Editar dados de ${member.name}`}
+                                        onClick={() => alert(`Editar membro: ${member.name}`)}
+                                    >
+                                        <Edit2 size={14} />
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        className="admin-action-btn delete" 
+                                        title={`Remover ${member.name}`}
+                                        onClick={() => alert(`Excluir membro ID: ${member.id}`)}
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
+                            )}
 
                             <div className="person-card-header">
                                 <figure className="person-avatar-frame">
-                                    {/* Avatar com fallback de inicial */}
                                     {member.avatar ? (
                                         <img
                                             src={member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`}
