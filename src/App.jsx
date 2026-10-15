@@ -11,6 +11,7 @@ import { Lab } from './pages/Lab';
 import { Booking } from './pages/Booking';
 import { News } from './pages/News';
 import AdminLogin from './pages/AdminLogin';
+import { FloatingAdminBar } from './components/admin/FloatingAdminBar';
 
 export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -66,6 +67,9 @@ export default function App() {
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
       />
+
+      {/* Barra de Status e Ações do Administrador (Visível apenas se autenticado) */}
+      <FloatingAdminBar />
     </div>
   );
 }

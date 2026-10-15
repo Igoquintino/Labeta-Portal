@@ -1,0 +1,173 @@
+.floating-admin-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: rgba(20, 36, 27, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-full);
+    padding: 6px 14px 6px 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(214, 194, 143, 0.15);
+    animation: admin-bar-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes admin-bar-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.admin-bar-main {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.admin-bar-status {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.admin-bar-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+}
+
+.admin-bar-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-bar-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gold);
+    line-height: 1.2;
+}
+
+.admin-bar-user {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-left: 1px solid rgba(214, 194, 143, 0.2);
+    padding-left: 0.75rem;
+}
+
+.admin-bar-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 5px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.admin-bar-action-btn.panel {
+    background-color: rgba(214, 194, 143, 0.12);
+    border-color: rgba(214, 194, 143, 0.3);
+    color: var(--color-gold);
+}
+
+.admin-bar-action-btn.panel:hover {
+    background-color: var(--color-gold);
+    color: var(--bg-primary);
+}
+
+.admin-bar-action-btn.logout {
+    background-color: transparent;
+    border-color: rgba(224, 122, 95, 0.3);
+    color: var(--color-danger);
+}
+
+.admin-bar-action-btn.logout:hover {
+    background-color: var(--color-danger);
+    color: #fff;
+}
+
+.admin-bar-collapse-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.admin-bar-collapse-toggle:hover {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Botão recolhido */
+.admin-bar-collapsed-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 8px 14px;
+    background-color: rgba(20, 36, 27, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-full);
+    color: var(--color-gold);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    transition: all var(--transition-fast);
+}
+
+.admin-bar-collapsed-btn:hover {
+    background-color: var(--bg-surface);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 600px) {
+    .floating-admin-bar {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+        border-radius: var(--radius-md);
+        padding: 8px 12px;
+    }
+
+    .admin-bar-main {
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .admin-bar-user {
+        max-width: 100px;
+    }
+}
