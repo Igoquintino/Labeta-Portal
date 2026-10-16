@@ -1,8 +1,17 @@
+/* ============================================================
+ * [SERVIÇO] supabase
+ * Descrição: Cliente Supabase com fallback seguro (placeholder) quando as variáveis de ambiente não existem.
+ * Rota/Uso: Importado por AuthContext.
+ * Dados: VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY (.env)
+ * CSS correlato: —
+ * ============================================================ */
 import { createClient } from '@supabase/supabase-js';
 
+// [CONFIG] Credenciais lidas do ambiente Vite
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
+/** [CONFIG] isSupabaseConfigured — true se URL e chave anônima estão definidas. */
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
 if (!isSupabaseConfigured) {

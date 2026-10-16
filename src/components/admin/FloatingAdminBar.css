@@ -1,17 +1,6 @@
-.floating-admin-bar {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-    background-color: rgba(20, 36, 27, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border-gold);
-    border-radius: var(--radius-full);
-    padding: 6px 14px 6px 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(214, 194, 143, 0.15);
-    animation: admin-bar-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* [ARQUIVO] FloatingAdminBar.css — estilos de FloatingAdminBar.jsx. Ordem das seções = ordem do JSX */
 
+/* [GLOBAL] Animação de entrada da barra */
 @keyframes admin-bar-slide-in {
     from {
         opacity: 0;
@@ -23,108 +12,7 @@
     }
 }
 
-.admin-bar-main {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-}
-
-.admin-bar-status {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-}
-
-.admin-bar-icon {
-    color: var(--color-gold);
-    flex-shrink: 0;
-}
-
-.admin-bar-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.admin-bar-badge {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-gold);
-    line-height: 1.2;
-}
-
-.admin-bar-user {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    max-width: 140px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.admin-bar-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-left: 1px solid rgba(214, 194, 143, 0.2);
-    padding-left: 0.75rem;
-}
-
-.admin-bar-action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 5px 10px;
-    border-radius: var(--radius-full);
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all var(--transition-fast);
-}
-
-.admin-bar-action-btn.panel {
-    background-color: rgba(214, 194, 143, 0.12);
-    border-color: rgba(214, 194, 143, 0.3);
-    color: var(--color-gold);
-}
-
-.admin-bar-action-btn.panel:hover {
-    background-color: var(--color-gold);
-    color: var(--bg-primary);
-}
-
-.admin-bar-action-btn.logout {
-    background-color: transparent;
-    border-color: rgba(224, 122, 95, 0.3);
-    color: var(--color-danger);
-}
-
-.admin-bar-action-btn.logout:hover {
-    background-color: var(--color-danger);
-    color: #fff;
-}
-
-.admin-bar-collapse-toggle {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    border-radius: 50%;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.admin-bar-collapse-toggle:hover {
-    color: var(--text-main);
-    background-color: rgba(255, 255, 255, 0.08);
-}
-
-/* Botão recolhido */
+/* [SEÇÃO 1] .admin-bar-collapsed-btn — botão recolhido (JSX: [SEÇÃO 1]) */
 .admin-bar-collapsed-btn {
     position: fixed;
     bottom: 20px;
@@ -153,6 +41,134 @@
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
 }
 
+/* [SEÇÃO 1.1 / 2.1.1] .admin-bar-icon — ícone escudo, usado nos dois estados (JSX: [SEÇÃO 1.1], [SEÇÃO 2.1.1]) */
+.admin-bar-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+}
+
+/* [SEÇÃO 2] .floating-admin-bar — barra expandida (JSX: [SEÇÃO 2]) */
+.floating-admin-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: rgba(20, 36, 27, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-full);
+    padding: 6px 14px 6px 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(214, 194, 143, 0.15);
+    animation: admin-bar-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* [SEÇÃO 2.1] .admin-bar-main — linha principal (JSX: [SEÇÃO 2.1]) */
+.admin-bar-main {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+/* [SEÇÃO 2.1.1] .admin-bar-status — ícone + identificação (JSX: [SEÇÃO 2.1.1]) */
+.admin-bar-status {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+/* [SEÇÃO 2.1.1.1] .admin-bar-info — textos (JSX: [SEÇÃO 2.1.1.1]) */
+.admin-bar-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* [SEÇÃO 2.1.1.1.1] .admin-bar-badge — selo (JSX: [SEÇÃO 2.1.1.1.1]) */
+.admin-bar-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-gold);
+    line-height: 1.2;
+}
+
+/* [SEÇÃO 2.1.1.1.2] .admin-bar-user — e-mail (JSX: [SEÇÃO 2.1.1.1.2]) */
+.admin-bar-user {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* [SEÇÃO 2.1.2] .admin-bar-actions — botões de ação (JSX: [SEÇÃO 2.1.2]) */
+.admin-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-left: 1px solid rgba(214, 194, 143, 0.2);
+    padding-left: 0.75rem;
+}
+
+/* [SEÇÃO 2.1.2.x] .admin-bar-action-btn — base dos botões Painel/Sair (JSX: [SEÇÃO 2.1.2.1], [SEÇÃO 2.1.2.2]) */
+.admin-bar-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 5px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+/* [SEÇÃO 2.1.2.1] .admin-bar-action-btn.panel (JSX: [SEÇÃO 2.1.2.1]) */
+.admin-bar-action-btn.panel {
+    background-color: rgba(214, 194, 143, 0.12);
+    border-color: rgba(214, 194, 143, 0.3);
+    color: var(--color-gold);
+}
+
+.admin-bar-action-btn.panel:hover {
+    background-color: var(--color-gold);
+    color: var(--bg-primary);
+}
+
+/* [SEÇÃO 2.1.2.2] .admin-bar-action-btn.logout (JSX: [SEÇÃO 2.1.2.2]) */
+.admin-bar-action-btn.logout {
+    background-color: transparent;
+    border-color: rgba(224, 122, 95, 0.3);
+    color: var(--color-danger);
+}
+
+.admin-bar-action-btn.logout:hover {
+    background-color: var(--color-danger);
+    color: #fff;
+}
+
+/* [SEÇÃO 2.1.2.3] .admin-bar-collapse-toggle — recolher (JSX: [SEÇÃO 2.1.2.3]) */
+.admin-bar-collapse-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.admin-bar-collapse-toggle:hover {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* [RESPONSIVO] Mobile ≤ 600px */
 @media (max-width: 600px) {
     .floating-admin-bar {
         bottom: 12px;

@@ -1,3 +1,19 @@
+/* [ARQUIVO] SpotlightSearch.css — estilos de SpotlightSearch.jsx. Ordem das seções = ordem do JSX */
+
+/* [GLOBAL] @keyframes, :root e regras sem classe */
+@keyframes spotlightFade {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* [SEÇÃO 1] .spotlight-overlay — <div> (JSX: [SEÇÃO 1]) */
 .spotlight-overlay {
     position: fixed;
     inset: 0;
@@ -10,6 +26,7 @@
     z-index: 1100;
 }
 
+/* [SEÇÃO 1.1] .spotlight-modal — <aside> (JSX: [SEÇÃO 1.1]) */
 .spotlight-modal {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-gold);
@@ -23,22 +40,7 @@
     animation: spotlightFade 0.2s ease-out;
 }
 
-.modal-close-btn:hover {
-    color: var(--text-main);
-}
-
-@keyframes spotlightFade {
-    from {
-        opacity: 0;
-        transform: translateY(-12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
+/* [SEÇÃO 1.1.1] .spotlight-search-header — <div> (JSX: [SEÇÃO 1.1.1]) */
 .spotlight-search-header {
     display: flex;
     align-items: center;
@@ -48,11 +50,13 @@
     gap: 0.75rem;
 }
 
+/* [SEÇÃO 1.1.1.1] .search-icon — <Search> (JSX: [SEÇÃO 1.1.1.1]) */
 .search-icon {
     color: var(--color-gold);
     flex-shrink: 0;
 }
 
+/* [SEÇÃO 1.1.1.2] .spotlight-input — <input> (JSX: [SEÇÃO 1.1.1.2]) */
 .spotlight-input {
     flex: 1;
     background: transparent;
@@ -66,6 +70,7 @@
     color: var(--text-muted);
 }
 
+/* [SEÇÃO 1.1.1.2.1] .clear-search-btn — <button> (JSX: [SEÇÃO 1.1.1.2.1]) */
 .clear-search-btn {
     color: var(--text-muted);
     display: flex;
@@ -77,6 +82,7 @@
     color: var(--text-main);
 }
 
+/* [SEÇÃO 1.1.1.3] .esc-close-btn — <button> (JSX: [SEÇÃO 1.1.1.3]) */
 /* ==========================================================================
    BOTÃO DE FECHAR / ESC (DESKTOP E BASE)
    ========================================================================== */
@@ -122,32 +128,7 @@
     display: block;
 }
 
-/* ==========================================================================
-   RESPONSIVO: TABLET E CELULAR (TELAS ATÉ 900px)
-   ========================================================================== */
-@media (max-width: 900px) {
-
-    /* Se ainda existir a classe antiga esc-badge em algum lugar, força sumir */
-    .esc-badge,
-    .esc-text,
-    .esc-close-btn .esc-text {
-        display: none !important;
-    }
-
-    /* Força o ícone X a aparecer no tablet/celular */
-    .esc-close-btn .esc-icon {
-        display: block !important;
-    }
-
-    /* Deixa o botão quadrado e fácil de tocar */
-    .esc-close-btn {
-        min-width: 30px;
-        width: 30px;
-        height: 30px;
-        padding: 0;
-    }
-}
-
+/* [SEÇÃO 1.1.2] .pills-nav — <nav> (JSX: [SEÇÃO 1.1.2]) */
 /* Navegação por Pílulas */
 .pills-nav {
     display: flex;
@@ -158,6 +139,7 @@
     overflow-x: auto;
 }
 
+/* [SEÇÃO 1.1.2.1] .filter-pill — <button> (JSX: [SEÇÃO 1.1.2.1]) */
 .filter-pill {
     padding: 4px 12px;
     border-radius: 20px;
@@ -181,6 +163,7 @@
     color: #ffffff;
 }
 
+/* [SEÇÃO 1.1.3] .spotlight-results — <div> (JSX: [SEÇÃO 1.1.3]) */
 /* Lista de Resultados */
 .spotlight-results {
     max-height: 380px;
@@ -188,12 +171,14 @@
     padding: 0.5rem 0;
 }
 
+/* [SEÇÃO 1.1.3.1] .results-list — <ul> (JSX: [SEÇÃO 1.1.3.1]) */
 .results-list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
+/* [SEÇÃO 1.1.3.1.1] .result-item — <li> (JSX: [SEÇÃO 1.1.3.1.1]) */
 .result-item {
     display: flex;
     align-items: center;
@@ -208,18 +193,38 @@
     background-color: var(--bg-surface-elevated);
 }
 
+.result-item:hover .result-arrow {
+    opacity: 1;
+    transform: translateX(3px);
+    color: var(--color-gold);
+}
+
+.result-item.active-keyboard {
+    background-color: var(--bg-surface-elevated);
+    border-left: 3px solid var(--color-gold);
+}
+
+.result-item.active-keyboard .result-arrow {
+    opacity: 1;
+    color: var(--color-gold);
+    transform: translateX(3px);
+}
+
+/* [SEÇÃO 1.1.3.1.1.1] .result-info — <div> (JSX: [SEÇÃO 1.1.3.1.1.1]) */
 .result-info {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
 
+/* [SEÇÃO 1.1.3.1.1.1.1] .result-header — <div> (JSX: [SEÇÃO 1.1.3.1.1.1.1]) */
 .result-header {
     display: flex;
     align-items: center;
     gap: 0.6rem;
 }
 
+/* [SEÇÃO 1.1.3.1.1.1.1.1] .category-badge — <span> (JSX: [SEÇÃO 1.1.3.1.1.1.1.1]) */
 .category-badge {
     display: inline-flex;
     align-items: center;
@@ -230,6 +235,73 @@
     padding: 2px 7px;
     border-radius: var(--radius-sm);
     background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* [SEÇÃO 1.1.3.1.1.1.1.2] .result-title — <h4> (JSX: [SEÇÃO 1.1.3.1.1.1.1.2]) */
+.result-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin: 0;
+}
+
+/* [SEÇÃO 1.1.3.1.1.1.2] .result-subtitle — <p> (JSX: [SEÇÃO 1.1.3.1.1.1.2]) */
+.result-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* [SEÇÃO 1.1.3.1.1.2] .result-arrow — <ArrowRight> (JSX: [SEÇÃO 1.1.3.1.1.2]) */
+.result-arrow {
+    color: var(--text-muted);
+    opacity: 0;
+    transition: all var(--transition-fast);
+}
+
+/* [SEÇÃO 1.1.3.2] .no-results-box — <div> (JSX: [SEÇÃO 1.1.3.2]) */
+.no-results-box {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.no-results-box strong {
+    color: var(--text-main);
+}
+
+/* [SEÇÃO 1.1.3.2.2] .no-results-hint — <span> (JSX: [SEÇÃO 1.1.3.2.2]) */
+.no-results-hint {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    color: var(--color-gold);
+}
+
+/* [SEÇÃO 1.1.4] .spotlight-footer — <footer> (JSX: [SEÇÃO 1.1.4]) */
+.spotlight-footer {
+    padding: 0.6rem 1.25rem;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.spotlight-footer kbd {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-gold);
+    color: var(--color-gold);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    margin-left: 2px;
+}
+
+/* [OUTROS / NÃO USADAS NO JSX] classes que não aparecem neste JSX (podem vir de children ou de outros arquivos) */
+.modal-close-btn:hover {
+    color: var(--text-main);
 }
 
 .badge-membros {
@@ -262,81 +334,35 @@
     border: 1px solid var(--color-gold);
 }
 
-.result-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-main);
-    margin: 0;
-}
-
-.result-subtitle {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    line-height: 1.4;
-}
-
-.result-arrow {
-    color: var(--text-muted);
-    opacity: 0;
-    transition: all var(--transition-fast);
-}
-
-.result-item:hover .result-arrow {
-    opacity: 1;
-    transform: translateX(3px);
-    color: var(--color-gold);
-}
-
-.no-results-box {
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    color: var(--text-muted);
-}
-
-.no-results-box strong {
-    color: var(--text-main);
-}
-
-.no-results-hint {
-    display: block;
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
-    color: var(--color-gold);
-}
-
 .badge-equipamentos {
     color: var(--color-accent);
     background-color: rgba(78, 168, 110, 0.12);
     border: 1px solid rgba(78, 168, 110, 0.3);
 }
 
-.result-item.active-keyboard {
-    background-color: var(--bg-surface-elevated);
-    border-left: 3px solid var(--color-gold);
-}
+/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
+/* ==========================================================================
+   RESPONSIVO: TABLET E CELULAR (TELAS ATÉ 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+    /* [SEÇÃO 1.1.1.3] .esc-close-btn — <button> (JSX: [SEÇÃO 1.1.1.3]) */
+    /* Se ainda existir a classe antiga esc-badge em algum lugar, força sumir */
+    .esc-badge,
+    .esc-text,
+    .esc-close-btn .esc-text {
+        display: none !important;
+    }
 
-.result-item.active-keyboard .result-arrow {
-    opacity: 1;
-    color: var(--color-gold);
-    transform: translateX(3px);
-}
+    /* Força o ícone X a aparecer no tablet/celular */
+    .esc-close-btn .esc-icon {
+        display: block !important;
+    }
 
-.spotlight-footer {
-    padding: 0.6rem 1.25rem;
-    background-color: var(--bg-primary);
-    border-top: 1px solid var(--border-subtle);
-    display: flex;
-    gap: 1.5rem;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-.spotlight-footer kbd {
-    background-color: var(--bg-surface-elevated);
-    border: 1px solid var(--border-gold);
-    color: var(--color-gold);
-    padding: 1px 5px;
-    border-radius: 3px;
-    font-size: 0.7rem;
-    margin-left: 2px;
+    /* Deixa o botão quadrado e fácil de tocar */
+    .esc-close-btn {
+        min-width: 30px;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+    }
 }

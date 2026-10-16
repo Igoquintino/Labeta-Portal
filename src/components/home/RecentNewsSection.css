@@ -1,3 +1,6 @@
+/* [ARQUIVO] RecentNewsSection.css — estilos de RecentNewsSection.jsx. Ordem das seções = ordem do JSX */
+
+/* [SEÇÃO 1] .recent-news-section — <section> (JSX: [SEÇÃO 1]) */
 .recent-news-section {
     width: 100%;
     background-color: var(--bg-surface);
@@ -8,6 +11,7 @@
     justify-content: center;
 }
 
+/* [SEÇÃO 1.1] .recent-news-container — <div> (JSX: [SEÇÃO 1.1]) */
 .recent-news-container {
     max-width: 1100px;
     width: 100%;
@@ -16,6 +20,7 @@
     gap: 2rem;
 }
 
+/* [SEÇÃO 1.1.1] .recent-news-header — <header> (JSX: [SEÇÃO 1.1.1]) */
 .recent-news-header {
     display: flex;
     justify-content: space-between;
@@ -24,12 +29,14 @@
     gap: 1rem;
 }
 
+/* [SEÇÃO 1.1.1.1] .header-meta — <div> (JSX: [SEÇÃO 1.1.1.1]) */
 .header-meta {
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
 }
 
+/* [SEÇÃO 1.1.1.1.1] .recent-news-badge — <span> (JSX: [SEÇÃO 1.1.1.1.1]) */
 .recent-news-badge {
     display: inline-flex;
     align-items: center;
@@ -45,12 +52,14 @@
     align-self: flex-start;
 }
 
+/* [SEÇÃO 1.1.1.1.2] .recent-news-title — <h2> (JSX: [SEÇÃO 1.1.1.1.2]) */
 .recent-news-title {
     font-size: 1.85rem;
     color: var(--text-main);
     margin: 0;
 }
 
+/* [SEÇÃO 1.1.1.2] .view-all-link — <Link> (JSX: [SEÇÃO 1.1.1.2]) */
 .view-all-link {
     display: inline-flex;
     align-items: center;
@@ -66,6 +75,7 @@
     transform: translateX(4px);
 }
 
+/* [SEÇÃO 1.1.2] .recent-news-grid — <div> (JSX: [SEÇÃO 1.1.2]) */
 /* Grid de 3 Cards */
 .recent-news-grid {
     display: grid;
@@ -73,6 +83,7 @@
     gap: 1.5rem;
 }
 
+/* [SEÇÃO 1.1.2.1] .recent-news-card — <article> (JSX: [SEÇÃO 1.1.2.1]) */
 .recent-news-card {
     background-color: var(--bg-primary);
     border: 1px solid var(--border-subtle);
@@ -89,6 +100,7 @@
     transform: translateY(-3px);
 }
 
+/* [SEÇÃO 1.1.2.1.1] .card-header-row — <div> (JSX: [SEÇÃO 1.1.2.1.1]) */
 .card-header-row {
     display: flex;
     justify-content: space-between;
@@ -97,6 +109,7 @@
     flex-wrap: wrap;
 }
 
+/* [SEÇÃO 1.1.2.1.1.1] .news-item-pill — <span> (JSX: [SEÇÃO 1.1.2.1.1.1]) */
 .news-item-pill {
     display: inline-flex;
     align-items: center;
@@ -109,18 +122,7 @@
     border-radius: var(--radius-sm);
 }
 
-.pill-announcement {
-    color: var(--color-gold);
-    background-color: rgba(214, 194, 143, 0.12);
-    border: 1px solid rgba(214, 194, 143, 0.25);
-}
-
-.pill-radar {
-    color: var(--color-accent);
-    background-color: rgba(78, 168, 110, 0.12);
-    border: 1px solid rgba(78, 168, 110, 0.25);
-}
-
+/* [SEÇÃO 1.1.2.1.1.2] .news-item-date — <span> (JSX: [SEÇÃO 1.1.2.1.1.2]) */
 .news-item-date {
     display: inline-flex;
     align-items: center;
@@ -129,6 +131,7 @@
     color: var(--text-muted);
 }
 
+/* [SEÇÃO 1.1.2.1.2] .news-card-heading — <h3> (JSX: [SEÇÃO 1.1.2.1.2]) */
 .news-card-heading {
     font-size: 1.1rem;
     line-height: 1.4;
@@ -144,6 +147,7 @@
     color: var(--color-gold);
 }
 
+/* [SEÇÃO 1.1.2.1.3] .news-card-excerpt — <p> (JSX: [SEÇÃO 1.1.2.1.3]) */
 .news-card-excerpt {
     font-size: 0.88rem;
     color: var(--text-muted);
@@ -156,7 +160,22 @@
     overflow: hidden;
 }
 
+/* [OUTROS / NÃO USADAS NO JSX] classes que não aparecem neste JSX (podem vir de children ou de outros arquivos) */
+.pill-announcement {
+    color: var(--color-gold);
+    background-color: rgba(214, 194, 143, 0.12);
+    border: 1px solid rgba(214, 194, 143, 0.25);
+}
+
+.pill-radar {
+    color: var(--color-accent);
+    background-color: rgba(78, 168, 110, 0.12);
+    border: 1px solid rgba(78, 168, 110, 0.25);
+}
+
+/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
 @media (max-width: 900px) {
+    /* [SEÇÃO 1.1.2] .recent-news-grid — <div> (JSX: [SEÇÃO 1.1.2]) */
     .recent-news-grid {
         grid-template-columns: 1fr;
     }

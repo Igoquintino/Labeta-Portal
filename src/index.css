@@ -1,3 +1,6 @@
+/* [ARQUIVO] index.css — importa theme.css e define estilos globais do modo administrador (barras e botões de ação por card).
+ * Usado por: main.jsx */
+
 @import './styles/theme.css';
 
 /* ==========================================================================

@@ -1,3 +1,6 @@
+/* [ARQUIVO] Booking.css — estilos de Booking.jsx. Ordem das seções = ordem do JSX */
+
+/* [SEÇÃO 1] .booking-page — <main> (JSX: [SEÇÃO 1]) */
 .booking-page {
     width: 100%;
     min-height: calc(100vh - 160px);
@@ -7,6 +10,7 @@
     justify-content: center;
 }
 
+/* [SEÇÃO 1.1] .booking-container — <div> (JSX: [SEÇÃO 1.1]) */
 .booking-container {
     max-width: 1100px;
     width: 100%;
@@ -15,6 +19,7 @@
     gap: 2.5rem;
 }
 
+/* [SEÇÃO 1.1.1] .booking-header — <header> (JSX: [SEÇÃO 1.1.1]) */
 .booking-header {
     text-align: center;
     display: flex;
@@ -22,6 +27,7 @@
     align-items: center;
 }
 
+/* [SEÇÃO 1.1.1.1] .booking-badge — <div> (JSX: [SEÇÃO 1.1.1.1]) */
 .booking-badge {
     display: inline-flex;
     align-items: center;
@@ -37,12 +43,14 @@
     margin-bottom: 0.75rem;
 }
 
+/* [SEÇÃO 1.1.1.2] .booking-title — <h1> (JSX: [SEÇÃO 1.1.1.2]) */
 .booking-title {
     font-size: 2.2rem;
     color: var(--text-main);
     margin-bottom: 0.5rem;
 }
 
+/* [SEÇÃO 1.1.1.3] .booking-subtitle — <p> (JSX: [SEÇÃO 1.1.1.3]) */
 .booking-subtitle {
     color: var(--text-muted);
     font-size: 1.05rem;
@@ -50,6 +58,7 @@
     line-height: 1.7;
 }
 
+/* [SEÇÃO 1.1.1.4] .restriction-banner — <aside> (JSX: [SEÇÃO 1.1.1.4]) */
 /* Banner de Restrição Institucional */
 .restriction-banner {
     margin-top: 1.75rem;
@@ -65,6 +74,7 @@
     text-align: left;
 }
 
+/* [SEÇÃO 1.1.1.4.1] .restriction-icon-box — <div> (JSX: [SEÇÃO 1.1.1.4.1]) */
 .restriction-icon-box {
     width: 44px;
     height: 44px;
@@ -77,6 +87,7 @@
     flex-shrink: 0;
 }
 
+/* [SEÇÃO 1.1.1.4.2] .restriction-text — <div> (JSX: [SEÇÃO 1.1.1.4.2]) */
 .restriction-text strong {
     font-size: 0.95rem;
     color: var(--text-main);
@@ -91,6 +102,7 @@
     margin: 0;
 }
 
+/* [SEÇÃO 1.1.1.5] .booking-nav-tabs — <nav> (JSX: [SEÇÃO 1.1.1.5]) */
 /* Abas de Navegação */
 .booking-nav-tabs {
     display: flex;
@@ -104,6 +116,7 @@
     justify-content: center;
 }
 
+/* [SEÇÃO 1.1.1.5.1] .booking-tab-btn — <button> (JSX: [SEÇÃO 1.1.1.5.1]) */
 .booking-tab-btn {
     display: inline-flex;
     align-items: center;
@@ -126,6 +139,7 @@
     border: 1px solid var(--border-gold);
 }
 
+/* [SEÇÃO 1.1.1.7.1] .equipment-grid — <div> (JSX: [SEÇÃO 1.1.1.7.1]) */
 /* Grid de Equipamentos */
 .equipment-grid {
     display: grid;
@@ -133,6 +147,7 @@
     gap: 1.75rem;
 }
 
+/* [SEÇÃO 1.1.1.7.1.1] .equipment-card — <article> (JSX: [SEÇÃO 1.1.1.7.1.1]) */
 .equipment-card {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-subtle);
@@ -149,6 +164,7 @@
     border-color: var(--border-gold);
 }
 
+/* [SEÇÃO 1.1.1.7.1.1.2] .equipment-card-header — <div> (JSX: [SEÇÃO 1.1.1.7.1.1.2]) */
 .equipment-card-header {
     display: flex;
     justify-content: space-between;
@@ -156,12 +172,14 @@
     gap: 0.5rem;
 }
 
+/* [SEÇÃO 1.1.1.7.1.1.2.1] .equipment-meta — <div> (JSX: [SEÇÃO 1.1.1.7.1.1.2.1]) */
 .equipment-meta {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
 }
 
+/* [SEÇÃO 1.1.1.7.1.1.2.1.1] .equipment-category — <span> (JSX: [SEÇÃO 1.1.1.7.1.1.2.1.1]) */
 .equipment-category {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -170,11 +188,318 @@
     font-weight: 700;
 }
 
+/* [SEÇÃO 1.1.1.7.1.1.2.1.2] .equipment-code — <span> (JSX: [SEÇÃO 1.1.1.7.1.1.2.1.2]) */
 .equipment-code {
     font-size: 0.75rem;
     color: var(--text-muted);
 }
 
+/* [SEÇÃO 1.1.1.7.1.1.3] .equipment-name — <h2> (JSX: [SEÇÃO 1.1.1.7.1.1.3]) */
+.equipment-name {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+
+/* [SEÇÃO 1.1.1.7.1.1.4] .equipment-desc — <p> (JSX: [SEÇÃO 1.1.1.7.1.1.4]) */
+.equipment-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+/* [SEÇÃO 1.1.1.7.1.1.6] .requirements-box — <div> (JSX: [SEÇÃO 1.1.1.7.1.1.6]) */
+.requirements-box {
+    background-color: var(--bg-surface-elevated);
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* [SEÇÃO 1.1.1.7.1.1.6.2.1.1] .req-icon — <CheckCircle> (JSX: [SEÇÃO 1.1.1.7.1.1.6.2.1.1]) */
+.req-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* [SEÇÃO 1.1.1.8] .schedule-section — <section> (JSX: [SEÇÃO 1.1.1.8]) */
+/* Aba da Agenda & Reserva */
+.schedule-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* [SEÇÃO 1.1.1.8.1] .selected-equipment-alert — <div> (JSX: [SEÇÃO 1.1.1.8.1]) */
+.selected-equipment-alert {
+    background-color: rgba(22, 91, 51, 0.3);
+    border: 1px solid var(--color-gold);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+/* [SEÇÃO 1.1.1.8.1.2] .clear-selection-btn — <button> (JSX: [SEÇÃO 1.1.1.8.1.2]) */
+.clear-selection-btn {
+    font-size: 0.8rem;
+    color: var(--color-gold);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* [SEÇÃO 1.1.1.8.2] .shifts-guide-panel — <div> (JSX: [SEÇÃO 1.1.1.8.2]) */
+/* ==========================================================================
+   GUIA VISUAL DE TURNOS DE BANCADA
+   ========================================================================== */
+.shifts-guide-panel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+/* [SEÇÃO 1.1.1.8.2.1] .shift-card — <div> (JSX: [SEÇÃO 1.1.1.8.2.1]) */
+.shift-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.shift-card:hover {
+    border-color: var(--color-gold);
+    transform: translateY(-2px);
+}
+
+/* [SEÇÃO 1.1.1.8.2.1.1] .shift-header — <div> (JSX: [SEÇÃO 1.1.1.8.2.1.1]) */
+.shift-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* [SEÇÃO 1.1.1.8.2.1.1.1] .shift-badge — <span> (JSX: [SEÇÃO 1.1.1.8.2.1.1.1]) */
+.shift-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.shift-badge.morning {
+    color: var(--color-gold);
+    background-color: rgba(214, 194, 143, 0.15);
+    border: 1px solid rgba(214, 194, 143, 0.3);
+}
+
+.shift-badge.afternoon {
+    color: var(--color-accent);
+    background-color: rgba(78, 168, 110, 0.15);
+    border: 1px solid rgba(78, 168, 110, 0.3);
+}
+
+.shift-badge.night {
+    color: #5bb3ff;
+    background-color: rgba(91, 179, 255, 0.15);
+    border: 1px solid rgba(91, 179, 255, 0.3);
+}
+
+/* [SEÇÃO 1.1.1.8.2.1.1.2] .shift-hours — <span> (JSX: [SEÇÃO 1.1.1.8.2.1.1.2]) */
+.shift-hours {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* [SEÇÃO 1.1.1.8.2.1.2] .shift-desc — <p> (JSX: [SEÇÃO 1.1.1.8.2.1.2]) */
+.shift-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* [SEÇÃO 1.1.1.8.3] .schedule-layout-grid — <div> (JSX: [SEÇÃO 1.1.1.8.3]) */
+.schedule-layout-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1] .calendar-panel — <div> (JSX: [SEÇÃO 1.1.1.8.3.1]) */
+.calendar-panel,
+.form-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.1] .panel-header — <div> (JSX: [SEÇÃO 1.1.1.8.3.1.1]) */
+.panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.1.1] .panel-icon — <Clock> (JSX: [SEÇÃO 1.1.1.8.3.1.1.1]) */
+.panel-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.1.2.1] .panel-title — <h2> (JSX: [SEÇÃO 1.1.1.8.3.1.1.2.1]) */
+.panel-title {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    margin: 0;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.1.2.2] .panel-subtitle — <p> (JSX: [SEÇÃO 1.1.1.8.3.1.1.2.2]) */
+.panel-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.2] .calendar-embed-container — <div> (JSX: [SEÇÃO 1.1.1.8.3.1.2]) */
+.calendar-embed-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.2.1] .calendar-iframe — <iframe> (JSX: [SEÇÃO 1.1.1.8.3.1.2.1]) */
+.calendar-iframe {
+    width: 100%;
+    min-height: 400px;
+    border: none;
+    border-radius: var(--radius-sm);
+    display: block;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.3] .calendar-footer-hint — <div> (JSX: [SEÇÃO 1.1.1.8.3.1.3]) */
+.calendar-footer-hint {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+/* [SEÇÃO 1.1.1.8.3.1.3.2] .calendar-direct-link — <a> (JSX: [SEÇÃO 1.1.1.8.3.1.3.2]) */
+.calendar-direct-link {
+    color: var(--color-gold);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+}
+
+.calendar-direct-link:hover {
+    color: var(--color-green-light);
+}
+
+/* [SEÇÃO 1.1.1.8.3.2.2] .form-action-box — <div> (JSX: [SEÇÃO 1.1.1.8.3.2.2]) */
+.form-action-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* [SEÇÃO 1.1.1.8.3.2.2.1] .form-notice — <div> (JSX: [SEÇÃO 1.1.1.8.3.2.2.1]) */
+.form-notice {
+    background-color: var(--bg-primary);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+}
+
+.form-notice p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* [SEÇÃO 1.1.1.8.3.2.2.1.1] .notice-icon — <HelpCircle> (JSX: [SEÇÃO 1.1.1.8.3.2.2.1.1]) */
+.notice-icon {
+    color: var(--color-gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* [SEÇÃO 1.1.1.8.3.2.2.2] .booking-steps-list — <ul> (JSX: [SEÇÃO 1.1.1.8.3.2.2.2]) */
+.booking-steps-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.booking-steps-list strong {
+    color: var(--text-main);
+}
+
+/* [SEÇÃO 1.1.1.8.3.2.2.3] .open-form-btn — <a> (JSX: [SEÇÃO 1.1.1.8.3.2.2.3]) */
+.open-form-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    background-color: var(--color-brand);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-gold);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    text-align: center;
+}
+
+.open-form-btn:hover {
+    background-color: var(--color-accent);
+    color: var(--bg-primary);
+}
+
+/* [OUTROS / NÃO USADAS NO JSX] classes que não aparecem neste JSX (podem vir de children ou de outros arquivos) */
 .status-tag {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -196,18 +521,6 @@
     border: 1px solid rgba(214, 194, 143, 0.35);
 }
 
-.equipment-name {
-    font-size: 1.2rem;
-    color: var(--text-main);
-    line-height: 1.4;
-}
-
-.equipment-desc {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-}
-
 .capacity-info {
     background-color: var(--bg-primary);
     padding: 0.6rem 0.85rem;
@@ -225,13 +538,6 @@
 .capacity-value {
     color: var(--color-gold);
     font-weight: 600;
-}
-
-.requirements-box {
-    background-color: var(--bg-surface-elevated);
-    padding: 0.85rem 1rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .requirements-title {
@@ -262,12 +568,6 @@
     line-height: 1.4;
 }
 
-.req-icon {
-    color: var(--color-accent);
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
 .select-reserve-btn {
     width: 100%;
     padding: 10px;
@@ -293,121 +593,6 @@
     opacity: 0.6;
 }
 
-/* Aba da Agenda & Reserva */
-.schedule-section {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.selected-equipment-alert {
-    background-color: rgba(22, 91, 51, 0.3);
-    border: 1px solid var(--color-gold);
-    border-radius: var(--radius-md);
-    padding: 0.85rem 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    color: var(--text-main);
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.clear-selection-btn {
-    font-size: 0.8rem;
-    color: var(--color-gold);
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.schedule-layout-grid {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 2rem;
-    align-items: start;
-}
-
-.calendar-panel,
-.form-panel {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-.panel-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.panel-icon {
-    color: var(--color-gold);
-    flex-shrink: 0;
-    margin-top: 3px;
-}
-
-.panel-title {
-    font-size: 1.2rem;
-    color: var(--text-main);
-    margin: 0;
-}
-
-.panel-subtitle {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    margin: 0;
-}
-
-.calendar-embed-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-}
-
-.calendar-iframe {
-    width: 100%;
-    min-height: 400px;
-    border: none;
-    border-radius: var(--radius-sm);
-    display: block;
-}
-
-.calendar-footer-hint {
-    margin-top: 0.75rem;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-}
-
-.calendar-direct-link {
-    color: var(--color-gold);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color var(--transition-fast);
-}
-
-.calendar-direct-link:hover {
-    color: var(--color-green-light);
-}
-
 .placeholder-icon {
     color: var(--color-gold);
 }
@@ -429,155 +614,21 @@
     font-style: italic;
 }
 
-.form-action-box {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-}
-
-.form-notice {
-    background-color: var(--bg-primary);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    padding: 1rem;
-    border-radius: var(--radius-sm);
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-start;
-}
-
-.notice-icon {
-    color: var(--color-gold);
-    flex-shrink: 0;
-    margin-top: 2px;
-}
-
-.form-notice p {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin: 0;
-}
-
-.booking-steps-list {
-    margin: 0;
-    padding-left: 1.2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-.booking-steps-list strong {
-    color: var(--text-main);
-}
-
-.open-form-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 12px 18px;
-    border-radius: var(--radius-md);
-    background-color: var(--color-brand);
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 0.9rem;
-    border: 1px solid var(--border-gold);
-    text-decoration: none;
-    transition: all var(--transition-fast);
-    text-align: center;
-}
-
-.open-form-btn:hover {
-    background-color: var(--color-accent);
-    color: var(--bg-primary);
-}
-
+/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
 @media (max-width: 900px) {
-    .schedule-layout-grid {
-        grid-template-columns: 1fr;
-    }
-
+    /* [SEÇÃO 1.1.1.2] .booking-title — <h1> (JSX: [SEÇÃO 1.1.1.2]) */
     .booking-title {
         font-size: 1.75rem;
     }
-}
 
-
-/* ==========================================================================
-   GUIA VISUAL DE TURNOS DE BANCADA
-   ========================================================================== */
-.shifts-guide-panel {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-}
-
-.shift-card {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 1.1rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    transition: border-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.shift-card:hover {
-    border-color: var(--color-gold);
-    transform: translateY(-2px);
-}
-
-.shift-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.shift-badge {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 3px 8px;
-    border-radius: var(--radius-sm);
-}
-
-.shift-badge.morning {
-    color: var(--color-gold);
-    background-color: rgba(214, 194, 143, 0.15);
-    border: 1px solid rgba(214, 194, 143, 0.3);
-}
-
-.shift-badge.afternoon {
-    color: var(--color-accent);
-    background-color: rgba(78, 168, 110, 0.15);
-    border: 1px solid rgba(78, 168, 110, 0.3);
-}
-
-.shift-badge.night {
-    color: #5bb3ff;
-    background-color: rgba(91, 179, 255, 0.15);
-    border: 1px solid rgba(91, 179, 255, 0.3);
-}
-
-.shift-hours {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text-main);
-}
-
-.shift-desc {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin: 0;
+    /* [SEÇÃO 1.1.1.8.3] .schedule-layout-grid — <div> (JSX: [SEÇÃO 1.1.1.8.3]) */
+    .schedule-layout-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 768px) {
+    /* [SEÇÃO 1.1.1.8.2] .shifts-guide-panel — <div> (JSX: [SEÇÃO 1.1.1.8.2]) */
     .shifts-guide-panel {
         grid-template-columns: 1fr;
     }

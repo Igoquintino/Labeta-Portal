@@ -1,10 +1,21 @@
+/* ============================================================
+ * [COMPONENTE] AdminModal
+ * Descrição: Diálogo modal genérico da área de gestão (Admin Invisível). Recebe o conteúdo via children.
+ * Rota/Uso: Aberto por FloatingAdminBar e pelas páginas com edição inline.
+ * Props: isOpen, onClose, title, children.
+ * Dados: nenhum.
+ * CSS correlato: AdminModal.css
+ * ============================================================ */
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import './AdminModal.css';
 
+/** [FUNÇÃO] AdminModal — renderiza o diálogo com foco preso (focus trap), fechamento por Esc e bloqueio de scroll. */
 export function AdminModal({ isOpen, onClose, title, children }) {
+    // [ESTADO] Referência ao contêiner do diálogo (usada para foco e focus trap)
     const modalRef = useRef(null);
 
+    /** [HOOK] useEffect — foca o 1º elemento, trata Esc/Tab e trava o scroll enquanto aberto. */
     useEffect(() => {
         if (!isOpen) return;
 
@@ -14,6 +25,7 @@ export function AdminModal({ isOpen, onClose, title, children }) {
             firstFocusable?.focus();
         }, 50);
 
+        /** [FUNÇÃO] handleKeyDown — Esc fecha; Tab/Shift+Tab circula o foco dentro do modal. */
         const handleKeyDown = (event) => {
             if (event.key === 'Escape') {
                 onClose();
@@ -52,7 +64,9 @@ export function AdminModal({ isOpen, onClose, title, children }) {
     if (!isOpen) return null;
 
     return (
+        /* [SEÇÃO 1] .admin-modal-overlay — fundo escurecido (clique fecha) */
         <div className="admin-modal-overlay" onClick={onClose} role="presentation">
+            {/* [SEÇÃO 1.1] .admin-modal-container — caixa do diálogo */}
             <aside
                 ref={modalRef}
                 className="admin-modal-container"
@@ -61,11 +75,15 @@ export function AdminModal({ isOpen, onClose, title, children }) {
                 aria-modal="true"
                 aria-labelledby="admin-modal-title"
             >
+                {/* [SEÇÃO 1.1.1] .admin-modal-header — cabeçalho */}
                 <header className="admin-modal-header">
                     <div>
+                        {/* [SEÇÃO 1.1.1.1] .admin-modal-badge — selo */}
                         <span className="admin-modal-badge">Gestão LABETA</span>
+                        {/* [SEÇÃO 1.1.1.2] .admin-modal-title — título */}
                         <h2 id="admin-modal-title" className="admin-modal-title">{title}</h2>
                     </div>
+                    {/* [SEÇÃO 1.1.1.3] .admin-modal-close-btn — fechar */}
                     <button
                         type="button"
                         className="admin-modal-close-btn"
@@ -76,6 +94,7 @@ export function AdminModal({ isOpen, onClose, title, children }) {
                     </button>
                 </header>
 
+                {/* [SEÇÃO 1.1.2] .admin-modal-body — conteúdo (children) */}
                 <div className="admin-modal-body">
                     {children}
                 </div>

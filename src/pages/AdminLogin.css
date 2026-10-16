@@ -1,3 +1,15 @@
+/* [ARQUIVO] AdminLogin.css — estilos de AdminLogin.jsx. Ordem das seções = ordem do JSX */
+
+/* [SEÇÃO 1] .admin-loading-container — <div> (JSX: [SEÇÃO 1]) */
+.admin-loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    color: var(--text-muted);
+}
+
+/* [SEÇÃO 2] .admin-login-page — <main> (JSX: [SEÇÃO 2]) */
 .admin-login-page {
     padding: 6rem 1.5rem;
     max-width: 480px;
@@ -9,17 +21,20 @@
     justify-content: center;
 }
 
+/* [SEÇÃO 2.1] .admin-login-header — <div> (JSX: [SEÇÃO 2.1]) */
 .admin-login-header {
     text-align: center;
     margin-bottom: 2rem;
 }
 
+/* [SEÇÃO 2.1.1] .admin-shield-icon — <ShieldCheck> (JSX: [SEÇÃO 2.1.1]) */
 .admin-shield-icon {
     color: var(--color-gold);
     margin-bottom: 0.75rem;
     filter: drop-shadow(0 0 12px rgba(214, 194, 143, 0.25));
 }
 
+/* [SEÇÃO 2.1.2] .admin-login-title — <h1> (JSX: [SEÇÃO 2.1.2]) */
 .admin-login-title {
     font-size: 1.6rem;
     font-weight: 700;
@@ -27,6 +42,7 @@
     margin: 0 0 0.5rem;
 }
 
+/* [SEÇÃO 2.1.3] .admin-login-subtitle — <p> (JSX: [SEÇÃO 2.1.3]) */
 .admin-login-subtitle {
     color: var(--text-muted);
     font-size: 0.9rem;
@@ -34,6 +50,7 @@
     line-height: 1.5;
 }
 
+/* [SEÇÃO 2.1.4] .admin-login-card — <div> (JSX: [SEÇÃO 2.1.4]) */
 .admin-login-card {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-subtle);
@@ -42,30 +59,63 @@
     box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
 }
 
+/* [SEÇÃO 2.1.4.1] .admin-login-success-view — <div> (JSX: [SEÇÃO 2.1.4.1]) */
+/* Sucesso do Magic Link */
+.admin-login-success-view {
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* [SEÇÃO 2.1.4.1.1] .admin-success-icon — <CheckCircle2> (JSX: [SEÇÃO 2.1.4.1.1]) */
+.admin-success-icon {
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+/* [SEÇÃO 2.1.4.1.2] .admin-success-title — <h2> (JSX: [SEÇÃO 2.1.4.1.2]) */
+.admin-success-title {
+    font-size: 1.2rem;
+    margin: 0 0 0.5rem;
+    color: var(--text-main);
+}
+
+/* [SEÇÃO 2.1.4.1.3] .admin-success-desc — <p> (JSX: [SEÇÃO 2.1.4.1.3]) */
+.admin-success-desc {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* [SEÇÃO 2.1.4.2] .admin-login-form — <form> (JSX: [SEÇÃO 2.1.4.2]) */
 .admin-login-form {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
 }
 
+/* [SEÇÃO 2.1.4.2.1] .admin-input-wrapper — <div> (JSX: [SEÇÃO 2.1.4.2.1]) */
 .admin-input-wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
 }
 
+/* [SEÇÃO 2.1.4.2.1.1] .admin-login-label — <label> (JSX: [SEÇÃO 2.1.4.2.1.1]) */
 .admin-login-label {
     font-size: 0.82rem;
     color: var(--text-muted);
     font-weight: 500;
 }
 
+/* [SEÇÃO 2.1.4.2.1.2] .admin-input-group — <div> (JSX: [SEÇÃO 2.1.4.2.1.2]) */
 .admin-input-group {
     position: relative;
     display: flex;
     align-items: center;
 }
 
+/* [SEÇÃO 2.1.4.2.1.2.1] .admin-input-icon — <Mail> (JSX: [SEÇÃO 2.1.4.2.1.2.1]) */
 .admin-input-icon {
     position: absolute;
     left: 12px;
@@ -73,6 +123,7 @@
     pointer-events: none;
 }
 
+/* [SEÇÃO 2.1.4.2.1.2.2] .admin-login-input — <input> (JSX: [SEÇÃO 2.1.4.2.1.2.2]) */
 .admin-login-input {
     width: 100%;
     padding: 10px 12px 10px 38px;
@@ -90,6 +141,7 @@
     box-shadow: 0 0 0 2px rgba(214, 194, 143, 0.15);
 }
 
+/* [SEÇÃO 2.1.4.2.1.3] .admin-login-error — <div> (JSX: [SEÇÃO 2.1.4.2.1.3]) */
 .admin-login-error {
     display: flex;
     align-items: center;
@@ -102,6 +154,7 @@
     border: 1px solid rgba(224, 122, 95, 0.25);
 }
 
+/* [SEÇÃO 2.1.4.2.2] .admin-login-submit-btn — <button> (JSX: [SEÇÃO 2.1.4.2.2]) */
 .admin-login-submit-btn {
     padding: 11px;
     background-color: var(--color-primary);
@@ -129,41 +182,20 @@
     cursor: not-allowed;
 }
 
-/* Sucesso do Magic Link */
-.admin-login-success-view {
-    text-align: center;
-    padding: 1rem 0;
-}
-
-.admin-success-icon {
-    color: var(--color-accent);
-    margin-bottom: 1rem;
-}
-
-.admin-success-title {
-    font-size: 1.2rem;
-    margin: 0 0 0.5rem;
-    color: var(--text-main);
-}
-
-.admin-success-desc {
-    color: var(--text-muted);
-    font-size: 0.88rem;
-    line-height: 1.6;
-    margin: 0;
-}
-
+/* [SEÇÃO 2.1.5] .admin-connected-card — <div> (JSX: [SEÇÃO 2.1.5]) */
 /* Card Conectado */
 .admin-connected-card {
     text-align: center;
 }
 
+/* [SEÇÃO 2.1.5.1] .admin-connected-label — <p> (JSX: [SEÇÃO 2.1.5.1]) */
 .admin-connected-label {
     font-size: 0.88rem;
     color: var(--text-muted);
     margin: 0;
 }
 
+/* [SEÇÃO 2.1.5.2] .admin-connected-email — <strong> (JSX: [SEÇÃO 2.1.5.2]) */
 .admin-connected-email {
     display: block;
     margin: 0.4rem 0 1.5rem;
@@ -172,6 +204,7 @@
     word-break: break-all;
 }
 
+/* [SEÇÃO 2.1.5.2.1] .admin-role-badge — <div> (JSX: [SEÇÃO 2.1.5.2.1]) */
 .admin-role-badge {
     display: inline-flex;
     align-items: center;
@@ -195,6 +228,7 @@
     color: var(--color-danger);
 }
 
+/* [SEÇÃO 2.1.5.3.1] .admin-logout-action-btn — <button> (JSX: [SEÇÃO 2.1.5.3.1]) */
 .admin-logout-action-btn {
     display: inline-flex;
     align-items: center;
@@ -213,12 +247,4 @@
     color: var(--color-danger);
     border-color: rgba(224, 122, 95, 0.4);
     background-color: rgba(224, 122, 95, 0.08);
-}
-
-.admin-loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 60vh;
-    color: var(--text-muted);
 }

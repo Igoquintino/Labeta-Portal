@@ -1,3 +1,10 @@
+/* ============================================================
+ * [COMPONENTE] SpotlightSearch
+ * Descrição: Busca global (Ctrl/Cmd+K) com filtro por categoria e navegação por teclado.
+ * Rota/Uso: Aberto pela Navbar ou atalho (App.jsx).
+ * Dados: members.json, works.json, news.json, equipment.json
+ * CSS correlato: SpotlightSearch.css
+ * ============================================================ */
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, BookOpen, Users, ShieldAlert, Newspaper, ArrowRight, Microscope, ShieldCheck } from 'lucide-react';
@@ -9,15 +16,20 @@ import './SpotlightSearch.css';
 
 const categories = ['Todos', 'Membros', 'Trabalhos', 'Equipamentos', 'Biossegurança', 'Notícias'];
 
+/** [FUNÇÃO] SpotlightSearch — renderiza o modal de busca global. */
 export function SpotlightSearch({ isOpen, onClose }) {
+  // [ESTADO] query — texto digitado na busca
   const [query, setQuery] = useState('');
+  // [ESTADO] activeCategory — pílula de filtro ativa (Todos, Membros, Trabalhos, Biossegurança, Notícias)
   const [activeCategory, setActiveCategory] = useState('Todos');
+  // [ESTADO] selectedIndex — resultado destacado (setas ↑/↓)
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef(null);
   const resultsListRef = useRef(null);
   const navigate = useNavigate();
 
   // Consolidação dinâmica do acervo completo do LABETA
+  /** [HOOK] useMemo searchableBase — unifica todos os dados pesquisáveis numa lista única. */
   const searchableBase = useMemo(() => {
     const list = [];
 
@@ -105,6 +117,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
+  /** [FUNÇÃO] handleClose — limpa a busca e fecha o modal. */
   const handleClose = useCallback(() => {
     setQuery('');
     setActiveCategory('Todos');
@@ -143,6 +156,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
   }, [isOpen, handleClose]);
 
   // Filtro reativo em tempo real
+  /** [HOOK] useMemo filteredResults — aplica categoria + texto sobre searchableBase. */
   const filteredResults = useMemo(() => {
     const normalizedQuery = query.toLowerCase().trim();
     const results = searchableBase.filter((item) => {
@@ -166,12 +180,14 @@ export function SpotlightSearch({ isOpen, onClose }) {
     return results;
   }, [searchableBase, query, activeCategory]);
 
+  /** [FUNÇÃO] handleSelect — navega para o link do resultado e fecha o modal. */
   const handleSelect = (link) => {
     handleClose();
     navigate(link);
   };
 
   // Navegação por teclado (ArrowUp, ArrowDown, Enter)
+  /** [FUNÇÃO] handleInputKeyDown — setas, Enter e Esc dentro do campo de busca. */
   const handleInputKeyDown = (e) => {
     if (filteredResults.length === 0) return;
 
@@ -191,6 +207,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  /** [FUNÇÃO] getCategoryIcon — devolve o ícone lucide da categoria do resultado. */
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'Membros': return <Users size={14} aria-hidden="true" />;
@@ -204,7 +221,9 @@ export function SpotlightSearch({ isOpen, onClose }) {
   };
 
   return (
+    /* [SEÇÃO 1] .spotlight-overlay — <div> */
     <div className="spotlight-overlay" onClick={handleClose} role="presentation">
+      {/* [SEÇÃO 1.1] .spotlight-modal — <aside> */}
       <aside
         ref={modalRef}
         className="spotlight-modal"
@@ -214,9 +233,12 @@ export function SpotlightSearch({ isOpen, onClose }) {
         aria-label="Busca Global no Portal LABETA"
       >
         {/* Barra Superior */}
+        {/* [SEÇÃO 1.1.1] .spotlight-search-header — <div> */}
         <div className="spotlight-search-header">
+          {/* [SEÇÃO 1.1.1.1] .search-icon — <Search> */}
           <Search size={20} className="search-icon" aria-hidden="true" />
 
+          {/* [SEÇÃO 1.1.1.2] .spotlight-input — <input> */}
           <input
             ref={inputRef}
             type="search"
@@ -233,6 +255,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
           />
 
           {query && (
+            /* [SEÇÃO 1.1.1.2.1] .clear-search-btn — <button> */
             <button
               type="button"
               className="clear-search-btn"
@@ -243,6 +266,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
             </button>
           )}
 
+          {/* [SEÇÃO 1.1.1.3] .esc-close-btn — <button> */}
           <button
             type="button"
             className="esc-close-btn"
@@ -250,14 +274,18 @@ export function SpotlightSearch({ isOpen, onClose }) {
             title="Fechar busca (Esc)"
             aria-label="Fechar busca rápida"
           >
+            {/* [SEÇÃO 1.1.1.3.1] .esc-text — <span> */}
             <span className="esc-text">ESC</span>
+            {/* [SEÇÃO 1.1.1.3.2] .esc-icon — <X> */}
             <X size={16} className="esc-icon" aria-hidden="true" />
           </button>
         </div>
 
         {/* Linha de Filtro por Pílulas */}
+        {/* [SEÇÃO 1.1.2] .pills-nav — <nav> */}
         <nav className="pills-nav" aria-label="Filtrar por categoria">
           {categories.map((cat) => (
+            /* [SEÇÃO 1.1.2.1] .filter-pill — <button> */
             <button
               key={cat}
               type="button"
@@ -273,8 +301,10 @@ export function SpotlightSearch({ isOpen, onClose }) {
         </nav>
 
         {/* Lista de Resultados */}
+        {/* [SEÇÃO 1.1.3] .spotlight-results — <div> */}
         <div className="spotlight-results" role="region" aria-live="polite">
           {filteredResults.length > 0 ? (
+            /* [SEÇÃO 1.1.3.1] .results-list — <ul> */
             <ul
               id="spotlight-results-list"
               className="results-list"
@@ -282,6 +312,7 @@ export function SpotlightSearch({ isOpen, onClose }) {
               role="listbox"
             >
               {filteredResults.map((item, index) => (
+                /* [SEÇÃO 1.1.3.1.1] .result-item — <li> */
                 <li
                   key={item.id}
                   role="option"
@@ -290,29 +321,38 @@ export function SpotlightSearch({ isOpen, onClose }) {
                   onClick={() => handleSelect(item.link)}
                   onMouseEnter={() => setSelectedIndex(index)}
                 >
+                  {/* [SEÇÃO 1.1.3.1.1.1] .result-info — <div> */}
                   <div className="result-info">
+                    {/* [SEÇÃO 1.1.3.1.1.1.1] .result-header — <div> */}
                     <div className="result-header">
+                      {/* [SEÇÃO 1.1.3.1.1.1.1.1] .category-badge — <span> */}
                       <span className={`category-badge badge-${item.category.toLowerCase()}`}>
                         {getCategoryIcon(item.category)}
                         <span>{item.category}</span>
                       </span>
+                      {/* [SEÇÃO 1.1.3.1.1.1.1.2] .result-title — <h4> */}
                       <h4 className="result-title">{item.title}</h4>
                     </div>
+                    {/* [SEÇÃO 1.1.3.1.1.1.2] .result-subtitle — <p> */}
                     <p className="result-subtitle">{item.subtitle}</p>
                   </div>
+                  {/* [SEÇÃO 1.1.3.1.1.2] .result-arrow — <ArrowRight> */}
                   <ArrowRight size={16} className="result-arrow" aria-hidden="true" />
                 </li>
               ))}
             </ul>
           ) : (
+            /* [SEÇÃO 1.1.3.2] .no-results-box — <div> */
             <div className="no-results-box">
               <p>Nenhum resultado encontrado para <strong>"{query}"</strong></p>
+              {/* [SEÇÃO 1.1.3.2.2] .no-results-hint — <span> */}
               <span className="no-results-hint">Tente buscar por termos como "diatomáceas", "microscópio", "EPIs" ou pelo nome de um pesquisador.</span>
             </div>
           )}
         </div>
 
         {/* Rodapé com Dicas de Atalho */}
+        {/* [SEÇÃO 1.1.4] .spotlight-footer — <footer> */}
         <footer className="spotlight-footer">
           <span>Navegar: <kbd>↑</kbd> <kbd>↓</kbd></span>
           <span>Selecionar: <kbd>Enter</kbd></span>

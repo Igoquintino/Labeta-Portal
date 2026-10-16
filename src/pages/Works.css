@@ -1,3 +1,6 @@
+/* [ARQUIVO] Works.css — estilos de Works.jsx. Ordem das seções = ordem do JSX */
+
+/* [SEÇÃO 1] .works-page — <main> (JSX: [SEÇÃO 1]) */
 .works-page {
     width: 100%;
     min-height: calc(100vh - 160px);
@@ -7,6 +10,7 @@
     justify-content: center;
 }
 
+/* [SEÇÃO 1.1] .works-container — <div> (JSX: [SEÇÃO 1.1]) */
 .works-container {
     max-width: 960px;
     width: 100%;
@@ -15,6 +19,7 @@
     gap: 2.5rem;
 }
 
+/* [SEÇÃO 1.1.1] .works-header — <header> (JSX: [SEÇÃO 1.1.1]) */
 .works-header {
     text-align: center;
     display: flex;
@@ -22,6 +27,7 @@
     align-items: center;
 }
 
+/* [SEÇÃO 1.1.1.1] .works-badge — <div> (JSX: [SEÇÃO 1.1.1.1]) */
 .works-badge {
     display: inline-flex;
     align-items: center;
@@ -37,12 +43,14 @@
     margin-bottom: 0.75rem;
 }
 
+/* [SEÇÃO 1.1.1.2] .works-title — <h1> (JSX: [SEÇÃO 1.1.1.2]) */
 .works-title {
     font-size: 2.2rem;
     color: var(--text-main);
     margin-bottom: 0.5rem;
 }
 
+/* [SEÇÃO 1.1.1.3] .works-subtitle — <p> (JSX: [SEÇÃO 1.1.1.3]) */
 .works-subtitle {
     color: var(--text-muted);
     font-size: 1.05rem;
@@ -50,6 +58,7 @@
     line-height: 1.7;
 }
 
+/* [SEÇÃO 1.1.1.4] .works-search-bar — <div> (JSX: [SEÇÃO 1.1.1.4]) */
 /* Barra de Busca de Trabalhos */
 .works-search-bar {
     width: 100%;
@@ -69,6 +78,186 @@
     border-color: var(--color-gold);
 }
 
+/* [SEÇÃO 1.1.1.5.1] .filter-tab-btn — <button> (JSX: [SEÇÃO 1.1.1.5.1]) */
+.filter-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.filter-tab-btn:hover {
+    color: var(--text-main);
+}
+
+.filter-tab-btn.active {
+    background-color: var(--color-brand);
+    color: #ffffff;
+    border: 1px solid var(--border-gold);
+}
+
+/* [SEÇÃO 1.1.2] .works-list — <section> (JSX: [SEÇÃO 1.1.2]) */
+/* Cards de Trabalhos */
+.works-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* [SEÇÃO 1.1.2.1] .work-card — <article> (JSX: [SEÇÃO 1.1.2.1]) */
+.work-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.work-card:hover {
+    border-color: var(--border-gold);
+    transform: translateY(-2px);
+}
+
+/* [SEÇÃO 1.1.2.1.2] .work-card-top — <div> (JSX: [SEÇÃO 1.1.2.1.2]) */
+.work-card-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* [SEÇÃO 1.1.2.1.2.1] .status-pill — <span> (JSX: [SEÇÃO 1.1.2.1.2.1]) */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: var(--radius-sm);
+}
+
+/* [SEÇÃO 1.1.2.1.2.2] .work-category — <span> (JSX: [SEÇÃO 1.1.2.1.2.2]) */
+.work-category {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* [SEÇÃO 1.1.2.1.2.3] .work-year — <span> (JSX: [SEÇÃO 1.1.2.1.2.3]) */
+.work-year {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+/* [SEÇÃO 1.1.2.1.4] .work-authors — <p> (JSX: [SEÇÃO 1.1.2.1.4]) */
+.work-authors {
+    font-size: 0.9rem;
+    color: var(--color-gold);
+}
+
+.work-authors strong {
+    color: var(--text-muted);
+}
+
+/* [SEÇÃO 1.1.2.1.5] .work-summary — <p> (JSX: [SEÇÃO 1.1.2.1.5]) */
+.work-summary {
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+/* [SEÇÃO 1.1.2.1.6] .work-tags-row — <div> (JSX: [SEÇÃO 1.1.2.1.6]) */
+.work-tags-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+}
+
+/* [SEÇÃO 1.1.2.1.6.1] .work-tag-item — <span> (JSX: [SEÇÃO 1.1.2.1.6.1]) */
+.work-tag-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background-color: var(--bg-surface-elevated);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+/* [SEÇÃO 1.1.2.1.7] .work-card-footer — <div> (JSX: [SEÇÃO 1.1.2.1.7]) */
+.work-card-footer {
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+/* [SEÇÃO 1.1.2.1.7.1] .work-doi-link — <a> (JSX: [SEÇÃO 1.1.2.1.7.1]) */
+.work-doi-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(214, 194, 143, 0.08);
+    border: 1px solid rgba(214, 194, 143, 0.25);
+    transition: all var(--transition-fast);
+}
+
+.work-doi-link:hover {
+    background-color: var(--color-gold);
+    color: var(--bg-primary);
+}
+
+/* [SEÇÃO 1.1.2.1.7.2] .work-ongoing-notice — <span> (JSX: [SEÇÃO 1.1.2.1.7.2]) */
+.work-ongoing-notice {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* [SEÇÃO 1.1.2.2] .no-works-box — <div> (JSX: [SEÇÃO 1.1.2.2]) */
+.no-works-box {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+}
+
+.no-works-box strong {
+    color: var(--text-main);
+}
+
+.no-works-box span {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* [OUTROS / NÃO USADAS NO JSX] classes que não aparecem neste JSX (podem vir de children ou de outros arquivos) */
 .works-search-icon {
     color: var(--color-gold);
     flex-shrink: 0;
@@ -98,25 +287,6 @@
     color: var(--text-main);
 }
 
-.no-works-box {
-    text-align: center;
-    padding: 3rem 1.5rem;
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    color: var(--text-muted);
-}
-
-.no-works-box strong {
-    color: var(--text-main);
-}
-
-.no-works-box span {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-}
-
 /* Abas de Filtro */
 .works-filter-nav {
     display: flex;
@@ -128,70 +298,6 @@
     border: 1px solid var(--border-subtle);
     flex-wrap: wrap;
     justify-content: center;
-}
-
-.filter-tab-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    transition: all var(--transition-fast);
-}
-
-.filter-tab-btn:hover {
-    color: var(--text-main);
-}
-
-.filter-tab-btn.active {
-    background-color: var(--color-brand);
-    color: #ffffff;
-    border: 1px solid var(--border-gold);
-}
-
-/* Cards de Trabalhos */
-.works-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.work-card {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 1.75rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    transition: border-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.work-card:hover {
-    border-color: var(--border-gold);
-    transform: translateY(-2px);
-}
-
-.work-card-top {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    padding: 3px 9px;
-    border-radius: var(--radius-sm);
 }
 
 .status-ongoing {
@@ -206,107 +312,30 @@
     border: 1px solid rgba(78, 168, 110, 0.35);
 }
 
-.work-category {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.work-year {
-    margin-left: auto;
-    font-size: 0.85rem;
-    color: var(--color-gold);
-    font-weight: 600;
-}
-
 .work-item-title {
     font-size: 1.35rem;
     color: var(--text-main);
     line-height: 1.4;
 }
 
-.work-authors {
-    font-size: 0.9rem;
-    color: var(--color-gold);
-}
-
-.work-authors strong {
-    color: var(--text-muted);
-}
-
-.work-summary {
-    font-size: 0.98rem;
-    color: var(--text-muted);
-    line-height: 1.7;
-}
-
-.work-tags-row {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-top: 0.25rem;
-}
-
-.work-tag-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    background-color: var(--bg-surface-elevated);
-    padding: 3px 8px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border-subtle);
-}
-
-.work-card-footer {
-    margin-top: 0.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-}
-
-.work-doi-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.85rem;
-    color: var(--color-gold);
-    font-weight: 600;
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
-    background-color: rgba(214, 194, 143, 0.08);
-    border: 1px solid rgba(214, 194, 143, 0.25);
-    transition: all var(--transition-fast);
-}
-
-.work-doi-link:hover {
-    background-color: var(--color-gold);
-    color: var(--bg-primary);
-}
-
-.work-ongoing-notice {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-    font-style: italic;
-}
-
+/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
 @media (max-width: 768px) {
-    .work-card {
-        padding: 1.25rem;
-    }
-
+    /* [SEÇÃO 1.1.1.2] .works-title — <h1> (JSX: [SEÇÃO 1.1.1.2]) */
     .works-title {
         font-size: 1.75rem;
     }
 
-    .work-item-title {
-        font-size: 1.15rem;
+    /* [SEÇÃO 1.1.2.1] .work-card — <article> (JSX: [SEÇÃO 1.1.2.1]) */
+    .work-card {
+        padding: 1.25rem;
     }
 
+    /* [SEÇÃO 1.1.2.1.2.3] .work-year — <span> (JSX: [SEÇÃO 1.1.2.1.2.3]) */
     .work-year {
         margin-left: 0;
+    }
+
+    .work-item-title {
+        font-size: 1.15rem;
     }
 }

@@ -1,3 +1,6 @@
+/* [ARQUIVO] theme.css — tokens globais (variáveis :root da paleta Amazônia Noturna), foco visível, skip-link e prefers-reduced-motion.
+ * Referência de cores: .agentcontext / DOCUMENTO_REQUISITOS_LABETA.md */
+
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {

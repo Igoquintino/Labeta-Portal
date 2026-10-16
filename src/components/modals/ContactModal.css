@@ -1,3 +1,19 @@
+/* [ARQUIVO] ContactModal.css — estilos de ContactModal.jsx. Ordem das seções = ordem do JSX */
+
+/* [GLOBAL] @keyframes, :root e regras sem classe */
+@keyframes modalScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* [SEÇÃO 1] .modal-overlay — <div> (JSX: [SEÇÃO 1]) */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -10,6 +26,7 @@
     padding: 1rem;
 }
 
+/* [SEÇÃO 1.1] .modal-container — <aside> (JSX: [SEÇÃO 1.1]) */
 .modal-container {
     background-color: var(--bg-surface);
     border: 1px solid var(--border-gold);
@@ -24,32 +41,20 @@
     overflow: hidden;
 }
 
-.member-avatar-wrapper {
-  flex-shrink: 0;
+/* [SEÇÃO 1.1.1] .sr-only — <div> (JSX: [SEÇÃO 1.1.1]) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
-.member-avatar-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid var(--color-gold);
-  display: block;
-  flex-shrink: 0;
-}
-
-@keyframes modalScaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.96);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
+/* [SEÇÃO 1.1.2] .modal-header — <header> (JSX: [SEÇÃO 1.1.2]) */
 .modal-header {
     padding: 1.25rem 1.5rem;
     display: flex;
@@ -58,6 +63,7 @@
     border-bottom: 1px solid var(--border-subtle);
 }
 
+/* [SEÇÃO 1.1.2.1.1] .modal-badge — <span> (JSX: [SEÇÃO 1.1.2.1.1]) */
 .modal-badge {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -67,11 +73,13 @@
     margin-bottom: 0.25rem;
 }
 
+/* [SEÇÃO 1.1.2.1.2] .modal-title — <h2> (JSX: [SEÇÃO 1.1.2.1.2]) */
 .modal-title {
     font-size: 1.35rem;
     color: var(--text-main);
 }
 
+/* [SEÇÃO 1.1.2.2] .modal-close-btn — <button> (JSX: [SEÇÃO 1.1.2.2]) */
 .modal-close-btn {
     color: var(--text-muted);
     width: 32px;
@@ -88,6 +96,7 @@
     color: var(--text-main);
 }
 
+/* [SEÇÃO 1.1.3] .members-contact-grid — <div> (JSX: [SEÇÃO 1.1.3]) */
 .members-contact-grid {
     padding: 1.5rem;
     display: flex;
@@ -96,6 +105,7 @@
     overflow-y: auto;
 }
 
+/* [SEÇÃO 1.1.3.1] .member-card — <article> (JSX: [SEÇÃO 1.1.3.1]) */
 .member-card {
     display: flex;
     align-items: center;
@@ -116,6 +126,23 @@
     border-color: var(--border-gold);
 }
 
+/* [SEÇÃO 1.1.3.1.1] .member-avatar-wrapper — <div> (JSX: [SEÇÃO 1.1.3.1.1]) */
+.member-avatar-wrapper {
+  flex-shrink: 0;
+}
+
+/* [SEÇÃO 1.1.3.1.1.1] .member-avatar-img — <img> (JSX: [SEÇÃO 1.1.3.1.1.1]) */
+.member-avatar-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--color-gold);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* [SEÇÃO 1.1.3.1.1.2] .member-avatar-placeholder — <div> (JSX: [SEÇÃO 1.1.3.1.1.2]) */
 .member-avatar-placeholder {
     width: 50px;
     height: 50px;
@@ -131,6 +158,7 @@
     flex-shrink: 0;
 }
 
+/* [SEÇÃO 1.1.3.1.2] .member-details — <div> (JSX: [SEÇÃO 1.1.3.1.2]) */
 .member-details {
     flex: 1;
     min-width: 0;
@@ -141,6 +169,7 @@
     overflow: hidden;
 }
 
+/* [SEÇÃO 1.1.3.1.2.1] .member-name — <h3> (JSX: [SEÇÃO 1.1.3.1.2.1]) */
 .member-name {
     font-size: 1rem;
     color: var(--text-main);
@@ -148,11 +177,13 @@
     word-break: break-word;
 }
 
+/* [SEÇÃO 1.1.3.1.2.2] .member-role — <span> (JSX: [SEÇÃO 1.1.3.1.2.2]) */
 .member-role {
     font-size: 0.8rem;
     color: var(--color-accent);
 }
 
+/* [SEÇÃO 1.1.3.1.2.3] .member-actions — <div> (JSX: [SEÇÃO 1.1.3.1.2.3]) */
 .member-actions {
     display: flex;
     align-items: center;
@@ -164,6 +195,7 @@
     min-width: 0;
 }
 
+/* [SEÇÃO 1.1.3.1.2.3.1] .copy-email-btn — <button> (JSX: [SEÇÃO 1.1.3.1.2.3.1]) */
 .copy-email-btn {
     display: inline-flex;
     align-items: center;
@@ -196,6 +228,7 @@
     color: var(--color-accent);
 }
 
+/* [SEÇÃO 1.1.3.1.2.3.1.4] .email-text — <span> (JSX: [SEÇÃO 1.1.3.1.2.3.1.4]) */
 .email-text {
     display: inline-block;
     min-width: 0;
@@ -205,6 +238,7 @@
     white-space: nowrap;
 }
 
+/* [SEÇÃO 1.1.3.1.2.3.1.5] .lattes-btn — <a> (JSX: [SEÇÃO 1.1.3.1.2.3.1.5]) */
 .lattes-btn {
     display: inline-flex;
     align-items: center;
@@ -237,35 +271,43 @@
     color: var(--color-gold);
 }
 
+/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
 /* Responsividade Mobile (Telas até 480px) */
 @media (max-width: 480px) {
+    /* [SEÇÃO 1] .modal-overlay — <div> (JSX: [SEÇÃO 1]) */
     .modal-overlay {
         padding: 0.5rem;
     }
 
+    /* [SEÇÃO 1.1] .modal-container — <aside> (JSX: [SEÇÃO 1.1]) */
     .modal-container {
         max-height: 90vh;
     }
 
+    /* [SEÇÃO 1.1.2] .modal-header — <header> (JSX: [SEÇÃO 1.1.2]) */
     .modal-header {
         padding: 1rem;
     }
 
+    /* [SEÇÃO 1.1.2.1.2] .modal-title — <h2> (JSX: [SEÇÃO 1.1.2.1.2]) */
     .modal-title {
         font-size: 1.15rem;
     }
 
+    /* [SEÇÃO 1.1.3] .members-contact-grid — <div> (JSX: [SEÇÃO 1.1.3]) */
     .members-contact-grid {
         padding: 0.75rem;
         gap: 0.75rem;
     }
 
+    /* [SEÇÃO 1.1.3.1] .member-card — <article> (JSX: [SEÇÃO 1.1.3.1]) */
     .member-card {
         padding: 0.75rem;
         gap: 0.75rem;
         align-items: flex-start;
     }
 
+    /* [SEÇÃO 1.1.3.1.1] .member-avatar-wrapper — <div> (JSX: [SEÇÃO 1.1.3.1.1]) */
     .member-avatar-wrapper,
     .member-avatar-img,
     .member-avatar-placeholder {
@@ -273,10 +315,12 @@
         height: 44px;
     }
 
+    /* [SEÇÃO 1.1.3.1.1.2] .member-avatar-placeholder — <div> (JSX: [SEÇÃO 1.1.3.1.1.2]) */
     .member-avatar-placeholder {
         font-size: 1.05rem;
     }
 
+    /* [SEÇÃO 1.1.3.1.2.3] .member-actions — <div> (JSX: [SEÇÃO 1.1.3.1.2.3]) */
     .member-actions {
         gap: 0.4rem;
     }
@@ -284,20 +328,24 @@
 
 /* Telas ultracompactas (como 320px a 360px) */
 @media (max-width: 360px) {
+    /* [SEÇÃO 1] .modal-overlay — <div> (JSX: [SEÇÃO 1]) */
     .modal-overlay {
         padding: 0.25rem;
     }
 
+    /* [SEÇÃO 1.1.3] .members-contact-grid — <div> (JSX: [SEÇÃO 1.1.3]) */
     .members-contact-grid {
         padding: 0.5rem;
         gap: 0.5rem;
     }
 
+    /* [SEÇÃO 1.1.3.1] .member-card — <article> (JSX: [SEÇÃO 1.1.3.1]) */
     .member-card {
         padding: 0.65rem 0.5rem;
         gap: 0.5rem;
     }
 
+    /* [SEÇÃO 1.1.3.1.1] .member-avatar-wrapper — <div> (JSX: [SEÇÃO 1.1.3.1.1]) */
     .member-avatar-wrapper,
     .member-avatar-img,
     .member-avatar-placeholder {
@@ -305,18 +353,22 @@
         height: 38px;
     }
 
+    /* [SEÇÃO 1.1.3.1.1.2] .member-avatar-placeholder — <div> (JSX: [SEÇÃO 1.1.3.1.1.2]) */
     .member-avatar-placeholder {
         font-size: 0.95rem;
     }
 
+    /* [SEÇÃO 1.1.3.1.2.1] .member-name — <h3> (JSX: [SEÇÃO 1.1.3.1.2.1]) */
     .member-name {
         font-size: 0.9rem;
     }
 
+    /* [SEÇÃO 1.1.3.1.2.2] .member-role — <span> (JSX: [SEÇÃO 1.1.3.1.2.2]) */
     .member-role {
         font-size: 0.75rem;
     }
 
+    /* [SEÇÃO 1.1.3.1.2.3] .member-actions — <div> (JSX: [SEÇÃO 1.1.3.1.2.3]) */
     .member-actions {
         flex-direction: column;
         align-items: stretch;
@@ -324,6 +376,7 @@
         width: 100%;
     }
 
+    /* [SEÇÃO 1.1.3.1.2.3.1] .copy-email-btn — <button> (JSX: [SEÇÃO 1.1.3.1.2.3.1]) */
     .copy-email-btn {
         width: 100%;
         max-width: 100%;
@@ -331,21 +384,10 @@
         padding: 6px 8px;
     }
 
+    /* [SEÇÃO 1.1.3.1.2.3.1.5] .lattes-btn — <a> (JSX: [SEÇÃO 1.1.3.1.2.3.1.5]) */
     .lattes-btn {
         width: 100%;
         justify-content: center;
         text-align: center;
     }
-}
-
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
 }

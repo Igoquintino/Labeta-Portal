@@ -1,3 +1,6 @@
+/* [ARQUIVO] Navbar.css — estilos de Navbar.jsx. Ordem das seções = ordem do JSX */
+
+/* [SEÇÃO 1] .navbar-header — <header> (JSX: [SEÇÃO 1]) */
 /* Base da Navbar fixa no topo */
 .navbar-header {
     position: sticky;
@@ -9,6 +12,7 @@
     z-index: 100;
 }
 
+/* [SEÇÃO 1.1] .navbar-container — <div> (JSX: [SEÇÃO 1.1]) */
 .navbar-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -20,6 +24,7 @@
     position: relative;
 }
 
+/* [SEÇÃO 1.1.1] .hamburger-btn — <button> (JSX: [SEÇÃO 1.1.1]) */
 /* O botão hambúrguer fica escondido em monitores grandes */
 .hamburger-btn {
     display: none;
@@ -39,6 +44,7 @@
     color: var(--text-main);
 }
 
+/* [SEÇÃO 1.1.2] .navbar-brand — <Link> (JSX: [SEÇÃO 1.1.2]) */
 /* Logo da marca */
 .navbar-brand {
     display: flex;
@@ -47,6 +53,7 @@
     text-decoration: none;
 }
 
+/* [SEÇÃO 1.1.2.1] .brand-logo-frame — <div> (JSX: [SEÇÃO 1.1.2.1]) */
 .brand-logo-frame {
     width: 40px;
     height: 40px;
@@ -55,17 +62,20 @@
     justify-content: center;
 }
 
+/* [SEÇÃO 1.1.2.1.1] .brand-logo-img — <img> (JSX: [SEÇÃO 1.1.2.1.1]) */
 .brand-logo-img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
+/* [SEÇÃO 1.1.2.2] .brand-titles — <div> (JSX: [SEÇÃO 1.1.2.2]) */
 .brand-titles {
     display: flex;
     flex-direction: column;
 }
 
+/* [SEÇÃO 1.1.2.2.1] .brand-name — <span> (JSX: [SEÇÃO 1.1.2.2.1]) */
 .brand-name {
     font-weight: 800;
     font-size: 1.15rem;
@@ -74,6 +84,7 @@
     line-height: 1.1;
 }
 
+/* [SEÇÃO 1.1.2.2.2] .brand-tagline — <span> (JSX: [SEÇÃO 1.1.2.2.2]) */
 .brand-tagline {
     font-size: 0.65rem;
     text-transform: uppercase;
@@ -81,11 +92,13 @@
     color: var(--color-gold);
 }
 
+/* [SEÇÃO 1.1.3] .desktop-nav — <nav> (JSX: [SEÇÃO 1.1.3]) */
 /* Navegação Desktop */
 .desktop-nav {
     display: flex;
 }
 
+/* [SEÇÃO 1.1.3.1] .nav-list — <ul> (JSX: [SEÇÃO 1.1.3.1]) */
 .nav-list {
     display: flex;
     list-style: none;
@@ -95,6 +108,7 @@
     padding: 0;
 }
 
+/* [SEÇÃO 1.1.3.1.1.1] .nav-link — <NavLink> (JSX: [SEÇÃO 1.1.3.1.1.1]) */
 .nav-link {
     font-size: 0.9rem;
     font-weight: 500;
@@ -108,6 +122,7 @@
     color: var(--color-gold);
 }
 
+/* [SEÇÃO 1.1.3.1.6.1] .nav-link-highlight — <NavLink> (JSX: [SEÇÃO 1.1.3.1.6.1]) */
 .nav-link-highlight {
     padding: 5px 12px;
     border-radius: var(--radius-sm);
@@ -121,6 +136,7 @@
     color: #ffffff;
 }
 
+/* [SEÇÃO 1.1.4] .navbar-actions — <div> (JSX: [SEÇÃO 1.1.4]) */
 /* Botões da Direita */
 .navbar-actions {
     display: flex;
@@ -128,6 +144,7 @@
     gap: 0.75rem;
 }
 
+/* [SEÇÃO 1.1.4.1] .action-btn — <button> (JSX: [SEÇÃO 1.1.4.1]) */
 .action-btn {
     display: inline-flex;
     align-items: center;
@@ -148,6 +165,7 @@
     color: var(--color-gold);
 }
 
+/* [SEÇÃO 1.1.4.1.2] .search-shortcut — <span> (JSX: [SEÇÃO 1.1.4.1.2]) */
 .search-shortcut {
     font-size: 0.7rem;
     background-color: rgba(255, 255, 255, 0.1);
@@ -157,20 +175,18 @@
     margin-left: 2px;
 }
 
+/* [SEÇÃO 1.1.4.2.1] .contact-icon — <Users> (JSX: [SEÇÃO 1.1.4.2.1]) */
 /* No Desktop: esconde o ícone e mostra o texto */
 .contact-icon {
   display: none;
 }
 
+/* [SEÇÃO 1.1.4.2.2] .contact-text — <span> (JSX: [SEÇÃO 1.1.4.2.2]) */
 .contact-text {
   display: inline;
 }
 
-/* Gaveta do Menu Mobile (Escondida por padrão) */
-.mobile-nav-drawer {
-    display: none;
-}
-
+/* [SEÇÃO 1.1.5] .mobile-nav-backdrop — <div> (JSX: [SEÇÃO 1.1.5]) */
 /* Backdrop escurecido para o menu mobile */
 .mobile-nav-backdrop {
     position: fixed;
@@ -183,22 +199,18 @@
     z-index: 95;
 }
 
+/* [SEÇÃO 1.2] .mobile-nav-drawer — <nav> (JSX: [SEÇÃO 1.2]) */
+/* Gaveta do Menu Mobile (Escondida por padrão) */
+.mobile-nav-drawer {
+    display: none;
+}
+
+/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
 /* ==========================================================================
    RESPONSIVIDADE: CELULAR E TABLET (Telas com largura até 900px)
    ========================================================================== */
 @media (max-width: 900px) {
-
-    /* 1. Mostra o botão hambúrguer */
-    .hamburger-btn {
-        display: flex;
-        z-index: 2;
-    }
-
-    /* 2. Esconde o menu estático do PC */
-    .desktop-nav {
-        display: none;
-    }
-
+    /* [SEÇÃO 1.1] .navbar-container — <div> (JSX: [SEÇÃO 1.1]) */
     /* 3. CENTRALIZA A LOGO NO MEIO DA BARRA */
     .navbar-container {
         display: grid;
@@ -207,21 +219,66 @@
         padding: 0.6rem 1rem;
     }
 
+    /* [SEÇÃO 1.1.1] .hamburger-btn — <button> (JSX: [SEÇÃO 1.1.1]) */
+    /* 1. Mostra o botão hambúrguer */
+    .hamburger-btn {
+        display: flex;
+        z-index: 2;
+    }
+
+    /* [SEÇÃO 1.1.2] .navbar-brand — <Link> (JSX: [SEÇÃO 1.1.2]) */
     .navbar-brand {
         justify-self: center;
         margin: 0 auto;
     }
 
-    /* Esconde o atalho de teclado ⌘K no celular para economizar espaço */
-    .search-shortcut {
+    /* [SEÇÃO 1.1.3] .desktop-nav — <nav> (JSX: [SEÇÃO 1.1.3]) */
+    /* 2. Esconde o menu estático do PC */
+    .desktop-nav {
         display: none;
     }
 
+    /* [SEÇÃO 1.1.3.1.1.1] .active — <NavLink> (JSX: [SEÇÃO 1.1.3.1.1.1]) */
+    .mobile-nav-link:hover,
+    .mobile-nav-link.active {
+        background-color: var(--bg-surface-elevated);
+        color: var(--color-gold);
+    }
+
+    /* [SEÇÃO 1.1.4.1] .action-btn — <button> (JSX: [SEÇÃO 1.1.4.1]) */
     .action-btn {
         padding: 6px 10px;
         font-size: 0.8rem;
     }
 
+    /* [SEÇÃO 1.1.4.1.2] .search-shortcut — <span> (JSX: [SEÇÃO 1.1.4.1.2]) */
+    /* Esconde o atalho de teclado ⌘K no celular para economizar espaço */
+    .search-shortcut {
+        display: none;
+    }
+
+    /* [SEÇÃO 1.1.4.2] .contact-trigger — <button> (JSX: [SEÇÃO 1.1.4.2]) */
+    /* 3. Deixa o botão compacto/quadrado, igual ao botão da lupa */
+    .contact-trigger {
+    padding: 6px 10px;
+    min-width: 34px;
+    height: 34px;
+    justify-content: center;
+  }
+
+    /* [SEÇÃO 1.1.4.2.1] .contact-icon — <Users> (JSX: [SEÇÃO 1.1.4.2.1]) */
+    /* 2. Força o ícone a aparecer */
+    .contact-icon {
+    display: block !important;
+  }
+
+    /* [SEÇÃO 1.1.4.2.2] .contact-text — <span> (JSX: [SEÇÃO 1.1.4.2.2]) */
+    /* 1. Esconde a palavra "Contatos" */
+    .contact-text {
+    display: none !important;
+  }
+
+    /* [SEÇÃO 1.2] .mobile-nav-drawer — <nav> (JSX: [SEÇÃO 1.2]) */
     /* 4. A GAVETA DO MENU DESLIZANDO COMO OVERLAY */
     .mobile-nav-drawer {
         position: absolute;
@@ -243,6 +300,7 @@
         border-color: var(--border-gold);
     }
 
+    /* [SEÇÃO 1.2.1] .mobile-nav-list — <ul> (JSX: [SEÇÃO 1.2.1]) */
     .mobile-nav-list {
         list-style: none;
         padding: 1rem 1.5rem;
@@ -252,6 +310,7 @@
         gap: 0.85rem;
     }
 
+    /* [SEÇÃO 1.2.1.1.1] .mobile-nav-link — <NavLink> (JSX: [SEÇÃO 1.2.1.1.1]) */
     .mobile-nav-link {
         display: block;
         font-size: 1rem;
@@ -262,34 +321,10 @@
         transition: all var(--transition-fast);
     }
 
-    .mobile-nav-link:hover,
-    .mobile-nav-link.active {
-        background-color: var(--bg-surface-elevated);
-        color: var(--color-gold);
-    }
-
+    /* [SEÇÃO 1.2.1.6.1] .mobile-highlight — <NavLink> (JSX: [SEÇÃO 1.2.1.6.1]) */
     .mobile-highlight {
         background-color: rgba(22, 91, 51, 0.4);
         border: 1px solid var(--border-gold);
         color: var(--text-main);
     }
-
-
-    /* 1. Esconde a palavra "Contatos" */
-  .contact-text {
-    display: none !important;
-  }
-
-  /* 2. Força o ícone a aparecer */
-  .contact-icon {
-    display: block !important;
-  }
-
-  /* 3. Deixa o botão compacto/quadrado, igual ao botão da lupa */
-  .contact-trigger {
-    padding: 6px 10px;
-    min-width: 34px;
-    height: 34px;
-    justify-content: center;
-  }
 }

@@ -1,3 +1,18 @@
+/* [ARQUIVO] ToastNotification.css — estilos de ToastNotification.jsx. Ordem das seções = ordem do JSX */
+
+/* [GLOBAL] Animação de entrada do toast */
+@keyframes toast-slide-up {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 15px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* [SEÇÃO 1] .toast-notification — contêiner fixo do toast (JSX: [SEÇÃO 1]) */
 .toast-notification {
     position: fixed;
     bottom: 24px;
@@ -17,44 +32,7 @@
     animation: toast-slide-up 0.25s ease-out;
 }
 
-@keyframes toast-slide-up {
-    from {
-        opacity: 0;
-        transform: translate(-50%, 15px);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-}
-
-.toast-content {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-}
-
-.toast-message {
-    color: var(--text-main);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.toast-icon-success {
-    color: var(--color-accent);
-    flex-shrink: 0;
-}
-
-.toast-icon-error {
-    color: var(--color-danger);
-    flex-shrink: 0;
-}
-
-.toast-icon-info {
-    color: var(--color-gold);
-    flex-shrink: 0;
-}
-
+/* [SEÇÃO 1.v] .toast-success / .toast-error / .toast-info — variantes por tipo (JSX: [SEÇÃO 1], classe toast-${type}) */
 .toast-success {
     border: 1px solid rgba(78, 168, 110, 0.4);
     border-left: 4px solid var(--color-accent);
@@ -70,6 +48,37 @@
     border-left: 4px solid var(--color-gold);
 }
 
+/* [SEÇÃO 1.1] .toast-content — ícone + mensagem (JSX: [SEÇÃO 1.1]) */
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+/* [SEÇÃO 1.1.1] .toast-icon-* — ícones por tipo (JSX: [SEÇÃO 1.1.1]) */
+.toast-icon-success {
+    color: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.toast-icon-error {
+    color: var(--color-danger);
+    flex-shrink: 0;
+}
+
+.toast-icon-info {
+    color: var(--color-gold);
+    flex-shrink: 0;
+}
+
+/* [SEÇÃO 1.1.2] .toast-message — texto (JSX: [SEÇÃO 1.1.2]) */
+.toast-message {
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* [SEÇÃO 1.2] .toast-close-btn — botão de fechar (JSX: [SEÇÃO 1.2]) */
 .toast-close-btn {
     background: transparent;
     border: none;

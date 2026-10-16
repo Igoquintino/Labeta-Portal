@@ -1,3 +1,10 @@
+/* ============================================================
+ * [ENTRADA] main
+ * Descrição: Ponto de entrada da aplicação: monta React com Router e AuthProvider.
+ * Rota/Uso: Carregado por index.html.
+ * Dados: nenhum
+ * CSS correlato: index.css
+ * ============================================================ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
