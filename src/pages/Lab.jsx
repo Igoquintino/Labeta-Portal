@@ -211,7 +211,7 @@ export function Lab() {
                     {/* [SEÇÃO 1.1.1.4] .lab-location-tag — <div> */}
                     <div className="lab-location-tag">
                         <MapPin size={14} aria-hidden="true" />
-                        <span>UFOPA – Campus Tapajós, Bloco 1, Sala 5 — Santarém, Pará</span>
+                        <span>UFOPA – Unidade Tapajós, Bloco 09, sala 06 — Santarém, Pará</span>
                     </div>
                 </header>
 
