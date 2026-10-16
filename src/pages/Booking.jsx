@@ -1,26 +1,51 @@
 /* ============================================================
  * [COMPONENTE] Booking
  * Descrição: Portal de agendamento: catálogo de equipamentos, agenda e formulário (restrito à comunidade UFOPA).
+ *            Possui integração reativa com Supabase e contingência automática via equipment.json.
  * Rota/Uso: Rota /agendamento.
- * Dados: src/data/equipment.json
+ * Dados: Supabase ('equipment') com fallback em src/data/equipment.json via equipmentService.
  * CSS correlato: Booking.css
  * ============================================================ */
-import { useState } from 'react';
-import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, HelpCircle, Plus, Edit2, Trash2, Settings } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, Plus, Edit2, Trash2, Settings } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
-import equipmentData from '../data/equipment.json';
+import { ToastNotification } from '../components/common/ToastNotification';
+import { fetchEquipment, createEquipment, updateEquipment, deleteEquipment } from '../services/equipmentService';
 import './Booking.css';
 
 /** [FUNÇÃO] Booking — renderiza abas Catálogo/Agenda e modais de gestão. */
 export function Booking() {
     const { isAdmin } = useAuth();
+    // [ESTADO] equipmentList — lista reativa de equipamentos
+    const [equipmentList, setEquipmentList] = useState([]);
+    // [ESTADO] loadingEquipment — indicador de carregamento
+    const [loadingEquipment, setLoadingEquipment] = useState(true);
     // [ESTADO] activeTab — aba ativa: 'catalogo' | 'agenda'
-    const [activeTab, setActiveTab] = useState('catalogo'); // 'catalogo' | 'agenda'
+    const [activeTab, setActiveTab] = useState('catalogo');
     // [ESTADO] selectedEquipment — equipamento selecionado para solicitação
     const [selectedEquipment, setSelectedEquipment] = useState(null);
     // [ESTADO] modalConfig — { isOpen, title, type, data } controla o AdminModal
     const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', type: '', data: null });
+    // [ESTADO] formSubmitting — envio do formulário em andamento
+    const [formSubmitting, setFormSubmitting] = useState(false);
+    // [ESTADO] toast — notificação de feedback temporário
+    const [toast, setToast] = useState(null);
+
+    /** [HOOK] useEffect — Carrega equipamentos na montagem */
+    useEffect(() => {
+        let isMounted = true;
+        async function load() {
+            setLoadingEquipment(true);
+            const { equipment } = await fetchEquipment();
+            if (isMounted) {
+                setEquipmentList(equipment);
+                setLoadingEquipment(false);
+            }
+        }
+        load();
+        return () => { isMounted = false; };
+    }, []);
 
     /** [FUNÇÃO] openCreateModal — abre o AdminModal em modo "criar" (somente admin). */
     const openCreateModal = () => {
@@ -64,13 +89,77 @@ export function Booking() {
 
     /** [FUNÇÃO] closeModal — fecha o AdminModal e reseta modalConfig. */
     const closeModal = () => {
+        if (formSubmitting) return;
         setModalConfig({ isOpen: false, title: '', type: '', data: null });
     };
 
-    /** [FUNÇÃO] handleFormSubmit — trata o envio do formulário do modal (por ora apenas simula e fecha). */
-    const handleFormSubmit = (e) => {
+    /** [FUNÇÃO] handleConfirmDelete — remove o equipamento e atualiza o estado */
+    const handleConfirmDelete = async () => {
+        if (!modalConfig.data) return;
+        setFormSubmitting(true);
+        const item = modalConfig.data;
+        const { error } = await deleteEquipment(item.id);
+
+        if (error) {
+            setToast({ type: 'error', message: `Erro ao remover equipamento: ${error.message}` });
+        } else {
+            setEquipmentList((prev) => prev.filter((eq) => eq.id !== item.id));
+            setToast({ type: 'success', message: 'Equipamento removido do catálogo!' });
+            closeModal();
+        }
+        setFormSubmitting(false);
+    };
+
+    /** [FUNÇÃO] handleFormSubmit — trata cadastro, edição e configs */
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
-        closeModal();
+        setFormSubmitting(true);
+
+        const formData = new FormData(e.currentTarget);
+        const isConfig = modalConfig.type === 'config';
+        const isEdit = modalConfig.type === 'edit';
+
+        if (isConfig) {
+            setToast({ type: 'info', message: 'Configurações de integração atualizadas!' });
+            closeModal();
+            setFormSubmitting(false);
+            return;
+        }
+
+        const payload = {
+            name: formData.get('name'),
+            code: formData.get('code'),
+            category: formData.get('category'),
+            status: formData.get('status'),
+            description: formData.get('description'),
+            capacity: modalConfig.data?.capacity || '1 pesquisador por turno',
+            requirements: modalConfig.data?.requirements || ['Uso exclusivo em bancada do LABETA']
+        };
+
+        if (isEdit) {
+            const currentId = modalConfig.data.id;
+            const { data, error } = await updateEquipment(currentId, payload);
+            if (error) {
+                setToast({ type: 'error', message: `Falha ao atualizar equipamento: ${error.message}` });
+            } else {
+                const updated = data || { id: currentId, ...payload };
+                setEquipmentList((prev) => prev.map((eq) => (eq.id === currentId ? updated : eq)));
+                setToast({ type: 'success', message: 'Equipamento atualizado com sucesso!' });
+                closeModal();
+            }
+        } else {
+            const { data, error } = await createEquipment(payload);
+            if (error) {
+                setToast({ type: 'error', message: `Falha ao cadastrar equipamento: ${error.message}` });
+            } else {
+                const created = data || { id: `local-${Date.now()}`, ...payload };
+                setEquipmentList((prev) => [...prev, created]);
+                setToast({ type: 'success', message: 'Equipamento cadastrado com sucesso!' });
+                closeModal();
+            }
+        }
+
+        setFormSubmitting(false);
     };
 
     return (
@@ -103,24 +192,26 @@ export function Booking() {
                         </div>
                         {/* [SEÇÃO 1.1.1.4.2] .restriction-text — <div> */}
                         <div className="restriction-text">
-                            <strong>Acesso Restrito à Comunidade UFOPA</strong>
-                            <p>
-                                O uso das dependências e equipamentos é concedido apenas a docentes, discentes orientados e pesquisadores com projetos ativos cadastrados no LABETA. O agendamento deve ser realizado com antecedência mínima de 48 horas úteis.
+                            {/* [SEÇÃO 1.1.1.4.2.1] .restriction-title — <strong> */}
+                            <strong className="restriction-title">Aviso de Elegibilidade de Uso:</strong>
+                            {/* [SEÇÃO 1.1.1.4.2.2] .restriction-desc — <p> */}
+                            <p className="restriction-desc">
+                                O uso da infraestrutura analítica é restrito a docentes, discentes e colaboradores em projetos formais de pesquisa cadastrados na UFOPA. Solicitações externas necessitam de autorização prévia da coordenação do laboratório.
                             </p>
                         </div>
                     </aside>
 
-                    {/* Abas de Navegação do Portal */}
-                    {/* [SEÇÃO 1.1.1.5] .booking-nav-tabs — <nav> */}
-                    <nav className="booking-nav-tabs" aria-label="Navegação do Portal de Agendamento">
+                    {/* Navegação entre Abas */}
+                    {/* [SEÇÃO 1.1.1.5] .booking-nav-tabs / .booking-tabs — <nav> */}
+                    <nav className="booking-nav-tabs booking-tabs" aria-label="Abas de agendamento">
                         {/* [SEÇÃO 1.1.1.5.1] .booking-tab-btn — <button> */}
                         <button
                             type="button"
                             className={`booking-tab-btn ${activeTab === 'catalogo' ? 'active' : ''}`}
                             onClick={() => setActiveTab('catalogo')}
                         >
-                            <Microscope size={16} />
-                            <span>1. Catálogo de Equipamentos ({equipmentData.length})</span>
+                            <Microscope size={15} />
+                            <span>Catálogo de Recursos ({equipmentList.length})</span>
                         </button>
                         {/* [SEÇÃO 1.1.1.5.2] .booking-tab-btn — <button> */}
                         <button
@@ -128,8 +219,8 @@ export function Booking() {
                             className={`booking-tab-btn ${activeTab === 'agenda' ? 'active' : ''}`}
                             onClick={() => setActiveTab('agenda')}
                         >
-                            <Clock size={16} />
-                            <span>2. Agenda e Solicitação</span>
+                            <Calendar size={15} />
+                            <span>Agenda e Solicitação</span>
                         </button>
                     </nav>
                 </header>
@@ -160,283 +251,234 @@ export function Booking() {
                     </div>
                 )}
 
-                {/* Conteúdo da Aba: Catálogo de Equipamentos */}
+                {/* ABA 1: Catálogo de Recursos e Equipamentos */}
                 {activeTab === 'catalogo' && (
-                    /* [SEÇÃO 1.1.1.7] .equipment-catalog-section — <section> */
-                    <section className="equipment-catalog-section" aria-label="Catálogo de Equipamentos Disponíveis">
-                        {/* [SEÇÃO 1.1.1.7.1] .equipment-grid — <div> */}
+                    /* [SEÇÃO 1.1.2] .equipment-catalog-section — <section> */
+                    <section className="equipment-catalog-section" aria-label="Catálogo de Recursos">
+                        {/* [SEÇÃO 1.1.2.1] .section-intro — <div> */}
+                        <div className="section-intro">
+                            {/* [SEÇÃO 1.1.2.1.1] .section-heading — <h2> */}
+                            <h2 className="section-heading">Equipamentos e Bancadas Disponíveis</h2>
+                            {/* [SEÇÃO 1.1.2.1.2] .section-lead — <p> */}
+                            <p className="section-lead">
+                                Consulte as especificações técnicas, exigências de biossegurança e capacidade por turno antes de formalizar sua solicitação.
+                            </p>
+                        </div>
+
+                        {/* [SEÇÃO 1.1.2.2] .equipment-grid — <div> */}
                         <div className="equipment-grid">
-                            {equipmentData.map((eq) => {
-                                const isAvailable = eq.status === 'disponivel';
-                                return (
-                                    /* [SEÇÃO 1.1.1.7.1.1] .equipment-card — <article> */
-                                    <article key={eq.id} className="equipment-card">
-
-                                        {/* Barra de Ações Administrativas do Card */}
-                                        {isAdmin && (
-                                            /* [SEÇÃO 1.1.1.7.1.1.1] .card-admin-actions — <div> */
-                                            <div className="card-admin-actions">
-                                                {/* [SEÇÃO 1.1.1.7.1.1.1.1] .card-admin-badge — <span> */}
-                                                <span className="card-admin-badge">
-                                                    <ShieldCheck size={12} aria-hidden="true" />
-                                                    <span>Gestão</span>
-                                                </span>
-                                                {/* [SEÇÃO 1.1.1.7.1.1.1.2] .card-admin-btns-group — <div> */}
-                                                <div className="card-admin-btns-group">
-                                                    {/* [SEÇÃO 1.1.1.7.1.1.1.2.1] .admin-action-btn .edit — <button> */}
-                                                    <button
-                                                        type="button"
-                                                        className="admin-action-btn edit"
-                                                        title={`Editar: ${eq.name}`}
-                                                        onClick={() => openEditModal(eq)}
-                                                    >
-                                                        <Edit2 size={13} />
-                                                        <span>Editar</span>
-                                                    </button>
-                                                    {/* [SEÇÃO 1.1.1.7.1.1.1.2.2] .admin-action-btn .delete — <button> */}
-                                                    <button
-                                                        type="button"
-                                                        className="admin-action-btn delete"
-                                                        title={`Excluir: ${eq.name}`}
-                                                        onClick={() => openDeleteModal(eq)}
-                                                    >
-                                                        <Trash2 size={13} />
-                                                        <span>Excluir</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* [SEÇÃO 1.1.1.7.1.1.2] .equipment-card-header — <div> */}
-                                        <div className="equipment-card-header">
-                                            {/* [SEÇÃO 1.1.1.7.1.1.2.1] .equipment-meta — <div> */}
-                                            <div className="equipment-meta">
-                                                {/* [SEÇÃO 1.1.1.7.1.1.2.1.1] .equipment-category — <span> */}
-                                                <span className="equipment-category">{eq.category}</span>
-                                                {/* [SEÇÃO 1.1.1.7.1.1.2.1.2] .equipment-code — <span> */}
-                                                <span className="equipment-code">{eq.code}</span>
-                                            </div>
-                                            {/* [SEÇÃO 1.1.1.7.1.1.2.2] .status-badge — <span> */}
-                                            <span className={`status-badge ${isAvailable ? 'available' : 'maintenance'}`}>
-                                                {isAvailable ? 'Disponível' : 'Em Manutenção'}
+                            {loadingEquipment ? (
+                                <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: 'var(--text-muted)' }}>Carregando catálogo de equipamentos...</p>
+                            ) : equipmentList.map((eq) => (
+                                /* [SEÇÃO 1.1.2.2.1] .equipment-card — <article> */
+                                <article key={eq.id} className="equipment-card">
+                                    {/* Barra de Ações Administrativas do Card */}
+                                    {isAdmin && (
+                                        /* [SEÇÃO 1.1.2.2.1.1] .card-admin-actions — <div> */
+                                        <div className="card-admin-actions">
+                                            {/* [SEÇÃO 1.1.2.2.1.1.1] .card-admin-badge — <span> */}
+                                            <span className="card-admin-badge">
+                                                <ShieldCheck size={12} aria-hidden="true" />
+                                                <span>Gestão</span>
                                             </span>
-                                        </div>
-
-                                        {/* [SEÇÃO 1.1.1.7.1.1.3] .equipment-name — <h2> */}
-                                        <h2 className="equipment-name">{eq.name}</h2>
-                                        {/* [SEÇÃO 1.1.1.7.1.1.4] .equipment-desc — <p> */}
-                                        <p className="equipment-desc">{eq.description}</p>
-
-                                        {/* [SEÇÃO 1.1.1.7.1.1.5] .specs-list — <div> */}
-                                        <div className="specs-list">
-                                            {/* [SEÇÃO 1.1.1.7.1.1.5.1] .spec-row — <div> */}
-                                            <div className="spec-row">
-                                                {/* [SEÇÃO 1.1.1.7.1.1.5.1.1] .spec-label — <span> */}
-                                                <span className="spec-label">Capacidade Máxima:</span>
-                                                {/* [SEÇÃO 1.1.1.7.1.1.5.1.2] .spec-value — <span> */}
-                                                <span className="spec-value">{eq.capacity}</span>
+                                            {/* [SEÇÃO 1.1.2.2.1.1.2] .card-admin-btns-group — <div> */}
+                                            <div className="card-admin-btns-group">
+                                                {/* [SEÇÃO 1.1.2.2.1.1.2.1] .admin-action-btn .edit — <button> */}
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn edit"
+                                                    title="Editar equipamento"
+                                                    onClick={() => openEditModal(eq)}
+                                                >
+                                                    <Edit2 size={13} />
+                                                    <span>Editar</span>
+                                                </button>
+                                                {/* [SEÇÃO 1.1.2.2.1.1.2.2] .admin-action-btn .delete — <button> */}
+                                                <button
+                                                    type="button"
+                                                    className="admin-action-btn delete"
+                                                    title="Excluir equipamento"
+                                                    onClick={() => openDeleteModal(eq)}
+                                                >
+                                                    <Trash2 size={13} />
+                                                    <span>Excluir</span>
+                                                </button>
                                             </div>
-                                            {/* [SEÇÃO 1.1.1.7.1.1.5.2] .spec-row — <div> */}
-                                            <div className="spec-row">
-                                                {/* [SEÇÃO 1.1.1.7.1.1.5.2.1] .spec-label — <span> */}
-                                                <span className="spec-label">Localização:</span>
-                                                {/* [SEÇÃO 1.1.1.7.1.1.5.2.2] .spec-value — <span> */}
-                                                <span className="spec-value">{eq.location}</span>
-                                            </div>
                                         </div>
+                                    )}
 
-                                        {/* [SEÇÃO 1.1.1.7.1.1.6] .requirements-box — <div> */}
-                                        <div className="requirements-box">
-                                            {/* [SEÇÃO 1.1.1.7.1.1.6.1] .req-title — <span> */}
-                                            <span className="req-title">Requisitos de Biossegurança:</span>
-                                            {/* [SEÇÃO 1.1.1.7.1.1.6.2] .req-list — <ul> */}
-                                            <ul className="req-list">
-                                                {eq.requirements.map((req, idx) => (
-                                                    /* [SEÇÃO 1.1.1.7.1.1.6.2.1] .req-item — <li> */
-                                                    <li key={idx} className="req-item">
-                                                        {/* [SEÇÃO 1.1.1.7.1.1.6.2.1.1] .req-icon — <CheckCircle> */}
-                                                        <CheckCircle size={13} className="req-icon" />
-                                                        <span>{req}</span>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                    {/* [SEÇÃO 1.1.2.2.1.2] .equipment-header — <div> */}
+                                    <div className="equipment-header">
+                                        <div>
+                                            {/* [SEÇÃO 1.1.2.2.1.2.1] .equipment-category-tag — <span className="equipment-category-tag"> */}
+                                            <span className="equipment-category-tag">{eq.category}</span>
+                                            {/* [SEÇÃO 1.1.2.2.1.2.2] .equipment-name — <h3> */}
+                                            <h3 className="equipment-name">{eq.name}</h3>
                                         </div>
+                                        {/* [SEÇÃO 1.1.2.2.1.2.3] .equipment-code — <span> */}
+                                        <span className="equipment-code">{eq.code}</span>
+                                    </div>
 
-                                        {/* [SEÇÃO 1.1.1.7.1.1.7] .equipment-card-footer — <div> */}
-                                        <div className="equipment-card-footer">
-                                            {/* [SEÇÃO 1.1.1.7.1.1.7.1] .select-equipment-btn — <button> */}
-                                            <button
-                                                type="button"
-                                                className="select-equipment-btn"
-                                                onClick={() => {
-                                                    setSelectedEquipment(eq);
-                                                    setActiveTab('agenda');
-                                                }}
-                                            >
-                                                <span>Ver Disponibilidade na Agenda</span>
-                                                <ExternalLink size={14} />
-                                            </button>
-                                        </div>
-                                    </article>
-                                );
-                            })}
+                                    {/* [SEÇÃO 1.1.2.2.1.3] .equipment-status-row — <div> */}
+                                    <div className="equipment-status-row">
+                                        {/* [SEÇÃO 1.1.2.2.1.3.1] .equipment-status-badge — <span> */}
+                                        <span className={`equipment-status-badge status-${eq.status}`}>
+                                            <span className="status-dot" aria-hidden="true" />
+                                            {eq.status === 'disponivel' && 'Disponível'}
+                                            {eq.status === 'manutencao_preventiva' && 'Manutenção Preventiva'}
+                                            {eq.status === 'indisponivel' && 'Indisponível'}
+                                        </span>
+                                        {/* [SEÇÃO 1.1.2.2.1.3.2] .equipment-capacity — <span> */}
+                                        <span className="equipment-capacity">
+                                            <Clock size={12} />
+                                            {eq.capacity}
+                                        </span>
+                                    </div>
+
+                                    {/* [SEÇÃO 1.1.2.2.1.4] .equipment-description — <p> */}
+                                    <p className="equipment-description">{eq.description}</p>
+
+                                    {/* [SEÇÃO 1.1.2.2.1.5] .equipment-requirements-box — <div> */}
+                                    <div className="equipment-requirements-box">
+                                        {/* [SEÇÃO 1.1.2.2.1.5.1] .requirements-label — <span className="requirements-label"> */}
+                                        <span className="requirements-label">Requisitos e Cuidados Específicos:</span>
+                                        {/* [SEÇÃO 1.1.2.2.1.5.2] .requirements-list — <ul> */}
+                                        <ul className="requirements-list">
+                                            {Array.isArray(eq.requirements) && eq.requirements.map((req, idx) => (
+                                                /* [SEÇÃO 1.1.2.2.1.5.2.1] .requirement-item — <li> */
+                                                <li key={idx} className="requirement-item">
+                                                    <CheckCircle size={13} className="req-check-icon" aria-hidden="true" />
+                                                    <span>{req}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    {/* [SEÇÃO 1.1.2.2.1.6] .equipment-card-footer — <div className="equipment-card-footer"> */}
+                                    <div className="equipment-card-footer">
+                                        {/* [SEÇÃO 1.1.2.2.1.6.1] .select-equipment-btn — <button> */}
+                                        <button
+                                            type="button"
+                                            className="select-equipment-btn select-reserve-btn"
+                                            onClick={() => {
+                                                setSelectedEquipment(eq.name);
+                                                setActiveTab('agenda');
+                                            }}
+                                            aria-label={`Solicitar agendamento do ${eq.name}`}
+                                        >
+                                            <span>Solicitar Este Recurso</span>
+                                            <ExternalLink size={13} />
+                                        </button>
+                                    </div>
+                                </article>
+                            ))}
                         </div>
                     </section>
                 )}
 
-                {/* Conteúdo da Aba: Calendário e Formulário */}
+                {/* ABA 2: Calendário e Formulário */}
                 {activeTab === 'agenda' && (
-                    /* [SEÇÃO 1.1.1.8] .schedule-section — <section> */
-                    <section className="schedule-section" aria-label="Painel de Agendamento e Horários">
+                    /* [SEÇÃO 1.1.3] .booking-agenda-section — <section> */
+                    <section className="booking-agenda-section" aria-label="Agenda e Formulário de Solicitação">
+                        {/* [SEÇÃO 1.1.3.1] .agenda-grid — <div> */}
+                        <div className="agenda-grid">
 
-                        {selectedEquipment && (
-                            /* [SEÇÃO 1.1.1.8.1] .selected-equipment-alert — <div> */
-                            <div className="selected-equipment-alert">
-                                <span>Equipamento pré-selecionado: <strong>{selectedEquipment.name}</strong> ({selectedEquipment.code})</span>
-                                {/* [SEÇÃO 1.1.1.8.1.2] .clear-selection-btn — <button> */}
-                                <button
-                                    type="button"
-                                    className="clear-selection-btn"
-                                    onClick={() => setSelectedEquipment(null)}
-                                >
-                                    Limpar seleção
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Guia Visual de Turnos de Bancada */}
-                        {/* [SEÇÃO 1.1.1.8.2] .shifts-guide-panel — <div> */}
-                        <div className="shifts-guide-panel" aria-label="Guia de Turnos de Bancada">
-                            {/* [SEÇÃO 1.1.1.8.2.1] .shift-card — <div> */}
-                            <div className="shift-card">
-                                {/* [SEÇÃO 1.1.1.8.2.1.1] .shift-header — <div> */}
-                                <div className="shift-header">
-                                    {/* [SEÇÃO 1.1.1.8.2.1.1.1] .shift-badge .morning — <span> */}
-                                    <span className="shift-badge morning">Manhã</span>
-                                    {/* [SEÇÃO 1.1.1.8.2.1.1.2] .shift-hours — <span> */}
-                                    <span className="shift-hours">08:00 – 12:00</span>
-                                </div>
-                                {/* [SEÇÃO 1.1.1.8.2.1.2] .shift-desc — <p> */}
-                                <p className="shift-desc">Triagem, preparação e lavagem de amostras ficológicas.</p>
-                            </div>
-                            {/* [SEÇÃO 1.1.1.8.2.2] .shift-card — <div> */}
-                            <div className="shift-card">
-                                {/* [SEÇÃO 1.1.1.8.2.2.1] .shift-header — <div> */}
-                                <div className="shift-header">
-                                    {/* [SEÇÃO 1.1.1.8.2.2.1.1] .shift-badge .afternoon — <span> */}
-                                    <span className="shift-badge afternoon">Tarde</span>
-                                    {/* [SEÇÃO 1.1.1.8.2.2.1.2] .shift-hours — <span> */}
-                                    <span className="shift-hours">14:00 – 18:00</span>
-                                </div>
-                                {/* [SEÇÃO 1.1.1.8.2.2.2] .shift-desc — <p> */}
-                                <p className="shift-desc">Microscopia óptica avançada, contagem celular e capturas digitais.</p>
-                            </div>
-                            {/* [SEÇÃO 1.1.1.8.2.3] .shift-card — <div> */}
-                            <div className="shift-card">
-                                {/* [SEÇÃO 1.1.1.8.2.3.1] .shift-header — <div> */}
-                                <div className="shift-header">
-                                    {/* [SEÇÃO 1.1.1.8.2.3.1.1] .shift-badge .night — <span> */}
-                                    <span className="shift-badge night">Noite</span>
-                                    {/* [SEÇÃO 1.1.1.8.2.3.1.2] .shift-hours — <span> */}
-                                    <span className="shift-hours">18:00 – 21:00</span>
-                                </div>
-                                {/* [SEÇÃO 1.1.1.8.2.3.2] .shift-desc — <p> */}
-                                <p className="shift-desc">Oxidação química, estufa e processos de longa duração (Pós-graduação).</p>
-                            </div>
-                        </div>
-
-                        {/* [SEÇÃO 1.1.1.8.3] .schedule-layout-grid — <div> */}
-                        <div className="schedule-layout-grid">
-
-                            {/* Calendário de Disponibilidade */}
-                            {/* [SEÇÃO 1.1.1.8.3.1] .calendar-panel — <div> */}
-                            <div className="calendar-panel">
-                                {/* [SEÇÃO 1.1.1.8.3.1.1] .panel-header — <div> */}
-                                <div className="panel-header">
-                                    {/* [SEÇÃO 1.1.1.8.3.1.1.1] .panel-icon — <Clock> */}
-                                    <Clock size={18} className="panel-icon" />
+                            {/* Coluna 1: Visualização de Disponibilidade */}
+                            {/* [SEÇÃO 1.1.3.1.1] .agenda-calendar-col — <article> */}
+                            <article className="agenda-calendar-col">
+                                {/* [SEÇÃO 1.1.3.1.1.1] .col-header — <div> */}
+                                <div className="col-header">
+                                    {/* [SEÇÃO 1.1.3.1.1.1.1] .col-icon-box — <div> */}
+                                    <div className="col-icon-box">
+                                        <Calendar size={20} />
+                                    </div>
                                     <div>
-                                        {/* [SEÇÃO 1.1.1.8.3.1.1.2.1] .panel-title — <h2> */}
-                                        <h2 className="panel-title">1. Consultar Horários Ocupados</h2>
-                                        {/* [SEÇÃO 1.1.1.8.3.1.1.2.2] .panel-subtitle — <p> */}
-                                        <p className="panel-subtitle">Verifique no calendário abaixo os horários com reservas já confirmadas.</p>
+                                        {/* [SEÇÃO 1.1.3.1.1.1.2.1] .col-title — <h2> */}
+                                        <h2 className="col-title">Disponibilidade do Laboratório</h2>
+                                        {/* [SEÇÃO 1.1.3.1.1.1.2.2] .col-desc — <p> */}
+                                        <p className="col-desc">Consulte horários e bancadas ocupadas antes de enviar a proposta.</p>
                                     </div>
                                 </div>
 
-                                {/* [SEÇÃO 1.1.1.8.3.1.2] .calendar-embed-container — <div> */}
+                                {/* [SEÇÃO 1.1.3.1.1.2] .calendar-embed-container — <div> */}
                                 <div className="calendar-embed-container">
-                                    {/* [SEÇÃO 1.1.1.8.3.1.2.1] .calendar-iframe — <iframe> */}
+                                    {/* [SEÇÃO 1.1.3.1.1.2.1] .google-calendar-iframe — <iframe> */}
                                     <iframe
-                                        src="https://calendar.google.com/calendar/embed?height=400&wkst=1&ctz=America%2FSao_Paulo&showPrint=0&color=%23165B33&color=%23D6C28F"
-                                        className="calendar-iframe"
-                                        width="100%"
-                                        height="400"
-                                        title="Google Agenda do LABETA - Horários de Bancada e Equipamentos"
+                                        src="https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSantarem&mode=MONTH&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&bgcolor=%2314241B"
+                                        title="Agenda Oficial de Ocupação do LABETA"
+                                        className="google-calendar-iframe"
+                                        width="554"
+                                        height="380"
+                                        frameBorder="0"
+                                        scrolling="no"
                                         loading="lazy"
                                     />
                                 </div>
-                                {/* [SEÇÃO 1.1.1.8.3.1.3] .calendar-footer-hint — <div> */}
-                                <div className="calendar-footer-hint">
-                                    <span>Visualização otimizada para web. </span>
-                                    {/* [SEÇÃO 1.1.1.8.3.1.3.2] .calendar-direct-link — <a> */}
-                                    <a
-                                        href="https://calendar.google.com/calendar/embed?ctz=America%2FSao_Paulo"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="calendar-direct-link"
-                                        aria-label="Abrir Google Agenda do laboratório em nova aba"
-                                    >
-                                        <span>Abrir agenda em tela cheia</span>
-                                        <ExternalLink size={13} aria-hidden="true" />
-                                    </a>
-                                </div>
-                            </div>
+                            </article>
 
-                            {/* Painel do Formulário de Reserva */}
-                            {/* [SEÇÃO 1.1.1.8.3.2] .form-panel — <div> */}
-                            <div className="form-panel">
-                                {/* [SEÇÃO 1.1.1.8.3.2.1] .panel-header — <div> */}
-                                <div className="panel-header">
-                                    {/* [SEÇÃO 1.1.1.8.3.2.1.1] .panel-icon — <Calendar> */}
-                                    <Calendar size={18} className="panel-icon" />
+                            {/* Coluna 2: Formulário de Solicitação */}
+                            {/* [SEÇÃO 1.1.3.1.2] .agenda-form-col — <article> */}
+                            <article className="agenda-form-col">
+                                {/* [SEÇÃO 1.1.3.1.2.1] .col-header — <div> */}
+                                <div className="col-header">
+                                    {/* [SEÇÃO 1.1.3.1.2.1.1] .col-icon-box — <div> */}
+                                    <div className="col-icon-box">
+                                        <Clock size={20} />
+                                    </div>
                                     <div>
-                                        {/* [SEÇÃO 1.1.1.8.3.2.1.2.1] .panel-title — <h2> */}
-                                        <h2 className="panel-title">2. Solicitar Reserva de Horário</h2>
-                                        {/* [SEÇÃO 1.1.1.8.3.2.1.2.2] .panel-subtitle — <p> */}
-                                        <p className="panel-subtitle">Preencha o formulário institucional com seus dados de pesquisa.</p>
+                                        {/* [SEÇÃO 1.1.3.1.2.1.2.1] .col-title — <h2> */}
+                                        <h2 className="col-title">Submissão de Agendamento</h2>
+                                        {/* [SEÇÃO 1.1.3.1.2.1.2.2] .col-desc — <p> */}
+                                        <p className="col-desc">Preencha o formulário acadêmico formal para análise da coordenação.</p>
                                     </div>
                                 </div>
 
-                                {/* [SEÇÃO 1.1.1.8.3.2.2] .form-action-box — <div> */}
-                                <div className="form-action-box">
-                                    {/* [SEÇÃO 1.1.1.8.3.2.2.1] .form-notice — <div> */}
+                                {/* [SEÇÃO 1.1.3.1.2.2] .form-embed-container — <div> */}
+                                <div className="form-embed-container">
+                                    {/* [SEÇÃO 1.1.3.1.2.2.1] .form-notice — <div> */}
                                     <div className="form-notice">
-                                        {/* [SEÇÃO 1.1.1.8.3.2.2.1.1] .notice-icon — <HelpCircle> */}
-                                        <HelpCircle size={18} className="notice-icon" />
+                                        {/* [SEÇÃO 1.1.3.1.2.2.1.1] .form-notice-title — <h3> */}
+                                        <h3 className="form-notice-title">Formulário Oficial de Reserva</h3>
                                         <p>
-                                            As solicitações são analisadas pela coordenação. Você receberá um e-mail com a confirmação e orientações para retirada da chave/acesso à sala.
+                                            O agendamento de recursos é realizado via Google Formulários institucional da UFOPA para registro auditável das atividades práticas.
                                         </p>
+                                        {selectedEquipment && (
+                                            <div style={{ marginTop: '0.85rem', padding: '0.6rem 0.85rem', background: 'rgba(56, 161, 105, 0.15)', border: '1px solid rgba(56, 161, 105, 0.35)', borderRadius: '6px', fontSize: '0.85rem', color: '#68d391', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                <span>Recurso pré-selecionado: <strong>{selectedEquipment}</strong></span>
+                                                <button type="button" onClick={() => setSelectedEquipment(null)} style={{ background: 'none', border: 'none', color: '#fc8181', cursor: 'pointer', fontSize: '0.75rem', textDecoration: 'underline' }}>Remover seleção</button>
+                                            </div>
+                                        )}
                                     </div>
 
-                                    {/* [SEÇÃO 1.1.1.8.3.2.2.2] .booking-steps-list — <ul> */}
-                                    <ul className="booking-steps-list">
-                                        <li><strong>Passo 1:</strong> Escolha um horário livre no calendário ao lado.</li>
-                                        <li><strong>Passo 2:</strong> Tenha em mãos seu número de matrícula ou SIAPE da UFOPA.</li>
-                                        <li><strong>Passo 3:</strong> Submeta o formulário de reserva para homologação.</li>
-                                    </ul>
+                                    {/* [SEÇÃO 1.1.3.1.2.2.2] .booking-steps-list — <ol> */}
+                                    <ol className="booking-steps-list">
+                                        {/* [SEÇÃO 1.1.3.1.2.2.2.1] .booking-step-item — <li> */}
+                                        <li className="booking-step-item">
+                                            <strong>01.</strong> Selecione os dias e turnos verificando a disponibilidade na agenda ao lado.
+                                        </li>
+                                        {/* [SEÇÃO 1.1.3.1.2.2.2.2] .booking-step-item — <li> */}
+                                        <li className="booking-step-item">
+                                            <strong>02.</strong> Indique o orientador responsável e o número do processo ou projeto formal.
+                                        </li>
+                                        {/* [SEÇÃO 1.1.3.1.2.2.2.3] .booking-step-item — <li> */}
+                                        <li className="booking-step-item">
+                                            <strong>03.</strong> Aguarde o e-mail de homologação emitido pela equipe técnica do laboratório.
+                                        </li>
+                                    </ol>
 
-                                    {/* [SEÇÃO 1.1.1.8.3.2.2.3] .open-form-btn — <a> */}
+                                    {/* [SEÇÃO 1.1.3.1.2.2.3] .form-action-btn — <a> */}
                                     <a
                                         href="https://forms.google.com"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="open-form-btn"
+                                        className="form-action-btn"
+                                        title="Abrir Formulário de Agendamento da UFOPA (em nova aba)"
                                     >
-                                        <span>Abrir Formulário de Agendamento (Google Forms)</span>
-                                        <ExternalLink size={16} />
+                                        <span>Abrir Formulário de Reserva Oficial</span>
+                                        <ExternalLink size={16} aria-hidden="true" />
                                     </a>
                                 </div>
-                            </div>
+                            </article>
 
                         </div>
                     </section>
@@ -449,64 +491,93 @@ export function Booking() {
                     title={modalConfig.title}
                 >
                     {modalConfig.type === 'delete' ? (
-                        /* [SEÇÃO 1.1.2.1] .admin-delete-box — <div> */
+                        /* [SEÇÃO 1.1.4.1] .admin-delete-box — <div> */
                         <div className="admin-delete-box">
-                            {/* [SEÇÃO 1.1.2.1.1] .admin-delete-notice — <p> */}
+                            {/* [SEÇÃO 1.1.4.1.1] .admin-delete-notice — <p> */}
                             <p className="admin-delete-notice">
                                 Tem certeza de que deseja remover o equipamento <strong className="admin-delete-highlight">"{modalConfig.data?.name}"</strong>?
                             </p>
-                            {/* [SEÇÃO 1.1.2.1.2] .admin-form-actions — <div> */}
+                            {/* [SEÇÃO 1.1.4.1.2] .admin-form-actions — <div> */}
                             <div className="admin-form-actions">
-                                {/* [SEÇÃO 1.1.2.1.2.1] .admin-btn-cancel — <button> */}
-                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
-                                {/* [SEÇÃO 1.1.2.1.2.2] .admin-btn-submit — <button> */}
-                                <button type="button" className="admin-btn-submit" style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }} onClick={closeModal}>
-                                    Confirmar Exclusão
+                                {/* [SEÇÃO 1.1.4.1.2.1] .admin-btn-cancel — <button> */}
+                                <button
+                                    type="button"
+                                    className="admin-btn-cancel"
+                                    onClick={closeModal}
+                                    disabled={formSubmitting}
+                                >
+                                    Cancelar
+                                </button>
+                                {/* [SEÇÃO 1.1.4.1.2.2] .admin-btn-submit — <button> */}
+                                <button
+                                    type="button"
+                                    className="admin-btn-submit"
+                                    style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                                    onClick={handleConfirmDelete}
+                                    disabled={formSubmitting}
+                                >
+                                    {formSubmitting ? 'Excluindo...' : 'Confirmar Exclusão'}
                                 </button>
                             </div>
                         </div>
                     ) : modalConfig.type === 'config' ? (
                         <form onSubmit={handleFormSubmit}>
-                            {/* [SEÇÃO 1.1.2.2.1] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.2.1] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.2.1.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.2.1.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">URL Embed do Google Calendar</label>
-                                {/* [SEÇÃO 1.1.2.2.1.2] .admin-form-input — <input> */}
+                                {/* [SEÇÃO 1.1.4.2.1.2] .admin-form-input — <input> */}
                                 <input
+                                    name="calendarUrl"
                                     type="url"
                                     required
                                     className="admin-form-input"
                                     defaultValue="https://calendar.google.com/calendar/embed?..."
                                 />
                             </div>
-                            {/* [SEÇÃO 1.1.2.2.2] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.2.2] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.2.2.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.2.2.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Link do Google Formulários</label>
-                                {/* [SEÇÃO 1.1.2.2.2.2] .admin-form-input — <input> */}
+                                {/* [SEÇÃO 1.1.4.2.2.2] .admin-form-input — <input> */}
                                 <input
+                                    name="formUrl"
                                     type="url"
                                     required
                                     className="admin-form-input"
                                     defaultValue="https://forms.google.com"
                                 />
                             </div>
-                            {/* [SEÇÃO 1.1.2.2.3] .admin-form-actions — <div> */}
+                            {/* [SEÇÃO 1.1.4.2.3] .admin-form-actions — <div> */}
                             <div className="admin-form-actions">
-                                {/* [SEÇÃO 1.1.2.2.3.1] .admin-btn-cancel — <button> */}
-                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
-                                {/* [SEÇÃO 1.1.2.2.3.2] .admin-btn-submit — <button> */}
-                                <button type="submit" className="admin-btn-submit">Salvar Configurações</button>
+                                {/* [SEÇÃO 1.1.4.2.3.1] .admin-btn-cancel — <button> */}
+                                <button
+                                    type="button"
+                                    className="admin-btn-cancel"
+                                    onClick={closeModal}
+                                    disabled={formSubmitting}
+                                >
+                                    Cancelar
+                                </button>
+                                {/* [SEÇÃO 1.1.4.2.3.2] .admin-btn-submit — <button> */}
+                                <button
+                                    type="submit"
+                                    className="admin-btn-submit"
+                                    disabled={formSubmitting}
+                                >
+                                    Salvar Configurações
+                                </button>
                             </div>
                         </form>
                     ) : (
                         <form onSubmit={handleFormSubmit}>
-                            {/* [SEÇÃO 1.1.2.3.1] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.3.1] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.3.1.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.3.1.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Nome do Equipamento</label>
-                                {/* [SEÇÃO 1.1.2.3.1.2] .admin-form-input — <input> */}
+                                {/* [SEÇÃO 1.1.4.3.1.2] .admin-form-input — <input> */}
                                 <input
+                                    name="name"
                                     type="text"
                                     required
                                     className="admin-form-input"
@@ -514,12 +585,13 @@ export function Booking() {
                                     placeholder="Ex.: Microscópio Óptico Trinocular..."
                                 />
                             </div>
-                            {/* [SEÇÃO 1.1.2.3.2] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.3.2] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.3.2.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.3.2.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Código Patrimonial / Sigla</label>
-                                {/* [SEÇÃO 1.1.2.3.2.2] .admin-form-input — <input> */}
+                                {/* [SEÇÃO 1.1.4.3.2.2] .admin-form-input — <input> */}
                                 <input
+                                    name="code"
                                     type="text"
                                     required
                                     className="admin-form-input"
@@ -527,12 +599,13 @@ export function Booking() {
                                     placeholder="Ex.: LABETA-MIC-01"
                                 />
                             </div>
-                            {/* [SEÇÃO 1.1.2.3.3] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.3.3] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.3.3.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.3.3.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Categoria</label>
-                                {/* [SEÇÃO 1.1.2.3.3.2] .admin-form-input — <input> */}
+                                {/* [SEÇÃO 1.1.4.3.3.2] .admin-form-input — <input> */}
                                 <input
+                                    name="category"
                                     type="text"
                                     required
                                     className="admin-form-input"
@@ -540,22 +613,28 @@ export function Booking() {
                                     placeholder="Ex.: Microscopia, Bancada, Esterilização..."
                                 />
                             </div>
-                            {/* [SEÇÃO 1.1.2.3.4] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.3.4] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.3.4.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.3.4.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Status de Uso</label>
-                                {/* [SEÇÃO 1.1.2.3.4.2] .admin-form-select — <select> */}
-                                <select className="admin-form-select" defaultValue={modalConfig.data?.status || 'disponivel'}>
+                                {/* [SEÇÃO 1.1.4.3.4.2] .admin-form-select — <select> */}
+                                <select
+                                    name="status"
+                                    className="admin-form-select"
+                                    defaultValue={modalConfig.data?.status || 'disponivel'}
+                                >
                                     <option value="disponivel">Disponível</option>
-                                    <option value="manutencao">Em Manutenção</option>
+                                    <option value="manutencao_preventiva">Em Manutenção Preventiva</option>
+                                    <option value="indisponivel">Indisponível</option>
                                 </select>
                             </div>
-                            {/* [SEÇÃO 1.1.2.3.5] .admin-form-group — <div> */}
+                            {/* [SEÇÃO 1.1.4.3.5] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.2.3.5.1] .admin-form-label — <label> */}
+                                {/* [SEÇÃO 1.1.4.3.5.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Descrição e Capacidade</label>
-                                {/* [SEÇÃO 1.1.2.3.5.2] .admin-form-textarea — <textarea> */}
+                                {/* [SEÇÃO 1.1.4.3.5.2] .admin-form-textarea — <textarea> */}
                                 <textarea
+                                    name="description"
                                     rows="3"
                                     required
                                     className="admin-form-textarea"
@@ -563,16 +642,38 @@ export function Booking() {
                                     placeholder="Especificações de lentes, aumento e uso..."
                                 />
                             </div>
-                            {/* [SEÇÃO 1.1.2.3.6] .admin-form-actions — <div> */}
+                            {/* [SEÇÃO 1.1.4.3.6] .admin-form-actions — <div> */}
                             <div className="admin-form-actions">
-                                {/* [SEÇÃO 1.1.2.3.6.1] .admin-btn-cancel — <button> */}
-                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
-                                {/* [SEÇÃO 1.1.2.3.6.2] .admin-btn-submit — <button> */}
-                                <button type="submit" className="admin-btn-submit">Salvar Equipamento</button>
+                                {/* [SEÇÃO 1.1.4.3.6.1] .admin-btn-cancel — <button> */}
+                                <button
+                                    type="button"
+                                    className="admin-btn-cancel"
+                                    onClick={closeModal}
+                                    disabled={formSubmitting}
+                                >
+                                    Cancelar
+                                </button>
+                                {/* [SEÇÃO 1.1.4.3.6.2] .admin-btn-submit — <button> */}
+                                <button
+                                    type="submit"
+                                    className="admin-btn-submit"
+                                    disabled={formSubmitting}
+                                >
+                                    {formSubmitting ? 'Salvando...' : 'Salvar Equipamento'}
+                                </button>
                             </div>
                         </form>
                     )}
                 </AdminModal>
+
+                {/* Toast de Feedback */}
+                {toast && (
+                    <ToastNotification
+                        type={toast.type}
+                        message={toast.message}
+                        onClose={() => setToast(null)}
+                    />
+                )}
 
             </div>
         </main>

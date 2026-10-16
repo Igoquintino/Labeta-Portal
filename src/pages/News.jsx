@@ -1,26 +1,56 @@
 /* ============================================================
  * [COMPONENTE] News
  * Descrição: Radar ficológico: comunicados do LABETA e Radar Científico (artigos) em 2 colunas.
+ *            Possui integração reativa com Supabase e contingência automática (fallback) via news.json.
  * Rota/Uso: Rota /noticias.
- * Dados: src/data/news.json
+ * Dados: Supabase ('news') com fallback em src/data/news.json via newsService.
  * CSS correlato: News.css
  * ============================================================ */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Newspaper, Bell, FileText, ExternalLink, Calendar, Tag, Sparkles, Plus, Edit2, Trash2, Search, Eye, X, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
-import newsData from '../data/news.json';
+import { ToastNotification } from '../components/common/ToastNotification';
+import { fetchNews, createNewsItem, updateNewsItem, deleteNewsItem } from '../services/newsService';
 import './News.css';
 
 /** [FUNÇÃO] News — renderiza comunicados, radar científico, busca e leitura. */
 export function News() {
     const { isAdmin } = useAuth();
+
+    // [ESTADO] announcements — lista reativa de comunicados do LABETA
+    const [announcements, setAnnouncements] = useState([]);
+    // [ESTADO] scientificRadar — lista reativa de artigos científicos
+    const [scientificRadar, setScientificRadar] = useState([]);
+    // [ESTADO] loadingNews — indicador de carregamento inicial
+    const [loadingNews, setLoadingNews] = useState(true);
+
     // [ESTADO] modalConfig — { isOpen, title, type, data } controla o AdminModal
     const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', type: '', data: null });
+    // [ESTADO] formSubmitting — estado de salvamento em andamento
+    const [formSubmitting, setFormSubmitting] = useState(false);
     // [ESTADO] readingAnnouncement — comunicado aberto no leitor
     const [readingAnnouncement, setReadingAnnouncement] = useState(null);
     // [ESTADO] searchQuery — texto de filtro das notícias
     const [searchQuery, setSearchQuery] = useState('');
+    // [ESTADO] toast — { message, type } para notificações temporárias
+    const [toast, setToast] = useState(null);
+
+    /** [HOOK] useEffect — Carrega as notícias no ciclo de vida inicial */
+    useEffect(() => {
+        let isMounted = true;
+        async function loadData() {
+            setLoadingNews(true);
+            const { announcements: ann, scientificRadar: radar } = await fetchNews();
+            if (isMounted) {
+                setAnnouncements(ann);
+                setScientificRadar(radar);
+                setLoadingNews(false);
+            }
+        }
+        loadData();
+        return () => { isMounted = false; };
+    }, []);
 
     /** [FUNÇÃO] openCreateModal — abre o AdminModal em modo "criar" (somente admin). */
     const openCreateModal = (type) => {
@@ -54,19 +84,93 @@ export function News() {
 
     /** [FUNÇÃO] closeModal — fecha o AdminModal e reseta modalConfig. */
     const closeModal = () => {
+        if (formSubmitting) return;
         setModalConfig({ isOpen: false, title: '', type: '', data: null });
     };
 
-    /** [FUNÇÃO] handleFormSubmit — trata o envio do formulário do modal (por ora apenas simula e fecha). */
-    const handleFormSubmit = (e) => {
+    /** [FUNÇÃO] handleConfirmDelete — processa a exclusão no backend e atualiza o estado local */
+    const handleConfirmDelete = async () => {
+        if (!modalConfig.data) return;
+        setFormSubmitting(true);
+        const item = modalConfig.data;
+        const { error } = await deleteNewsItem(item.id);
+
+        if (error) {
+            setToast({ type: 'error', message: `Erro ao excluir: ${error.message}` });
+        } else {
+            // Atualização otimista imediata na interface
+            setAnnouncements((prev) => prev.filter((a) => a.id !== item.id));
+            setScientificRadar((prev) => prev.filter((r) => r.id !== item.id));
+            setToast({ type: 'success', message: 'Registro removido com sucesso!' });
+            closeModal();
+        }
+        setFormSubmitting(false);
+    };
+
+    /** [FUNÇÃO] handleFormSubmit — trata o envio do formulário (criação e edição) */
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
-        // Em fase de pré-produção, simula sucesso e fecha o modal
-        closeModal();
+        setFormSubmitting(true);
+
+        const formData = new FormData(e.currentTarget);
+        const isEdit = modalConfig.type.startsWith('edit_');
+        const isAnnouncement = modalConfig.type.includes('announcement');
+        const targetType = isAnnouncement ? 'announcement' : 'radar';
+
+        const payload = isAnnouncement ? {
+            title: formData.get('title'),
+            tag: formData.get('tag'),
+            content: formData.get('content'),
+            date: modalConfig.data?.date || new Date().toISOString().split('T')[0]
+        } : {
+            title: formData.get('title'),
+            journal: formData.get('journal'),
+            authors: formData.get('authors'),
+            summary: formData.get('summary'),
+            content: formData.get('summary'),
+            url: formData.get('url'),
+            year: formData.get('year') || (modalConfig.data?.year ? String(modalConfig.data.year) : String(new Date().getFullYear())),
+            doi: formData.get('doi') || modalConfig.data?.doi || '',
+            date: modalConfig.data?.date || new Date().toISOString().split('T')[0]
+        };
+
+        if (isEdit) {
+            const currentId = modalConfig.data.id;
+            const { data, error } = await updateNewsItem(currentId, targetType, payload);
+            if (error) {
+                setToast({ type: 'error', message: `Falha ao atualizar: ${error.message}` });
+            } else {
+                const updated = data || { id: currentId, ...payload };
+                if (isAnnouncement) {
+                    setAnnouncements((prev) => prev.map((a) => (a.id === currentId ? updated : a)));
+                } else {
+                    setScientificRadar((prev) => prev.map((r) => (r.id === currentId ? updated : r)));
+                }
+                setToast({ type: 'success', message: 'Registro atualizado com sucesso!' });
+                closeModal();
+            }
+        } else {
+            const { data, error } = await createNewsItem(targetType, payload);
+            if (error) {
+                setToast({ type: 'error', message: `Falha ao salvar: ${error.message}` });
+            } else {
+                const created = data || { id: `local-${Date.now()}`, ...payload };
+                if (isAnnouncement) {
+                    setAnnouncements((prev) => [created, ...prev]);
+                } else {
+                    setScientificRadar((prev) => [created, ...prev]);
+                }
+                setToast({ type: 'success', message: 'Registro cadastrado com sucesso!' });
+                closeModal();
+            }
+        }
+
+        setFormSubmitting(false);
     };
 
     const normalizedQuery = searchQuery.trim().toLowerCase();
 
-    const filteredAnnouncements = newsData.announcements.filter((item) => {
+    const filteredAnnouncements = announcements.filter((item) => {
         if (!normalizedQuery) return true;
         return (
             item.title?.toLowerCase().includes(normalizedQuery) ||
@@ -75,7 +179,7 @@ export function News() {
         );
     });
 
-    const filteredRadar = newsData.scientificRadar.filter((article) => {
+    const filteredRadar = scientificRadar.filter((article) => {
         if (!normalizedQuery) return true;
         return (
             article.title?.toLowerCase().includes(normalizedQuery) ||
@@ -180,7 +284,9 @@ export function News() {
 
                         {/* [SEÇÃO 1.1.2.1.2] .cards-stack — <div> */}
                         <div className="cards-stack">
-                            {filteredAnnouncements.length === 0 ? (
+                            {loadingNews ? (
+                                <div className="news-empty-state"><p>Carregando comunicados...</p></div>
+                            ) : filteredAnnouncements.length === 0 ? (
                                 /* [SEÇÃO 1.1.2.1.2.1] .news-empty-state — <div> */
                                 <div className="news-empty-state">
                                     <p>Nenhum comunicado encontrado{searchQuery ? ` para "${searchQuery}"` : ''}.</p>
@@ -281,7 +387,9 @@ export function News() {
 
                         {/* [SEÇÃO 1.1.2.2.2] .cards-stack — <div> */}
                         <div className="cards-stack">
-                            {filteredRadar.length === 0 ? (
+                            {loadingNews ? (
+                                <div className="news-empty-state"><p>Carregando artigos...</p></div>
+                            ) : filteredRadar.length === 0 ? (
                                 /* [SEÇÃO 1.1.2.2.2.1] .news-empty-state — <div> */
                                 <div className="news-empty-state">
                                     <p>Nenhum artigo encontrado{searchQuery ? ` para "${searchQuery}"` : ''}.</p>
@@ -349,17 +457,23 @@ export function News() {
                                         {/* [SEÇÃO 1.1.2.2.2.1.2.6] .news-card-footer — <div> */}
                                         <div className="news-card-footer">
                                             {/* [SEÇÃO 1.1.2.2.2.1.2.6.1] .doi-badge-link — <a> */}
-                                            <a
-                                                href={article.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="doi-badge-link"
-                                                title="Acessar publicação no periódico (abre em nova aba)"
-                                                aria-label={`Acessar artigo ${article.title} com DOI ${article.doi} (abre em nova aba)`}
-                                            >
-                                                <span>Acessar Artigo (DOI: {article.doi})</span>
-                                                <ExternalLink size={13} />
-                                            </a>
+                                            {article.url ? (
+                                                <a
+                                                    href={article.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="doi-badge-link"
+                                                    title="Acessar publicação no periódico (abre em nova aba)"
+                                                    aria-label={`Acessar artigo ${article.title} com DOI ${article.doi || ''} (abre em nova aba)`}
+                                                >
+                                                    <span>Acessar Artigo {article.doi ? `(DOI: ${article.doi})` : ''}</span>
+                                                    <ExternalLink size={13} />
+                                                </a>
+                                            ) : (
+                                                <span className="doi-badge-link" style={{ opacity: 0.65 }}>
+                                                    Publicação Registrada
+                                                </span>
+                                            )}
                                         </div>
                                     </article>
                                 ))
@@ -369,17 +483,17 @@ export function News() {
 
                 </div>
 
-                {/* Modal de Leitura Integral de Comunicado */}
+                {/* Modal de Leitura na Íntegra */}
                 <AdminModal
-                    isOpen={!!readingAnnouncement}
+                    isOpen={Boolean(readingAnnouncement)}
                     onClose={() => setReadingAnnouncement(null)}
-                    title={readingAnnouncement?.title || 'Comunicado Oficial'}
+                    title={readingAnnouncement?.title || 'Comunicado'}
                 >
                     {readingAnnouncement && (
-                        /* [SEÇÃO 1.1.3.1] .announcement-reading-view — <div> */
-                        <div className="announcement-reading-view">
-                            {/* [SEÇÃO 1.1.3.1.1] .news-card-meta — <div> */}
-                            <div className="news-card-meta" style={{ marginBottom: '1.25rem' }}>
+                        /* [SEÇÃO 1.1.3.1] .announcement-read-wrapper — <div> */
+                        <div className="announcement-read-wrapper">
+                            {/* [SEÇÃO 1.1.3.1.1] .announcement-read-meta — <div> */}
+                            <div className="announcement-read-meta">
                                 {/* [SEÇÃO 1.1.3.1.1.1] .news-tag .announcement-tag — <span> */}
                                 <span className="news-tag announcement-tag">
                                     <Tag size={12} />
@@ -391,11 +505,9 @@ export function News() {
                                     {readingAnnouncement.date}
                                 </span>
                             </div>
-                            {/* [SEÇÃO 1.1.3.1.2] .announcement-full-body — <div> */}
-                            <div className="announcement-full-body">
-                                <p style={{ fontSize: '0.98rem', lineHeight: 1.8, color: 'var(--text-main)', whiteSpace: 'pre-line' }}>
-                                    {readingAnnouncement.content}
-                                </p>
+                            {/* [SEÇÃO 1.1.3.1.2] .announcement-read-body — <div> */}
+                            <div className="announcement-read-body">
+                                <p>{readingAnnouncement.content}</p>
                             </div>
                             {/* [SEÇÃO 1.1.3.1.3] .admin-form-actions — <div> */}
                             <div className="admin-form-actions" style={{ marginTop: '1.75rem', justifyContent: 'flex-end' }}>
@@ -412,7 +524,7 @@ export function News() {
                     )}
                 </AdminModal>
 
-                {/* Modal Administrativo Unificado */}
+                {/* Modal Administrativo Unificado (Criação, Edição e Exclusão) */}
                 <AdminModal
                     isOpen={modalConfig.isOpen}
                     onClose={closeModal}
@@ -428,10 +540,23 @@ export function News() {
                             {/* [SEÇÃO 1.1.4.1.2] .admin-form-actions — <div> */}
                             <div className="admin-form-actions">
                                 {/* [SEÇÃO 1.1.4.1.2.1] .admin-btn-cancel — <button> */}
-                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button
+                                    type="button"
+                                    className="admin-btn-cancel"
+                                    onClick={closeModal}
+                                    disabled={formSubmitting}
+                                >
+                                    Cancelar
+                                </button>
                                 {/* [SEÇÃO 1.1.4.1.2.2] .admin-btn-submit — <button> */}
-                                <button type="button" className="admin-btn-submit" style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }} onClick={closeModal}>
-                                    Confirmar Exclusão
+                                <button
+                                    type="button"
+                                    className="admin-btn-submit"
+                                    style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+                                    onClick={handleConfirmDelete}
+                                    disabled={formSubmitting}
+                                >
+                                    {formSubmitting ? 'Excluindo...' : 'Confirmar Exclusão'}
                                 </button>
                             </div>
                         </div>
@@ -443,6 +568,7 @@ export function News() {
                                 <label className="admin-form-label">Título</label>
                                 {/* [SEÇÃO 1.1.4.2.1.2] .admin-form-input — <input> */}
                                 <input
+                                    name="title"
                                     type="text"
                                     required
                                     className="admin-form-input"
@@ -459,6 +585,7 @@ export function News() {
                                         <label className="admin-form-label">Categoria / Tag</label>
                                         {/* [SEÇÃO 1.1.4.2.1.2.1.2] .admin-form-input — <input> */}
                                         <input
+                                            name="tag"
                                             type="text"
                                             required
                                             className="admin-form-input"
@@ -471,6 +598,7 @@ export function News() {
                                         <label className="admin-form-label">Conteúdo do Comunicado</label>
                                         {/* [SEÇÃO 1.1.4.2.1.2.2.2] .admin-form-textarea — <textarea> */}
                                         <textarea
+                                            name="content"
                                             rows="4"
                                             required
                                             className="admin-form-textarea"
@@ -487,6 +615,7 @@ export function News() {
                                         <label className="admin-form-label">Periódico / Revista</label>
                                         {/* [SEÇÃO 1.1.4.2.1.2.3.2] .admin-form-input — <input> */}
                                         <input
+                                            name="journal"
                                             type="text"
                                             required
                                             className="admin-form-input"
@@ -500,6 +629,7 @@ export function News() {
                                         <label className="admin-form-label">Autores</label>
                                         {/* [SEÇÃO 1.1.4.2.1.2.4.2] .admin-form-input — <input> */}
                                         <input
+                                            name="authors"
                                             type="text"
                                             required
                                             className="admin-form-input"
@@ -513,10 +643,12 @@ export function News() {
                                         <label className="admin-form-label">Resumo Técnico</label>
                                         {/* [SEÇÃO 1.1.4.2.1.2.5.2] .admin-form-textarea — <textarea> */}
                                         <textarea
+                                            name="summary"
                                             rows="3"
                                             required
                                             className="admin-form-textarea"
                                             defaultValue={modalConfig.data?.summary || ''}
+                                            placeholder="Resumo do artigo..."
                                         />
                                     </div>
                                     {/* [SEÇÃO 1.1.4.2.1.2.6] .admin-form-group — <div> */}
@@ -525,11 +657,22 @@ export function News() {
                                         <label className="admin-form-label">Link DOI / URL</label>
                                         {/* [SEÇÃO 1.1.4.2.1.2.6.2] .admin-form-input — <input> */}
                                         <input
+                                            name="url"
                                             type="url"
                                             required
                                             className="admin-form-input"
                                             defaultValue={modalConfig.data?.url || ''}
                                             placeholder="https://doi.org/..."
+                                        />
+                                    </div>
+                                    <div className="admin-form-group">
+                                        <label className="admin-form-label">Código DOI (opcional)</label>
+                                        <input
+                                            name="doi"
+                                            type="text"
+                                            className="admin-form-input"
+                                            defaultValue={modalConfig.data?.doi || ''}
+                                            placeholder="Ex.: 10.1016/j.algal.2026.103980"
                                         />
                                     </div>
                                 </>
@@ -538,13 +681,35 @@ export function News() {
                             {/* [SEÇÃO 1.1.4.2.2] .admin-form-actions — <div> */}
                             <div className="admin-form-actions">
                                 {/* [SEÇÃO 1.1.4.2.2.1] .admin-btn-cancel — <button> */}
-                                <button type="button" className="admin-btn-cancel" onClick={closeModal}>Cancelar</button>
+                                <button
+                                    type="button"
+                                    className="admin-btn-cancel"
+                                    onClick={closeModal}
+                                    disabled={formSubmitting}
+                                >
+                                    Cancelar
+                                </button>
                                 {/* [SEÇÃO 1.1.4.2.2.2] .admin-btn-submit — <button> */}
-                                <button type="submit" className="admin-btn-submit">Salvar Registro</button>
+                                <button
+                                    type="submit"
+                                    className="admin-btn-submit"
+                                    disabled={formSubmitting}
+                                >
+                                    {formSubmitting ? 'Salvando...' : 'Salvar Registro'}
+                                </button>
                             </div>
                         </form>
                     )}
                 </AdminModal>
+
+                {/* Notificação Toast de Feedback */}
+                {toast && (
+                    <ToastNotification
+                        type={toast.type}
+                        message={toast.message}
+                        onClose={() => setToast(null)}
+                    />
+                )}
 
             </div>
         </main>

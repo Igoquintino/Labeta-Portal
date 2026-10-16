@@ -1,36 +1,53 @@
 /* ============================================================
  * [COMPONENTE] RecentNewsSection
- * Descrição: Mural com 3 destaques de news.json (2 comunicados + 1 item do radar científico).
+ * Descrição: Mural com 3 destaques (2 comunicados + 1 item do radar científico)
+ *            carregados reativamente via newsService (Supabase + fallback local).
  * Rota/Uso: Home (/).
- * Dados: src/data/news.json
+ * Dados: Supabase ('news') com fallback em src/data/news.json via newsService.
  * CSS correlato: RecentNewsSection.css
  * ============================================================ */
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Newspaper, ArrowRight, Calendar, Sparkles, Bell } from 'lucide-react';
-import newsData from '../../data/news.json';
+import { fetchNews } from '../../services/newsService';
 import './RecentNewsSection.css';
 
 /** [FUNÇÃO] RecentNewsSection — seleciona e exibe as notícias mais recentes. */
 export function RecentNewsSection() {
-    // Combina e seleciona as 3 notícias/artigos mais recentes
-    const recentItems = [
-        ...newsData.announcements.slice(0, 2).map((item) => ({
-            id: item.id,
-            type: 'announcement',
-            tag: item.tag,
-            title: item.title,
-            date: item.date,
-            description: item.content
-        })),
-        ...newsData.scientificRadar.slice(0, 1).map((item) => ({
-            id: item.id,
-            type: 'radar',
-            tag: `${item.journal} (${item.year})`,
-            title: item.title,
-            date: item.date,
-            description: item.summary
-        }))
-    ];
+    // [ESTADO] recentItems — lista dos 3 itens de destaque
+    const [recentItems, setRecentItems] = useState([]);
+
+    /** [HOOK] useEffect — busca as notícias e monta os 3 cards destacados */
+    useEffect(() => {
+        let isMounted = true;
+        async function loadRecent() {
+            const { announcements, scientificRadar } = await fetchNews();
+            if (!isMounted) return;
+
+            const items = [
+                ...announcements.slice(0, 2).map((item) => ({
+                    id: item.id,
+                    type: 'announcement',
+                    tag: item.tag || 'Comunicado',
+                    title: item.title,
+                    date: item.date,
+                    description: item.content
+                })),
+                ...scientificRadar.slice(0, 1).map((item) => ({
+                    id: item.id,
+                    type: 'radar',
+                    tag: `${item.journal || 'Periódico'} (${item.year || ''})`,
+                    title: item.title,
+                    date: item.date,
+                    description: item.summary
+                }))
+            ];
+            setRecentItems(items);
+        }
+
+        loadRecent();
+        return () => { isMounted = false; };
+    }, []);
 
     return (
         /* [SEÇÃO 1] .recent-news-section — <section> */
