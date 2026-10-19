@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgMicro" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0C120F"/>
+      <stop offset="50%" stop-color="#14241B"/>
+      <stop offset="100%" stop-color="#165B33"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bgMicro)"/>
+  <!-- Focus Rings Target -->
+  <g stroke="rgba(214, 194, 143, 0.2)" stroke-width="2" fill="none">
+    <circle cx="400" cy="270" r="160" stroke-dasharray="6,6"/>
+    <circle cx="400" cy="270" r="110"/>
+    <circle cx="400" cy="270" r="60"/>
+  </g>
+  <!-- Microscope Outline -->
+  <g fill="none" stroke="#D6C28F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Eyepiece Tube -->
+    <line x1="370" y1="130" x2="410" y2="180"/>
+    <rect x="350" y="105" width="30" height="30" rx="3" transform="rotate(-38 350 105)"/>
+    <!-- Revolver & Objectives -->
+    <circle cx="415" cy="210" r="18" fill="rgba(22, 91, 51, 0.5)"/>
+    <line x1="410" y1="228" x2="400" y2="260"/>
+    <line x1="425" y1="225" x2="435" y2="255"/>
+    <!-- Stage -->
+    <line x1="330" y1="285" x2="470" y2="285" stroke-width="6"/>
+    <!-- Arm Curved -->
+    <path d="M 425 180 C 490 200, 500 320, 440 370 L 440 400"/>
+    <!-- Base -->
+    <path d="M 320 420 L 480 420" stroke-width="8"/>
+  </g>
+  <text x="400" y="475" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="22" font-weight="700" fill="#F4F7F4" text-anchor="middle" letter-spacing="3">MICROSCOPIA &amp; ANÁLISE</text>
+  <text x="400" y="510" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="14" fill="#A0B0A4" text-anchor="middle" letter-spacing="1">TAXONOMIA &amp; CONTAGEM DE FRÚSTULAS DE DIATOMÁCEAS</text>
+</svg>
