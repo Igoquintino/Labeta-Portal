@@ -30,6 +30,8 @@
     --border-subtle: rgba(214, 194, 143, 0.2);
     --border-gold: rgba(214, 194, 143, 0.45);
     --border-accent: rgba(78, 168, 110, 0.35);
+    --color-danger: var(--color-danger-500);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
 
     /* 3. Escala de Espaçamento e Raios */
     --space-1: 4px;

@@ -309,8 +309,6 @@ export function Lab() {
                                             alt={space.title}
                                             className="space-img"
                                             loading="lazy"
-                                            width="400"
-                                            height="220"
                                         />
                                         {/* [SEÇÃO 1.1.2.1.2.1.2.2] .space-tag — <span className="space-tag"> */}
                                         <span className="space-tag">{space.tag}</span>

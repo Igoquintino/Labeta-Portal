@@ -1,6 +1,10 @@
-/* [ARQUIVO] Lab.css — estilos de Lab.jsx. Ordem das seções = ordem do JSX */
+/* ============================================================
+ * [ARQUIVO] Lab.css — Estilos da Página do Laboratório (Lab.jsx)
+ * Design System: Dark / Amazônia Noturna (UFOPA)
+ * Acessibilidade: WCAG 2.2 AA / Diretrizes Heurísticas de Nielsen
+ * ============================================================ */
 
-/* [SEÇÃO 1] .lab-page — <main> (JSX: [SEÇÃO 1]) */
+/* [SEÇÃO 1] .lab-page — Container principal */
 .lab-page {
     width: 100%;
     min-height: calc(100vh - 160px);
@@ -10,16 +14,16 @@
     justify-content: center;
 }
 
-/* [SEÇÃO 1.1] .lab-container — <div> (JSX: [SEÇÃO 1.1]) */
+/* [SEÇÃO 1.1] .lab-container — Limite de largura centralizado */
 .lab-container {
-    max-width: 1100px;
+    max-width: 1120px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 3rem;
 }
 
-/* [SEÇÃO 1.1.1] .lab-header — <header> (JSX: [SEÇÃO 1.1.1]) */
+/* [SEÇÃO 1.1.1] .lab-header — Cabeçalho Institucional */
 .lab-header {
     text-align: center;
     display: flex;
@@ -27,7 +31,7 @@
     align-items: center;
 }
 
-/* [SEÇÃO 1.1.1.1] .lab-badge — <div> (JSX: [SEÇÃO 1.1.1.1]) */
+/* [SEÇÃO 1.1.1.1] .lab-badge — Tag superior de categoria */
 .lab-badge {
     display: inline-flex;
     align-items: center;
@@ -35,245 +39,220 @@
     color: var(--color-gold);
     background-color: rgba(214, 194, 143, 0.1);
     border: 1px solid var(--border-gold);
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: var(--radius-sm);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 0.75rem;
 }
 
-/* [SEÇÃO 1.1.1.2] .lab-title — <h1> (JSX: [SEÇÃO 1.1.1.2]) */
+/* [SEÇÃO 1.1.1.2] .lab-title — Título principal H1 */
 .lab-title {
-    font-size: 2.2rem;
+    font-size: 2.3rem;
+    font-weight: 800;
     color: var(--text-main);
+    letter-spacing: -0.02em;
     margin-bottom: 0.5rem;
 }
 
-/* [SEÇÃO 1.1.1.3] .lab-subtitle — <p> (JSX: [SEÇÃO 1.1.1.3]) */
+/* [SEÇÃO 1.1.1.3] .lab-subtitle — Subtítulo descritivo */
 .lab-subtitle {
     color: var(--text-muted);
     font-size: 1.05rem;
-    max-width: 700px;
+    max-width: 720px;
     line-height: 1.7;
 }
 
-/* [SEÇÃO 1.1.1.4] .lab-location-tag — <div> (JSX: [SEÇÃO 1.1.1.4]) */
+/* [SEÇÃO 1.1.1.4] .lab-location-tag — Localização física institucional */
 .lab-location-tag {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
-    margin-top: 1rem;
+    gap: 0.45rem;
+    margin-top: 1.1rem;
     font-size: 0.85rem;
+    font-weight: 500;
     color: var(--color-gold);
-    background-color: rgba(214, 194, 143, 0.06);
-    padding: 4px 12px;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(214, 194, 143, 0.2);
+    background-color: rgba(214, 194, 143, 0.08);
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(214, 194, 143, 0.25);
 }
 
-/* [SEÇÃO 1.1.2] .lab-grid-layout — <div> (JSX: [SEÇÃO 1.1.2]) */
-/* Grid em 2 Colunas */
-.lab-grid-layout {
+/* ============================================================
+ * [SEÇÃO 1.1.2] .lab-grid-columns — Layout em Duas Colunas
+ * ============================================================ */
+.lab-grid-columns {
     display: grid;
     grid-template-columns: 1.15fr 0.85fr;
-    gap: 2.5rem;
+    gap: 2.75rem;
     align-items: start;
 }
 
-/* [SEÇÃO 1.1.2.1.1] .column-header — <div> (JSX: [SEÇÃO 1.1.2.1.1]) */
-.column-header {
+.lab-col {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    flex-direction: column;
+    min-width: 0; /* Previne estouro horizontal no CSS Grid */
+}
+
+/* [SEÇÃO 1.1.2.1.1] .col-header — Cabeçalho de cada coluna */
+.col-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
     margin-bottom: 1.75rem;
-    padding-bottom: 0.75rem;
+    padding-bottom: 0.85rem;
     border-bottom: 1px solid var(--border-subtle);
 }
 
-/* [SEÇÃO 1.1.2.1.1.1] .column-icon — <Layers> (JSX: [SEÇÃO 1.1.2.1.1.1]) */
-.column-icon {
-    color: var(--color-gold);
-}
-
-/* [SEÇÃO 1.1.2.1.1.2.1] .column-title — <h2> (JSX: [SEÇÃO 1.1.2.1.1.2.1]) */
-.column-title {
-    font-size: 1.35rem;
-    color: var(--text-main);
-    margin: 0;
-}
-
-/* [SEÇÃO 1.1.2.1.1.2.2] .column-desc — <p> (JSX: [SEÇÃO 1.1.2.1.1.2.2]) */
-.column-desc {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin: 0;
-}
-
-/* [SEÇÃO 1.1.2.1.2] .spaces-list — <div> (JSX: [SEÇÃO 1.1.2.1.2]) */
-/* Coluna 1: Espaços */
-.spaces-list {
-    display:flex;
-    flex-direction:column;
-    gap: 1.5rem;
-}
-
-/* [SEÇÃO 1.1.2.1.2] .spaces-cards-list — <div> (JSX: [SEÇÃO 1.1.2.1.2]) */
-/* Coluna 1: Espaços */
-.spaces-cards-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-/* [SEÇÃO 1.1.2.1.2.1] .space-card — <article> (JSX: [SEÇÃO 1.1.2.1.2.1]) */
-.space-card {
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 1.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    transition: border-color var(--transition-fast);
-}
-
-.space-card:hover {
-    border-color: var(--border-gold);
-}
-
-/* [SEÇÃO 1.1.2.1.2.1.2] .space-card-top — <div> (JSX: [SEÇÃO 1.1.2.1.2.1.2]) */
-.space-card-top {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-/* [SEÇÃO 1.1.2.1.2.1.2.1] .space-tag — <span> (JSX: [SEÇÃO 1.1.2.1.2.1.2.1]) */
-.space-tag {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-accent);
-    background-color: rgba(78, 168, 110, 0.12);
-    padding: 2px 8px;
+.col-header-icon {
+    width: 42px;
+    height: 42px;
     border-radius: var(--radius-sm);
-    align-self: flex-start;
-    border: 1px solid rgba(78, 168, 110, 0.3);
-}
-
-/* [SEÇÃO 1.1.2.1.2.1.2.2] .space-title — <h3> (JSX: [SEÇÃO 1.1.2.1.2.1.2.2]) */
-.space-title {
-    font-size: 1.25rem;
-    color: var(--text-main);
-}
-
-/* [SEÇÃO 1.1.2.1.2.1.3] .space-description — <p> (JSX: [SEÇÃO 1.1.2.1.2.1.3]) */
-.space-description {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-}
-
-/* [SEÇÃO 1.1.2.1.2.1.4.2.1] .equipment-item — <li> (JSX: [SEÇÃO 1.1.2.1.2.1.4.2.1]) */
-.equipment-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-main);
-}
-
-/* [SEÇÃO 1.1.2.1.2.1.4.2.1.1] .check-icon — <Check> (JSX: [SEÇÃO 1.1.2.1.2.1.4.2.1.1]) */
-.check-icon {
-    color: var(--color-accent);
-    flex-shrink: 0;
-}
-
-/* [SEÇÃO 1.1.2.2.2] .timeline-wrapper — <div> (JSX: [SEÇÃO 1.1.2.2.2]) */
-/* Coluna 2: Protocolos */
-.timeline-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    position: relative;
-}
-
-/* [SEÇÃO 1.1.2.2.2.1] .protocol-step-card — <article> (JSX: [SEÇÃO 1.1.2.2.2.1]) */
-.protocol-step-card {
-    display: flex;
-    gap: 1rem;
-    background-color: var(--bg-surface);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
-    transition: border-color var(--transition-fast);
-}
-
-.protocol-step-card:hover {
-    border-color: var(--border-gold);
-}
-
-/* [SEÇÃO 1.1.2.2.2.1.2] .step-number-badge — <div> (JSX: [SEÇÃO 1.1.2.2.2.1.2]) */
-.step-number-badge {
-    width: 38px;
-    height: 38px;
-    border-radius: var(--radius-sm);
-    background-color: var(--bg-surface-elevated);
-    border: 1px solid var(--border-gold);
-    color: var(--color-gold);
-    font-weight: 800;
-    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-}
-
-/* [SEÇÃO 1.1.2.2.2.1.3] .step-content — <div> (JSX: [SEÇÃO 1.1.2.2.2.1.3]) */
-.step-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-}
-
-/* [SEÇÃO 1.1.2.2.2.1.3.1] .step-title — <h3> (JSX: [SEÇÃO 1.1.2.2.2.1.3.1]) */
-.step-title {
-    font-size: 1.05rem;
-    color: var(--text-main);
-}
-
-/* [SEÇÃO 1.1.2.2.3] .booking-cta-box — <aside> (JSX: [SEÇÃO 1.1.2.2.3]) */
-/* Caixa de Chamada para Agendamento */
-.booking-cta-box {
-    margin-top: 2rem;
-    background-color: rgba(22, 91, 51, 0.2);
+    background-color: rgba(214, 194, 143, 0.1);
     border: 1px solid var(--border-gold);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    color: var(--color-gold);
 }
 
-/* [OUTROS / NÃO USADAS NO JSX] classes que não aparecem neste JSX (podem vir de children ou de outros arquivos) */
-.equipment-block {
-    margin-top: 0.5rem;
-    background-color: var(--bg-primary);
-    padding: 1rem;
+.col-header-icon.spaces-icon {
+    color: var(--color-gold);
+    border-color: var(--border-gold);
+    background-color: rgba(214, 194, 143, 0.1);
+}
+
+.col-header-icon.protocols-icon {
+    color: var(--color-accent);
+    border-color: var(--border-accent);
+    background-color: rgba(78, 168, 110, 0.12);
+}
+
+.col-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 0.25rem 0;
+}
+
+.col-desc {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ============================================================
+ * COLUNA 1: ESPAÇOS ANALÍTICOS & EQUIPAMENTOS
+ * ============================================================ */
+.spaces-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* [SEÇÃO 1.1.2.1.2.1] .space-card — Card do Espaço Analítico */
+.space-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.space-card:hover {
+    border-color: var(--border-gold);
+    box-shadow: var(--shadow-card);
+}
+
+/* [SEÇÃO 1.1.2.1.2.1.2] .space-image-wrapper — Imagem e Badge de Destaque */
+.space-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 210px;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid rgba(214, 194, 143, 0.15);
+}
+
+.space-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-normal);
+}
+
+.space-card:hover .space-img {
+    transform: scale(1.02);
+}
+
+/* [SEÇÃO 1.1.2.1.2.1.2.2] .space-tag — Tag sobreposta na imagem */
+.space-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    z-index: 2;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-gold);
+    background: rgba(12, 18, 15, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 4px 10px;
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-gold);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* [SEÇÃO 1.1.2.1.2.1.3] .space-body — Conteúdo textual do espaço */
+.space-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.space-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.35;
+    margin: 0;
+}
+
+.space-description {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* [SEÇÃO 1.1.2.1.2.1.3.3] .space-equipment-section — Bloco de equipamentos */
+.space-equipment-section {
+    background-color: var(--bg-primary);
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(214, 194, 143, 0.12);
+    margin-top: 0.35rem;
 }
 
 .equipment-label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: var(--color-gold);
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+    margin-bottom: 0.65rem;
+    font-weight: 700;
 }
 
 .equipment-list {
@@ -282,53 +261,282 @@
     padding: 0;
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
+}
+
+.equipment-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 0.86rem;
+    color: var(--text-main);
+    line-height: 1.45;
+}
+
+.check-icon {
+    color: var(--color-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ============================================================
+ * COLUNA 2: ROTINA METODOLÓGICA (LINHA DO TEMPO)
+ * ============================================================ */
+.timeline-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+}
+
+/* Linha conectora vertical da linha do tempo */
+.timeline-steps::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    bottom: 24px;
+    left: 21px;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        var(--color-gold),
+        var(--color-accent) 60%,
+        rgba(78, 168, 110, 0.1)
+    );
+    z-index: 0;
+}
+
+/* [SEÇÃO 1.1.2.2.2.1] .step-item — Card de cada etapa da rotina */
+.step-item {
+    display: flex;
+    gap: 1.15rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.35rem;
+    position: relative;
+    z-index: 1;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.step-item:hover {
+    border-color: var(--border-gold);
+    transform: translateX(3px);
+    box-shadow: var(--shadow-card);
+}
+
+/* [SEÇÃO 1.1.2.2.2.1.2] .step-badge — Indicador numérico */
+.step-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-gold);
+    color: var(--color-gold);
+    font-weight: 800;
+    font-size: 1.05rem;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* [SEÇÃO 1.1.2.2.2.1.3] .step-body — Conteúdo da etapa */
+.step-body {
+    display: flex;
+    flex-direction: column;
     gap: 0.4rem;
 }
 
-.step-details {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-}
-
-.cta-box-title {
-    font-size: 1.1rem;
+.step-name {
+    font-size: 1.08rem;
+    font-weight: 700;
     color: var(--text-main);
+    line-height: 1.35;
+    margin: 0;
 }
 
-.cta-box-text {
-    font-size: 0.85rem;
+.step-details {
+    font-size: 0.86rem;
     color: var(--text-muted);
     line-height: 1.6;
+    margin: 0;
 }
 
-.cta-box-link {
+/* ============================================================
+ * [SEÇÃO 1.1.2.2.3] .booking-cta-box — Chamada para Agendamento
+ * ============================================================ */
+.booking-cta-box {
+    margin-top: 1.75rem;
+    background: linear-gradient(145deg, rgba(22, 91, 51, 0.28), rgba(12, 18, 15, 0.7));
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-md);
+    padding: 1.5rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.booking-cta-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.cta-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+.cta-description {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.cta-action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--color-gold);
+    justify-content: center;
+    gap: 0.65rem;
+    padding: 12px 22px;
+    background-color: var(--color-brand);
+    color: #ffffff;
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-gold);
     text-decoration: none;
-    transition: transform var(--transition-fast);
+    transition: all var(--transition-fast);
     align-self: flex-start;
 }
 
-.cta-box-link:hover {
-    transform: translateX(4px);
-    color: var(--text-main);
+.cta-action-btn:hover {
+    background-color: var(--color-accent);
+    color: #ffffff;
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(78, 168, 110, 0.35);
 }
 
-/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
-@media (max-width: 900px) {
-    /* [SEÇÃO 1.1.1.2] .lab-title — <h1> (JSX: [SEÇÃO 1.1.1.2]) */
+/* ============================================================
+ * [RESPONSIVIDADE] Media Queries Multi-Dispositivo
+ * ============================================================ */
+
+/* Tablets e Telas Médias (<= 960px) */
+@media (max-width: 960px) {
+    .lab-grid-columns {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .lab-title {
+        font-size: 2rem;
+    }
+
+    .space-image-wrapper {
+        height: 200px;
+    }
+}
+
+/* Smartphones e Telas Pequenas (<= 768px) */
+@media (max-width: 768px) {
+    .lab-page {
+        padding: 2.5rem 1rem 4rem;
+    }
+
+    .lab-container {
+        gap: 2.25rem;
+    }
+
     .lab-title {
         font-size: 1.75rem;
     }
 
-    /* [SEÇÃO 1.1.2] .lab-grid-layout — <div> (JSX: [SEÇÃO 1.1.2]) */
-    .lab-grid-layout {
-        grid-template-columns: 1fr;
-        gap: 3rem;
+    .lab-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .lab-location-tag {
+        font-size: 0.78rem;
+        padding: 6px 12px;
+        text-align: center;
+        line-height: 1.4;
+    }
+
+    .col-header {
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .col-title {
+        font-size: 1.2rem;
+    }
+
+    .space-card {
+        padding: 1.1rem;
+    }
+
+    .space-image-wrapper {
+        height: 180px;
+    }
+
+    .space-title {
+        font-size: 1.18rem;
+    }
+
+    .space-equipment-section {
+        padding: 0.9rem 1rem;
+    }
+
+    .step-item {
+        padding: 1.1rem;
+        gap: 0.9rem;
+    }
+
+    .timeline-steps::before {
+        left: 20px;
+    }
+
+    .step-badge {
+        width: 38px;
+        height: 38px;
+        font-size: 0.95rem;
+    }
+
+    .step-name {
+        font-size: 1rem;
+    }
+
+    .booking-cta-box {
+        padding: 1.25rem;
+    }
+
+    .cta-action-btn {
+        width: 100%;
+        align-self: stretch;
+    }
+}
+
+/* Smartphones Compactos (<= 480px) */
+@media (max-width: 480px) {
+    .space-image-wrapper {
+        height: 160px;
+    }
+
+    .step-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .timeline-steps::before {
+        display: none; /* Oculta a linha vertical quando o badge fica acima do texto */
     }
 }

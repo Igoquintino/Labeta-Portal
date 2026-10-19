@@ -380,6 +380,31 @@ export function Booking() {
                 {activeTab === 'agenda' && (
                     /* [SEÇÃO 1.1.3] .booking-agenda-section — <section> */
                     <section className="booking-agenda-section" aria-label="Agenda e Formulário de Solicitação">
+                        {/* Guia Visual de Turnos de Bancada */}
+                        <div className="shifts-guide-panel">
+                            <div className="shift-card">
+                                <div className="shift-header">
+                                    <span className="shift-badge morning">Manhã</span>
+                                    <span className="shift-hours">08:00 – 12:00</span>
+                                </div>
+                                <p className="shift-desc">Preferencial para triagem de fitoplâncton fresco e preparo inicial de lâminas.</p>
+                            </div>
+                            <div className="shift-card">
+                                <div className="shift-header">
+                                    <span className="shift-badge afternoon">Tarde</span>
+                                    <span className="shift-hours">14:00 – 18:00</span>
+                                </div>
+                                <p className="shift-desc">Sessões contínuas de microscopia óptica, micrometria e análise taxonômica.</p>
+                            </div>
+                            <div className="shift-card">
+                                <div className="shift-header">
+                                    <span className="shift-badge night">Especial</span>
+                                    <span className="shift-hours">18:00 – 21:00</span>
+                                </div>
+                                <p className="shift-desc">Exclusivo para pós-graduação e projetos em regime de amostragem intensiva.</p>
+                            </div>
+                        </div>
+
                         {/* [SEÇÃO 1.1.3.1] .agenda-grid — <div> */}
                         <div className="agenda-grid">
 
