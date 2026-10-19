@@ -7,7 +7,7 @@
  * CSS correlato: Booking.css
  * ============================================================ */
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, Plus, Edit2, Trash2, Settings } from 'lucide-react';
+import { Calendar, Clock, ShieldCheck, Microscope, CheckCircle, ExternalLink, Plus, Edit2, Trash2, Settings, List, Globe } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
 import { AdminModal } from '../components/admin/AdminModal';
 import { ToastNotification } from '../components/common/ToastNotification';
@@ -23,6 +23,10 @@ export function Booking() {
     const [loadingEquipment, setLoadingEquipment] = useState(true);
     // [ESTADO] activeTab — aba ativa: 'catalogo' | 'agenda'
     const [activeTab, setActiveTab] = useState('catalogo');
+    // [ESTADO] calendarMode — modo de visualização do Google Agenda: 'MONTH' | 'AGENDA'
+    const [calendarMode, setCalendarMode] = useState(() => (
+        typeof window !== 'undefined' && window.innerWidth < 768 ? 'AGENDA' : 'MONTH'
+    ));
     // [ESTADO] selectedEquipment — equipamento selecionado para solicitação
     const [selectedEquipment, setSelectedEquipment] = useState(null);
     // [ESTADO] modalConfig — { isOpen, title, type, data } controla o AdminModal
@@ -425,19 +429,60 @@ export function Booking() {
                                     </div>
                                 </div>
 
+                                {/* Barra de Controles e Alternância de Visualização */}
+                                <div className="calendar-controls-bar">
+                                    <div className="calendar-mode-toggle" role="group" aria-label="Modo de visualização do calendário">
+                                        <button
+                                            type="button"
+                                            className={`calendar-mode-btn ${calendarMode === 'MONTH' ? 'active' : ''}`}
+                                            onClick={() => setCalendarMode('MONTH')}
+                                            aria-pressed={calendarMode === 'MONTH'}
+                                        >
+                                            <Calendar size={13} aria-hidden="true" />
+                                            <span>Visão Mensal</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className={`calendar-mode-btn ${calendarMode === 'AGENDA' ? 'active' : ''}`}
+                                            onClick={() => setCalendarMode('AGENDA')}
+                                            aria-pressed={calendarMode === 'AGENDA'}
+                                        >
+                                            <List size={13} aria-hidden="true" />
+                                            <span>Lista / Agenda</span>
+                                        </button>
+                                    </div>
+
+                                    <span className="calendar-tz-badge" title="Fuso horário oficial do laboratório">
+                                        <Globe size={11} aria-hidden="true" />
+                                        <span>Santarém (UTC-3)</span>
+                                    </span>
+                                </div>
+
                                 {/* [SEÇÃO 1.1.3.1.1.2] .calendar-embed-container — <div> */}
                                 <div className="calendar-embed-container">
                                     {/* [SEÇÃO 1.1.3.1.1.2.1] .google-calendar-iframe — <iframe> */}
                                     <iframe
-                                        src="https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSantarem&mode=MONTH&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=1&showCalendars=0&showTz=0&bgcolor=%2314241B"
-                                        title="Agenda Oficial de Ocupação do LABETA"
+                                        src={`https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSantarem&mode=${calendarMode}&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&bgcolor=%2314241B`}
+                                        title="Agenda Oficial de Ocupação e Reservas do LABETA"
                                         className="google-calendar-iframe"
-                                        width="554"
-                                        height="380"
                                         frameBorder="0"
                                         scrolling="no"
                                         loading="lazy"
                                     />
+                                </div>
+
+                                {/* Rodapé Acessível e Link Direto */}
+                                <div className="calendar-footer-hint">
+                                    <a
+                                        href="https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSantarem"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="calendar-direct-link"
+                                        title="Abrir Google Agenda oficial em nova aba"
+                                    >
+                                        <span>Abrir no Google Agenda</span>
+                                        <ExternalLink size={12} aria-hidden="true" />
+                                    </a>
                                 </div>
                             </article>
 
