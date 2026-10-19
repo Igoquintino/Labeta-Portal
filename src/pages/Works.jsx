@@ -256,7 +256,7 @@ export function Works() {
                 {/* Barra de Ações Administrativas */}
                 {isAdmin && (
                     /* [SEÇÃO 1.1.1.6] .admin-toolbar — <div> */
-                    <div className="admin-toolbar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+                    <div className="admin-toolbar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.75rem' }}>
                         {/* [SEÇÃO 1.1.1.6.1] .admin-btn-primary — <button> */}
                         <button
                             type="button"
