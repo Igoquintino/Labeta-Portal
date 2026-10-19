@@ -27,6 +27,11 @@
     align-items: center;
 }
 
+.works-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
 /* [SEÇÃO 1.1.1.1] .works-badge — <div> (JSX: [SEÇÃO 1.1.1.1]) */
 .works-badge {
     display: inline-flex;
