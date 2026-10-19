@@ -110,6 +110,14 @@
     margin: 0;
 }
 
+/* [SEÇÃO 1.1.2.1.2] .spaces-list — <div> (JSX: [SEÇÃO 1.1.2.1.2]) */
+/* Coluna 1: Espaços */
+.spaces-list {
+    display:flex;
+    flex-direction:column;
+    gap: 1.5rem;
+}
+
 /* [SEÇÃO 1.1.2.1.2] .spaces-cards-list — <div> (JSX: [SEÇÃO 1.1.2.1.2]) */
 /* Coluna 1: Espaços */
 .spaces-cards-list {
