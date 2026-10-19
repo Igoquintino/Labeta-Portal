@@ -61,10 +61,17 @@
     font-size: 1.05rem;
     max-width: 680px;
     line-height: 1.7;
+    padding-bottom: 2rem;
 }
 
 /* [SEÇÃO 1.1.1.4] .works-search-bar — <div> (JSX: [SEÇÃO 1.1.1.4]) */
 /* Barra de Busca de Trabalhos */
+.works-search-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
 .works-search-bar {
     width: 100%;
     max-width: 600px;
