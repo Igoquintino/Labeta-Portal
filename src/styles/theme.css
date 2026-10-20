@@ -4,36 +4,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-    /* 1. Primitivos da Paleta Amazônica */
+    /* ==========================================================================
+       CAMADA 1: PRIMITIVOS DA PALETA AMAZÔNICA NOTURNA
+       ========================================================================== */
     --color-green-950: #0C120F; /* Grafite Amazônico profundo */
     --color-green-900: #14241B; /* Superfície base */
     --color-green-850: #1B3125; /* Superfície elevada */
     --color-green-700: #165B33; /* Verde Institucional UFOPA */
     --color-green-500: #4EA86E; /* Verde Clorofila / Interação */
+    --color-green-400: #6FCF97; /* Verde Clorofila suave */
     --color-gold-400:  #D6C28F; /* Dourado / Areia Aluvial */
     --color-gold-300:  #E8DEC0;
     --color-gold-100:  #FAF7EE;
+    --color-blue-400:  #5BB3FF; /* Ciano / Destaque noturno */
     --color-light-100: #F4F7F4; /* Texto principal de alto contraste */
     --color-muted-400: #A0B0A4; /* Texto secundário com contraste AA */
-    --color-danger-500: #EF4444;
+    --color-danger-500: #EF4444; /* Vermelho alerta / perigo */
+    --color-danger-300: #FCA5A5;
 
-    /* 2. Tokens Semânticos */
-    --bg-primary: var(--color-green-950);
+    /* ==========================================================================
+       CAMADA 2: TOKENS SEMÂNTICOS
+       ========================================================================== */
+    --bg-canvas: var(--color-green-950);
+    --bg-primary: var(--color-green-950); /* Compatibilidade */
     --bg-surface: var(--color-green-900);
     --bg-surface-elevated: var(--color-green-850);
     --color-brand: var(--color-green-700);
     --color-gold: var(--color-gold-400);
     --color-accent: var(--color-green-500);
 
-    --text-main: var(--color-light-100);
-    --text-muted: var(--color-muted-400);
-    --border-subtle: rgba(214, 194, 143, 0.2);
+    --text-primary: var(--color-light-100);
+    --text-main: var(--color-light-100); /* Compatibilidade */
+    --text-secondary: var(--color-muted-400);
+    --text-muted: var(--color-muted-400); /* Compatibilidade */
+
+    --border-subtle: rgba(214, 194, 143, 0.15);
+    --border-medium: rgba(214, 194, 143, 0.35);
     --border-gold: rgba(214, 194, 143, 0.45);
     --border-accent: rgba(78, 168, 110, 0.35);
     --color-danger: var(--color-danger-500);
-    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
 
-    /* 3. Escala de Espaçamento e Raios */
+    /* Tokens Semânticos de Status Operacional */
+    --status-available-bg: rgba(78, 168, 110, 0.15);
+    --status-available-text: var(--color-green-500);
+    --status-maintenance-bg: rgba(214, 194, 143, 0.15);
+    --status-maintenance-text: var(--color-gold-400);
+    --status-busy-bg: rgba(239, 68, 68, 0.15);
+    --status-busy-text: var(--color-danger-300);
+
+    /* ==========================================================================
+       CAMADA 3: COMPONENTES & ESCALAS (Tipografia, Espaçamento, Z-Index, Sombras)
+       ========================================================================== */
+    /* Escala Tipográfica (Piso de Acessibilidade: 12px / 0.75rem) */
+    --font-xs: 0.75rem;   /* 12px - Badges, metadados secundários */
+    --font-sm: 0.875rem;  /* 14px - Textos auxiliares, inputs, tabelas */
+    --font-base: 1rem;    /* 16px - Corpo de texto padrão */
+    --font-lg: 1.125rem;  /* 18px - Subtítulos de seções */
+    --font-xl: 1.25rem;   /* 20px - Títulos de cards */
+    --font-2xl: 1.5rem;   /* 24px - Títulos h2 */
+    --font-3xl: 2rem;     /* 32px - Títulos h1 das páginas */
+    --font-4xl: 2.5rem;   /* 40px - Hero principal */
+
+    /* Escala de Espaçamento e Raios */
     --space-1: 4px;
     --space-2: 8px;
     --space-3: 12px;
@@ -46,6 +78,22 @@
     --radius-md: 8px;
     --radius-lg: 14px;
     --radius-full: 9999px;
+
+    /* Camadas Z-Index Padronizadas */
+    --z-base: 1;
+    --z-sticky: 100;
+    --z-header: 500;
+    --z-drawer: 900;
+    --z-modal: 1000;
+    --z-spotlight: 1100;
+    --z-admin-bar: 1200;
+    --z-toast: 1300;
+
+    /* Sombras e Elevações */
+    --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
+    --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.6);
 
     --transition-fast: 0.18s ease-in-out;
     --transition-normal: 0.28s ease-in-out;
