@@ -15,8 +15,9 @@
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(12, 18, 15, 0.85);
+    background-color: var(--bg-backdrop, rgba(12, 18, 15, 0.85));
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -284,6 +285,6 @@
     }
 
     .member-card {
-        padding: 0.75rem;
+        display: inline-table;
     }
 }

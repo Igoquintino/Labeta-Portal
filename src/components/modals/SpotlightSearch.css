@@ -15,8 +15,9 @@
 .spotlight-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(12, 18, 15, 0.85);
+    background-color: var(--bg-backdrop, rgba(12, 18, 15, 0.85));
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     align-items: flex-start;
     justify-content: center;

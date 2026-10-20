@@ -6,9 +6,9 @@
   justify-content: space-between;
   width: 100%;
   padding: 5px 10px;
-  background-color: rgba(20, 36, 27, 0.7);
+  background-color: var(--bg-surface-elevated);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(214, 194, 143, 0.25);
+  border: 1px solid var(--border-medium);
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-3);
   box-sizing: border-box;
@@ -16,8 +16,8 @@
 }
 
 .card-admin-actions:hover {
-  border-color: rgba(214, 194, 143, 0.45);
-  background-color: rgba(20, 36, 27, 0.9);
+  border-color: var(--border-gold);
+  background-color: var(--bg-surface);
 }
 
 .card-admin-badge {
