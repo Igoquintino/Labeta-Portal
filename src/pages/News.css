@@ -57,7 +57,7 @@
 
 /* [SEÇÃO 1.1.2.1.1.1] .announcement-icon — <div> */
 .announcement-icon {
-    background-color: rgba(214, 194, 143, 0.12);
+    background-color: var(--status-maintenance-bg);
     color: var(--accent-gold);
     border: 1px solid var(--border-medium);
 }
@@ -179,7 +179,7 @@
 
 /* [SEÇÃO 1.1.2.2.1.1] .radar-icon — <div> */
 .radar-icon {
-    background-color: rgba(78, 168, 110, 0.12);
+    background-color: var(--status-available-bg);
     color: var(--accent-chlorophyll);
     border: 1px solid var(--accent-chlorophyll);
 }
@@ -210,7 +210,7 @@
     font-weight: 600;
     padding: 5px 10px;
     border-radius: var(--radius-sm);
-    background-color: rgba(214, 194, 143, 0.08);
+    background-color: var(--status-maintenance-bg);
     border: 1px solid var(--border-subtle);
     text-decoration: none;
     transition: all var(--transition-fast);

@@ -101,7 +101,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background-color: rgba(19, 27, 23, 0.88);
+    background-color: var(--bg-surface-elevated);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--border-gold);

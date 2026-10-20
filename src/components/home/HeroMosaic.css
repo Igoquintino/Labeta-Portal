@@ -59,7 +59,7 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--text-muted);
-    background-color: rgba(12, 18, 15, 0.7);
+    background-color: var(--bg-surface-elevated);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-subtle);

@@ -172,7 +172,7 @@
     font-weight: 600;
     padding: 6px 12px;
     border-radius: var(--radius-sm);
-    background-color: rgba(214, 194, 143, 0.08);
+    background-color: var(--status-maintenance-bg);
     border: 1px solid var(--border-subtle);
     transition: all var(--transition-fast);
 }
@@ -189,7 +189,7 @@
 }
 
 .person-lattes-link.disabled:hover {
-    background-color: rgba(214, 194, 143, 0.08);
+    background-color: var(--status-maintenance-bg);
     color: var(--accent-gold);
 }
 
