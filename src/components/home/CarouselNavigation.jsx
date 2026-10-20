@@ -1,6 +1,7 @@
 /* ============================================================
  * [COMPONENTE] CarouselNavigation
- * Descrição: Carrossel de atalhos para as páginas internas: auto-avanço de 5s, pausa no hover, setas e barra de progresso.
+ * Descrição: Carrossel com visualização lateral (peek/center-mode), auto-avanço de 5s,
+ *            pausa no hover/botão, navegação por setas, toque/swipe e indicadores (dots).
  * Rota/Uso: Home (/).
  * Dados: src/data/carouselCards.json
  * CSS correlato: CarouselNavigation.css
@@ -11,19 +12,24 @@ import { ChevronLeft, ChevronRight, ArrowRight, Pause, Play } from 'lucide-react
 import cardsData from '../../data/carouselCards.json';
 import './CarouselNavigation.css';
 
-/** [FUNÇÃO] CarouselNavigation — controla slides, auto-avanço e navegação por setas. */
+/** [FUNÇÃO] CarouselNavigation — controla slides com foco central e visão dos cards laterais. */
 export function CarouselNavigation() {
-    // [ESTADO] currentIndex — slide atual
+    // [ESTADO] currentIndex — índice do card ativo
     const [currentIndex, setCurrentIndex] = useState(0);
+
     // [ESTADO] isPaused — auto-avanço pausado (inicia pausado se prefers-reduced-motion)
     const [isPaused, setIsPaused] = useState(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
             return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         }
         return false;
     });
-    // [ESTADO] touchStartX — posição X inicial do gesto de swipe
-    const [touchStartX, setTouchStartX] = useState(null);
+
+    // [ESTADO] dragOffset — deslocamento em pixels durante o gesto de touch
+    const [dragOffset, setDragOffset] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const touchStartXRef = useRef(null);
+
     // [ESTADO] autoPlayRef — id do setInterval do auto-avanço
     const autoPlayRef = useRef(null);
     const duration = 5000;
@@ -39,8 +45,9 @@ export function CarouselNavigation() {
         setCurrentIndex((prev) => (prev - 1 + total) % total);
     }, [total]);
 
-    // Respeita mudanças em prefers-reduced-motion
+    // Respeita preferências de redução de movimento do sistema
     useEffect(() => {
+        if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
         const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
         const handleChange = (e) => {
             if (e.matches) setIsPaused(true);
@@ -49,6 +56,7 @@ export function CarouselNavigation() {
         return () => mediaQuery.removeEventListener('change', handleChange);
     }, []);
 
+    // Temporizador de auto-avanço
     useEffect(() => {
         if (!isPaused) {
             autoPlayRef.current = setInterval(() => {
@@ -58,42 +66,65 @@ export function CarouselNavigation() {
         return () => clearInterval(autoPlayRef.current);
     }, [nextSlide, isPaused]);
 
-    // Suporte a gestos touch (Mobile Swipe)
-    /** [FUNÇÃO] handleTouchStart — registra o início do swipe. */
+    // Suporte a gestos touch (Mobile Swipe responsivo com arrasto tátil)
     const handleTouchStart = (e) => {
-        setTouchStartX(e.touches[0].clientX);
+        touchStartXRef.current = e.touches[0].clientX;
+        setIsDragging(true);
+        setIsPaused(true);
     };
 
-    /** [FUNÇÃO] handleTouchEnd — decide avançar/voltar conforme a distância do swipe (> 50px). */
-    const handleTouchEnd = (e) => {
-        if (touchStartX === null) return;
-        const touchEndX = e.changedTouches[0].clientX;
-        const diffX = touchStartX - touchEndX;
+    const handleTouchMove = (e) => {
+        if (!isDragging || touchStartXRef.current === null) return;
+        const currentX = e.touches[0].clientX;
+        const diffX = currentX - touchStartXRef.current;
+        // Amortecimento do deslocamento em touch
+        const damped = Math.max(Math.min(diffX, 80), -80);
+        setDragOffset(damped);
+    };
 
-        if (diffX > 50) {
-            nextSlide(); // Deslizar para a esquerda avança
-        } else if (diffX < -50) {
-            prevSlide(); // Deslizar para a direita volta
+    const handleTouchEnd = () => {
+        if (!isDragging) return;
+        setIsDragging(false);
+        if (dragOffset < -40) {
+            nextSlide();
+        } else if (dragOffset > 40) {
+            prevSlide();
         }
-        setTouchStartX(null);
+        setDragOffset(0);
+        touchStartXRef.current = null;
     };
 
-    const visibleCards = [
-        cardsData[currentIndex % total],
-        cardsData[(currentIndex + 1) % total],
-        cardsData[(currentIndex + 2) % total]
+    // Navegação por teclado (Setas Esquerda / Direita)
+    const handleKeyDown = (e) => {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevSlide();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            nextSlide();
+        }
+    };
+
+    // Slots de visualização: central ativo com pré-visualização (peek) nas laterais
+    const slots = [
+        { card: cardsData[(currentIndex - 2 + total) % total], role: 'outer-left', slotKey: 'slot-outer-left' },
+        { card: cardsData[(currentIndex - 1 + total) % total], role: 'prev', slotKey: 'slot-prev' },
+        { card: cardsData[currentIndex % total], role: 'active', slotKey: 'slot-active' },
+        { card: cardsData[(currentIndex + 1) % total], role: 'next', slotKey: 'slot-next' },
+        { card: cardsData[(currentIndex + 2) % total], role: 'outer-right', slotKey: 'slot-outer-right' },
     ];
 
     return (
         /* [SEÇÃO 1] .carousel-section — <section> */
         <section
             className="carousel-section"
+            role="region"
             aria-roledescription="carousel"
             aria-label="Exploração Rápida do LABETA"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
+            onKeyDown={handleKeyDown}
+            tabIndex={0}
         >
             {/* [SEÇÃO 1.1] .carousel-container — <div> */}
             <div className="carousel-container">
@@ -126,44 +157,76 @@ export function CarouselNavigation() {
                         <ChevronLeft size={28} aria-hidden="true" />
                     </button>
 
-                    {/* [SEÇÃO 1.1.2.2] .carousel-cards-grid — <div> */}
-                    <div className="carousel-cards-grid">
-                        {visibleCards.map((card, index) => (
-                            /* [SEÇÃO 1.1.2.2.1] .carousel-card-item — <article> */
-                            <article className="carousel-card-item" key={`${card.id}-${index}`}>
-                                {/* [SEÇÃO 1.1.2.2.1.1] .card-thumb-frame — <div> */}
-                                <div className="card-thumb-frame">
-                                    {/* [SEÇÃO 1.1.2.2.1.1.1] .card-thumb-img — <img> */}
-                                    <img
-                                        src={card.image}
-                                        alt={card.title}
-                                        className="card-thumb-img"
-                                        loading="lazy"
-                                        width="400"
-                                        height="150"
-                                    />
-                                </div>
+                    {/* [SEÇÃO 1.1.2.2] .carousel-viewport — <div> */}
+                    <div
+                        className="carousel-viewport"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
+                        {/* [SEÇÃO 1.1.2.3] .carousel-track — <div> */}
+                        <div
+                            className="carousel-track"
+                            style={{
+                                transform: dragOffset !== 0 ? `translateX(${dragOffset}px)` : undefined,
+                                transition: isDragging ? 'none' : 'transform 0.25s ease-out'
+                            }}
+                        >
+                            {slots.map(({ card, role, slotKey }) => {
+                                const isActive = role === 'active';
+                                const isPeek = role === 'prev' || role === 'next';
+                                const isPrev = role === 'prev';
+                                const isNext = role === 'next';
 
-                                {/* [SEÇÃO 1.1.2.2.1.2] .card-body — <div> */}
-                                <div className="card-body">
-                                    {/* [SEÇÃO 1.1.2.2.1.2.1] .card-tag — <span> */}
-                                    <span className="card-tag">{card.tag}</span>
-                                    {/* [SEÇÃO 1.1.2.2.1.2.2] .card-title — <h3> */}
-                                    <h3 className="card-title">{card.title}</h3>
-                                    {/* [SEÇÃO 1.1.2.2.1.2.3] .card-description — <p> */}
-                                    <p className="card-description">{card.description}</p>
+                                return (
+                                    <article
+                                        key={slotKey}
+                                        className={`carousel-card-item ${
+                                            isActive
+                                                ? 'is-active'
+                                                : isPeek
+                                                ? `is-peek ${isPrev ? 'is-prev' : 'is-next'}`
+                                                : `is-outer is-${role}`
+                                        }`}
+                                        onClick={isPrev ? prevSlide : isNext ? nextSlide : undefined}
+                                        title={isPrev ? "Clique para ver slide anterior" : isNext ? "Clique para ver próximo slide" : undefined}
+                                        aria-hidden={!isActive}
+                                    >
+                                        {/* Frame da Imagem de Destaque */}
+                                        <div className="card-thumb-frame">
+                                            <img
+                                                src={card.image}
+                                                alt={card.title}
+                                                className="card-thumb-img"
+                                                loading="lazy"
+                                                width="400"
+                                                height="160"
+                                            />
+                                        </div>
 
-                                    {/* [SEÇÃO 1.1.2.2.1.2.4] .card-cta-btn — <Link> */}
-                                    <Link to={card.link} className="card-cta-btn">
-                                        <span>{card.ctaText}</span>
-                                        <ArrowRight size={15} aria-hidden="true" />
-                                    </Link>
-                                </div>
-                            </article>
-                        ))}
+                                        {/* Corpo Informativo do Card */}
+                                        <div className="card-body">
+                                            <span className="card-tag">{card.tag}</span>
+                                            <h3 className="card-title">{card.title}</h3>
+                                            <p className="card-description">{card.description}</p>
+
+                                            <Link
+                                                to={card.link}
+                                                className="card-cta-btn"
+                                                tabIndex={isActive ? 0 : -1}
+                                                aria-hidden={!isActive}
+                                            >
+                                                <span>{card.ctaText}</span>
+                                                <ArrowRight size={15} aria-hidden="true" />
+                                            </Link>
+                                        </div>
+                                    </article>
+                                );
+                            })}
+                        </div>
                     </div>
 
-                    {/* [SEÇÃO 1.1.2.3] .carousel-btn .btn-next — <button> */}
+                    {/* [SEÇÃO 1.1.2.4] .carousel-btn .btn-next — <button> */}
                     <button
                         type="button"
                         className="carousel-btn btn-next"
@@ -174,10 +237,23 @@ export function CarouselNavigation() {
                     </button>
                 </div>
 
+                {/* [SEÇÃO 1.1.3] Indicadores de Paginação (Dots) */}
+                <div className="carousel-dots-container" role="tablist" aria-label="Navegação por slides">
+                    {cardsData.map((card, index) => (
+                        <button
+                            key={card.id}
+                            type="button"
+                            role="tab"
+                            className={`carousel-dot ${index === currentIndex ? 'active' : ''}`}
+                            onClick={() => setCurrentIndex(index)}
+                            aria-selected={index === currentIndex}
+                            aria-label={`Ir para slide ${index + 1}: ${card.title}`}
+                        />
+                    ))}
+                </div>
+
                 {/* Linha de Progresso Visual */}
-                {/* [SEÇÃO 1.1.3] .carousel-progress-track — <div> */}
                 <div className="carousel-progress-track" aria-hidden="true">
-                    {/* [SEÇÃO 1.1.3.1] .carousel-progress-bar — <div> */}
                     <div
                         className={`carousel-progress-bar ${isPaused ? 'paused' : ''}`}
                         key={currentIndex}
