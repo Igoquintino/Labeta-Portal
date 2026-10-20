@@ -21,11 +21,26 @@
   <meta name="twitter:description" content="Laboratório de Ecologia e Taxonomia de Algas da UFOPA. Pesquisa científica, acervo taxonômico e biodiversidade aquática na Amazônia." />
   <meta name="twitter:image" content="/logo-labeta.svg" />
   <title>LABETA – Laboratório de Ecologia e Taxonomia de Algas | UFOPA</title>
-  <script type="module" crossorigin src="/assets/index-CqiP4qIi.js"></script>
+
+  <!-- Script Anti-FOUC: aplica tema antes do primeiro paint -->
+  <script>
+    (function() {
+      try {
+        var theme = localStorage.getItem('labeta-theme');
+        if (!theme) {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'light' ? '#F8FAF8' : '#0C120F');
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" crossorigin src="/assets/index-LR5M7pT7.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-CbXtAM7H.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-react-CCUiyeVW.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-react-BUAWImOV.js">
   <link rel="modulepreload" crossorigin href="/assets/vendor-supabase-9xy1qO_j.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-CzZtwdN5.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-6JlporB_.css">
 </head>
 
 <body>
