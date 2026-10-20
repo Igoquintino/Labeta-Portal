@@ -1,0 +1,74 @@
+/* [ARQUIVO] CardAdminActions.css — estilos padronizados da barra de ações do card */
+
+.card-admin-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 5px 10px;
+  background-color: rgba(20, 36, 27, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(214, 194, 143, 0.25);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-3);
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.card-admin-actions:hover {
+  border-color: rgba(214, 194, 143, 0.45);
+  background-color: rgba(20, 36, 27, 0.9);
+}
+
+.card-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-xs); /* 0.75rem / 12px */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-gold);
+}
+
+.card-admin-btns-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs); /* 0.75rem / 12px */
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.admin-action-btn.edit {
+  color: var(--color-gold);
+  border-color: rgba(214, 194, 143, 0.3);
+  background-color: rgba(214, 194, 143, 0.08);
+}
+
+.admin-action-btn.edit:hover {
+  background-color: var(--color-gold);
+  color: var(--bg-canvas);
+}
+
+.admin-action-btn.delete {
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.admin-action-btn.delete:hover {
+  background-color: var(--color-danger);
+  color: var(--text-primary);
+}

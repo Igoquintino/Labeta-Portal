@@ -1,0 +1,101 @@
+/* [ARQUIVO] DeleteConfirmDialog.css — estilos do diálogo de confirmação de exclusão */
+
+.ui-delete-confirm-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-4) var(--space-2);
+}
+
+.ui-delete-confirm-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--status-busy-bg);
+  color: var(--color-danger);
+  margin-bottom: var(--space-4);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.ui-delete-confirm-notice {
+  font-size: var(--font-base); /* 1rem / 16px */
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: var(--space-6);
+  max-width: 440px;
+}
+
+.ui-delete-confirm-highlight {
+  color: var(--color-danger-300);
+  word-break: break-word;
+}
+
+.ui-delete-confirm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.ui-delete-btn-cancel {
+  padding: 9px 20px;
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: var(--font-sm); /* 0.875rem / 14px */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ui-delete-btn-cancel:hover:not(:disabled) {
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+.ui-delete-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  background-color: var(--color-danger);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-sm); /* 0.875rem / 14px */
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.ui-delete-btn-danger:hover:not(:disabled) {
+  background-color: #dc2626;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.ui-delete-btn-cancel:disabled,
+.ui-delete-btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
