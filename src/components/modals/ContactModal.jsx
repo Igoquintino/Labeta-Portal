@@ -86,13 +86,21 @@ export function ContactModal({ isOpen, onClose }) {
                         <article key={member.id} className="member-card">
                             <div className="member-avatar-wrapper">
                                 {member.avatar ? (
-                                    <img
-                                        src={member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`}
-                                        alt={`Foto de ${member.name}`}
-                                        className="member-avatar-img"
-                                        width="50"
-                                        height="50"
-                                    />
+                                    <picture>
+                                        {member.avatar.match(/\.(jpg|jpeg|png)$/i) && (
+                                            <source
+                                                srcSet={(member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`).replace(/\.(jpg|jpeg|png)$/i, '.webp')}
+                                                type="image/webp"
+                                            />
+                                        )}
+                                        <img
+                                            src={member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`}
+                                            alt={`Foto de ${member.name}`}
+                                            className="member-avatar-img"
+                                            width="50"
+                                            height="50"
+                                        />
+                                    </picture>
                                 ) : (
                                     <div className="member-avatar-placeholder">
                                         {member.name ? member.name.charAt(0) : 'L'}

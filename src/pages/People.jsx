@@ -218,19 +218,27 @@ export function People() {
                                     />
                                 )}
 
-                                {/* Foto / Avatar */}
-                                <div className="person-avatar-wrapper">
+                                {/* Foto / Avatar com suporte progressivo a WebP */}
+                                <div className="person-avatar-frame">
                                     {member.avatar ? (
-                                        <img
-                                            src={member.avatar}
-                                            alt={`Foto de ${member.name}`}
-                                            className="person-avatar"
-                                            loading="lazy"
-                                            width="88"
-                                            height="88"
-                                        />
+                                        <picture>
+                                            {member.avatar.match(/\.(jpg|jpeg|png)$/i) && (
+                                                <source
+                                                    srcSet={member.avatar.replace(/\.(jpg|jpeg|png)$/i, '.webp')}
+                                                    type="image/webp"
+                                                />
+                                            )}
+                                            <img
+                                                src={member.avatar}
+                                                alt={`Foto de ${member.name}`}
+                                                className="person-avatar-img"
+                                                loading="lazy"
+                                                width="60"
+                                                height="60"
+                                            />
+                                        </picture>
                                     ) : (
-                                        <div className="person-avatar-fallback" aria-hidden="true">
+                                        <div className="person-avatar-placeholder" aria-hidden="true">
                                             {member.name ? member.name.charAt(0) : 'U'}
                                         </div>
                                     )}

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1B3125" />
+      <stop offset="80%" stop-color="#14241B" />
+      <stop offset="100%" stop-color="#0C120F" />
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAF7EE" />
+      <stop offset="50%" stop-color="#D6C28F" />
+      <stop offset="100%" stop-color="#9C8758" />
+    </linearGradient>
+    <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6FCF97" />
+      <stop offset="100%" stop-color="#165B33" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo Circular Institucional -->
+  <circle cx="64" cy="64" r="60" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="2.5" />
+  <circle cx="64" cy="64" r="54" fill="none" stroke="rgba(214, 194, 143, 0.25)" stroke-width="1" stroke-dasharray="3 3" />
+
+  <!-- Valva Silicosa de Diatomácea (Navicula / Pinnularia) -->
+  <g transform="translate(64, 64) scale(0.95)">
+    <!-- Frústulo Externo (Silica Shell) -->
+    <path d="M 0 -44 C 18 -26, 20 26, 0 44 C -20 26, -18 -26, 0 -44 Z"
+          fill="rgba(22, 91, 51, 0.45)"
+          stroke="url(#goldGrad)"
+          stroke-width="2" />
+
+    <!-- Estrias Transversais Ficológicas -->
+    <path d="M -11 -28 L 11 -28 M -14 -20 L 14 -20 M -16 -12 L 16 -12 M -17 -4 L 17 -4 M -17 4 L 17 4 M -16 12 L 16 12 M -14 20 L 14 20 M -11 28 L 11 28"
+          stroke="rgba(214, 194, 143, 0.4)"
+          stroke-width="1"
+          stroke-linecap="round" />
+
+    <!-- Rafe Central e Nódulos Polares -->
+    <line x1="0" y1="-38" x2="0" y2="-6" stroke="url(#goldGrad)" stroke-width="1.8" stroke-linecap="round" />
+    <line x1="0" y1="6" x2="0" y2="38" stroke="url(#goldGrad)" stroke-width="1.8" stroke-linecap="round" />
+
+    <!-- Nódulo Central -->
+    <circle cx="0" cy="0" r="4.5" fill="url(#goldGrad)" />
+    <circle cx="0" cy="0" r="2.2" fill="#0C120F" />
+
+    <!-- Plastídios de Clorofila (Algas Douradas/Castanhas) -->
+    <ellipse cx="-7" cy="0" rx="3" ry="14" fill="url(#greenGrad)" opacity="0.8" />
+    <ellipse cx="7" cy="0" rx="3" ry="14" fill="url(#greenGrad)" opacity="0.8" />
+  </g>
+
+  <!-- Tipografia LABETA na curvatura ou base -->
+  <text x="64" y="112"
+        text-anchor="middle"
+        font-family="'Inter', sans-serif"
+        font-size="9"
+        font-weight="800"
+        letter-spacing="2.5"
+        fill="url(#goldGrad)">LABETA</text>
+</svg>

@@ -136,6 +136,10 @@
     flex-shrink: 0;
 }
 
+.member-avatar-wrapper picture {
+    display: contents;
+}
+
 .member-avatar-img {
     width: 50px;
     height: 50px;

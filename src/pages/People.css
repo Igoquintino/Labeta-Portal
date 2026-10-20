@@ -64,6 +64,10 @@
     flex-shrink: 0;
 }
 
+.person-avatar-frame picture {
+    display: contents;
+}
+
 /* [SEÇÃO 1.1.2.1.2.1.1] .person-avatar-img — <img> */
 .person-avatar-img {
     width: 60px;
