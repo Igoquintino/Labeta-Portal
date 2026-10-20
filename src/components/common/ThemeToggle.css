@@ -1,0 +1,49 @@
+/* ============================================================
+ * [CSS] ThemeToggle.css
+ * Descrição: Botão interativo e acessível de alternância de tema (Dark / Light).
+ * ============================================================ */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 6px 10px;
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+    font-weight: 500;
+    color: var(--color-gold);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-width: 36px;
+    height: 36px;
+}
+
+.theme-toggle-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--color-gold);
+    background-color: var(--bg-surface-elevated);
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+.theme-toggle-icon {
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-btn:hover .theme-toggle-icon {
+    transform: rotate(20deg) scale(1.1);
+}
+
+@media (max-width: 900px) {
+    .theme-toggle-btn {
+        min-width: 34px;
+        height: 34px;
+        padding: 6px;
+    }
+}
