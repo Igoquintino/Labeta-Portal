@@ -1,0 +1,62 @@
+/* [ARQUIVO] SearchInput.css — estilos padronizados do campo de busca */
+
+.ui-search-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  align-items: center;
+}
+
+.ui-search-input__icon {
+  position: absolute;
+  left: 14px;
+  color: var(--color-gold);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.ui-search-input__control {
+  width: 100%;
+  padding: 10px 40px 10px 42px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-sm); /* 0.875rem / 14px */
+  outline: none;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.ui-search-input__control:focus {
+  border-color: var(--color-gold);
+  background-color: var(--bg-surface-elevated);
+  box-shadow: 0 0 0 3px rgba(214, 194, 143, 0.2);
+}
+
+.ui-search-input__control::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.ui-search-input__clear-btn {
+  position: absolute;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.ui-search-input__clear-btn:hover {
+  color: var(--color-gold);
+  background-color: rgba(214, 194, 143, 0.1);
+}
