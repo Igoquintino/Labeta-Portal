@@ -29,9 +29,13 @@
     --bg-primary: var(--color-green-950); /* Compatibilidade */
     --bg-surface: var(--color-green-900);
     --bg-surface-elevated: var(--color-green-850);
+    --bg-navbar: rgba(12, 18, 15, 0.94);
+    --bg-backdrop: rgba(12, 18, 15, 0.85);
     --color-brand: var(--color-green-700);
     --color-gold: var(--color-gold-400);
+    --accent-gold: var(--color-gold-400);
     --color-accent: var(--color-green-500);
+    --accent-chlorophyll: var(--color-green-500);
 
     --text-primary: var(--color-light-100);
     --text-main: var(--color-light-100); /* Compatibilidade */
@@ -100,6 +104,56 @@
 
     /* Acessibilidade: Anel de Foco Visível (WCAG 2.2 AAA/AA) */
     --focus-ring: 0 0 0 2px var(--color-green-950), 0 0 0 4px var(--color-gold-400);
+}
+
+/* ==========================================================================
+   CAMADA 2: MODO CLARO ("AMAZÔNIA DIURNA / ÁGUAS CLARAS")
+   Sobrescreve os tokens semânticos, cores de contraste, bordas e sombras.
+   ========================================================================== */
+[data-theme='light'] {
+    /* Superfícies e Fundos */
+    --bg-canvas: #F8FAF8;
+    --bg-primary: #F8FAF8;
+    --bg-surface: #FFFFFF;
+    --bg-surface-elevated: #EFF4F0;
+    --bg-navbar: rgba(248, 250, 248, 0.94);
+    --bg-backdrop: rgba(13, 23, 18, 0.45);
+
+    /* Tipografia de Alto Contraste (WCAG AAA >= 15:1 / AA >= 5.8:1) */
+    --text-primary: #0D1712;
+    --text-main: #0D1712;
+    --text-secondary: #43574C;
+    --text-muted: #43574C;
+
+    /* Cores de Destaque Adaptativas */
+    --color-brand: #165B33;
+    --color-gold: #9E6700; /* Ouro Velho / Âmbar Fluvial (contraste 4.9:1 sobre branco) */
+    --accent-gold: #9E6700;
+    --color-accent: #1B7340; /* Verde Clorofila Intenso (contraste 4.8:1) */
+    --accent-chlorophyll: #1B7340;
+
+    /* Bordas e Contornos Diurnos */
+    --border-subtle: rgba(22, 91, 51, 0.12);
+    --border-medium: rgba(22, 91, 51, 0.24);
+    --border-gold: rgba(158, 103, 0, 0.40);
+    --border-accent: rgba(27, 115, 64, 0.35);
+
+    /* Badges de Status Operacional */
+    --status-available-bg: rgba(27, 115, 64, 0.12);
+    --status-available-text: #1B7340;
+    --status-maintenance-bg: rgba(158, 103, 0, 0.12);
+    --status-maintenance-text: #9E6700;
+    --status-busy-bg: rgba(239, 68, 68, 0.12);
+    --status-busy-text: #B91C1C;
+
+    /* Sombras e Profundidade Difusa */
+    --shadow-subtle: 0 2px 8px rgba(16, 36, 24, 0.05);
+    --shadow-card: 0 4px 20px rgba(16, 36, 24, 0.07);
+    --shadow-elevated: 0 8px 30px rgba(16, 36, 24, 0.12);
+    --shadow-modal: 0 16px 48px rgba(16, 36, 24, 0.20);
+
+    /* Anel de Foco Visível para Fundo Claro */
+    --focus-ring: 0 0 0 2px #FFFFFF, 0 0 0 4px #9E6700;
 }
 
 * {
