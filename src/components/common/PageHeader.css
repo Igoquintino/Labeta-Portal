@@ -1,0 +1,50 @@
+/* [ARQUIVO] PageHeader.css — estilos padronizados de cabeçalho de página */
+
+.ui-page-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ui-page-header__badge-wrapper {
+  margin-bottom: var(--space-3);
+}
+
+.ui-page-header__title {
+  font-size: var(--font-3xl); /* 2rem / 32px */
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: var(--space-3);
+  letter-spacing: -0.01em;
+}
+
+.ui-page-header__subtitle {
+  font-size: var(--font-base); /* 1rem / 16px */
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+.ui-page-header__actions {
+  width: 100%;
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .ui-page-header__title {
+    font-size: var(--font-2xl); /* 1.5rem / 24px */
+  }
+
+  .ui-page-header__subtitle {
+    font-size: var(--font-sm); /* 0.875rem / 14px */
+    padding: 0 var(--space-2);
+  }
+}

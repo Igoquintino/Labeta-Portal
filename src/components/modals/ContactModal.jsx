@@ -1,70 +1,47 @@
 /* ============================================================
  * [COMPONENTE] ContactModal
- * Descrição: Modal de contatos rápidos: lista membros, copia e-mail institucional e abre Lattes.
+ * Descrição: Modal de contatos rápidos: lista membros dinamicamente, copia e-mail institucional e abre Lattes.
+ *            Integrado com useFocusTrap e camada de serviços reativa do Supabase.
  * Rota/Uso: Aberto pela Navbar (App.jsx).
- * Dados: src/data/members.json
+ * Dados: membersService.fetchMembers() com fallback automático em members.json.
  * CSS correlato: ContactModal.css
  * ============================================================ */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Copy, Check, ExternalLink } from 'lucide-react';
-import membersData from '../../data/members.json';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
+import { fetchMembers } from '../../services/membersService';
+import initialMembersData from '../../data/members.json';
 import './ContactModal.css';
 
-/** [FUNÇÃO] ContactModal — renderiza o modal; fecha por Esc ou clique no fundo. */
+/** [FUNÇÃO] ContactModal — renderiza o modal de contatos rápidos. */
 export function ContactModal({ isOpen, onClose }) {
-    // [ESTADO] copiedId — id do membro cujo e-mail acabou de ser copiado (feedback "Copiado!")
+    // [ESTADO] members — lista reativa de membros
+    const [members, setMembers] = useState(initialMembersData);
+    // [ESTADO] copiedId — id do membro cujo e-mail acabou de ser copiado
     const [copiedId, setCopiedId] = useState(null);
-    // [ESTADO] modalRef — referência ao diálogo (foco/focus trap)
-    const modalRef = useRef(null);
 
-    /** [HOOK] useEffect — foco inicial, Esc, focus trap e bloqueio de scroll enquanto aberto. */
+    // Contenção de foco, tecla Esc e bloqueio de rolagem via hook
+    const modalRef = useFocusTrap(isOpen, onClose);
+
+    /** [HOOK] useEffect — Carrega membros dinamicamente da camada de serviço ao abrir */
     useEffect(() => {
-        if (!isOpen) return;
-
-        const timer = setTimeout(() => {
-            const firstFocusable = modalRef.current?.querySelector('button, [href]');
-            firstFocusable?.focus();
-        }, 50);
-
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape') {
-                onClose();
-                return;
+        let isMounted = true;
+        async function loadContacts() {
+            if (!isOpen) return;
+            const { members: data } = await fetchMembers();
+            if (isMounted && data && data.length > 0) {
+                setMembers(data);
             }
-
-            if (event.key === 'Tab' && modalRef.current) {
-                const focusableElements = modalRef.current.querySelectorAll(
-                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                if (focusableElements.length > 0) {
-                    const firstElement = focusableElements[0];
-                    const lastElement = focusableElements[focusableElements.length - 1];
-
-                    if (event.shiftKey && document.activeElement === firstElement) {
-                        event.preventDefault();
-                        lastElement.focus();
-                    } else if (!event.shiftKey && document.activeElement === lastElement) {
-                        event.preventDefault();
-                        firstElement.focus();
-                    }
-                }
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = 'hidden';
-
-        return () => {
-            clearTimeout(timer);
-            window.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'unset';
-        };
-    }, [isOpen, onClose]);
+        }
+        loadContacts();
+        return () => { isMounted = false; };
+    }, [isOpen]);
 
     if (!isOpen) return null;
 
-    /** [FUNÇÃO] handleCopyEmail — copia o e-mail para a área de transferência e mostra feedback temporário. */
+    /** [FUNÇÃO] handleCopyEmail — copia o e-mail para a área de transferência com feedback. */
     const handleCopyEmail = (id, email) => {
+        if (!email) return;
         navigator.clipboard.writeText(email);
         setCopiedId(id);
         setTimeout(() => setCopiedId(null), 2000);
@@ -83,7 +60,6 @@ export function ContactModal({ isOpen, onClose }) {
                 aria-labelledby="contact-modal-title"
             >
                 {/* Região viva para leitor de tela anunciar cópia */}
-                {/* [SEÇÃO 1.1.1] .sr-only — <div> */}
                 <div className="sr-only" aria-live="polite">
                     {copiedId ? "E-mail copiado com sucesso para a área de transferência." : ""}
                 </div>
@@ -91,12 +67,9 @@ export function ContactModal({ isOpen, onClose }) {
                 {/* [SEÇÃO 1.1.2] .modal-header — <header> */}
                 <header className="modal-header">
                     <div>
-                        {/* [SEÇÃO 1.1.2.1.1] .modal-badge — <span> */}
                         <span className="modal-badge">Equipe &amp; Pesquisa</span>
-                        {/* [SEÇÃO 1.1.2.1.2] .modal-title — <h2> */}
                         <h2 id="contact-modal-title" className="modal-title">Contatos Rápidos do LABETA</h2>
                     </div>
-                    {/* [SEÇÃO 1.1.2.2] .modal-close-btn — <button> */}
                     <button
                         type="button"
                         className="modal-close-btn"
@@ -109,38 +82,37 @@ export function ContactModal({ isOpen, onClose }) {
 
                 {/* [SEÇÃO 1.1.3] .members-contact-grid — <div> */}
                 <div className="members-contact-grid">
-                    {membersData.map((member) => (
-                        /* [SEÇÃO 1.1.3.1] .member-card — <article> */
+                    {members.map((member) => (
                         <article key={member.id} className="member-card">
-                            {/* [SEÇÃO 1.1.3.1.1] .member-avatar-wrapper — <div> */}
                             <div className="member-avatar-wrapper">
                                 {member.avatar ? (
-                                    /* [SEÇÃO 1.1.3.1.1.1] .member-avatar-img — <img> */
-                                    <img
-                                        src={member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`}
-                                        alt={`Foto de ${member.name}`}
-                                        className="member-avatar-img"
-                                        width="50"
-                                        height="50"
-                                    />
+                                    <picture>
+                                        {member.avatar.match(/\.(jpg|jpeg|png)$/i) && (
+                                            <source
+                                                srcSet={(member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`).replace(/\.(jpg|jpeg|png)$/i, '.webp')}
+                                                type="image/webp"
+                                            />
+                                        )}
+                                        <img
+                                            src={member.avatar.startsWith('/') ? member.avatar : `/${member.avatar}`}
+                                            alt={`Foto de ${member.name}`}
+                                            className="member-avatar-img"
+                                            width="50"
+                                            height="50"
+                                        />
+                                    </picture>
                                 ) : (
-                                    /* [SEÇÃO 1.1.3.1.1.2] .member-avatar-placeholder — <div> */
                                     <div className="member-avatar-placeholder">
-                                        {member.name.charAt(0)}
+                                        {member.name ? member.name.charAt(0) : 'L'}
                                     </div>
                                 )}
                             </div>
 
-                            {/* [SEÇÃO 1.1.3.1.2] .member-details — <div> */}
                             <div className="member-details">
-                                {/* [SEÇÃO 1.1.3.1.2.1] .member-name — <h3> */}
                                 <h3 className="member-name">{member.name}</h3>
-                                {/* [SEÇÃO 1.1.3.1.2.2] .member-role — <span> */}
                                 <span className="member-role">{member.role}</span>
 
-                                {/* [SEÇÃO 1.1.3.1.2.3] .member-actions — <div> */}
                                 <div className="member-actions">
-                                    {/* [SEÇÃO 1.1.3.1.2.3.1] .copy-email-btn — <button> */}
                                     <button
                                         type="button"
                                         className={`copy-email-btn ${copiedId === member.id ? 'copied' : ''}`}
@@ -156,14 +128,12 @@ export function ContactModal({ isOpen, onClose }) {
                                         ) : (
                                             <>
                                                 <Copy size={14} aria-hidden="true" />
-                                                {/* [SEÇÃO 1.1.3.1.2.3.1.4] .email-text — <span> */}
                                                 <span className="email-text">{member.email}</span>
                                             </>
                                         )}
                                     </button>
 
                                     {member.lattes && !member.lattes.includes('0000000000000000') ? (
-                                        /* [SEÇÃO 1.1.3.1.2.3.1.5] .lattes-btn — <a> */
                                         <a
                                             href={member.lattes}
                                             target="_blank"
@@ -176,7 +146,6 @@ export function ContactModal({ isOpen, onClose }) {
                                             <ExternalLink size={12} aria-hidden="true" />
                                         </a>
                                     ) : (
-                                        /* [SEÇÃO 1.1.3.1.2.3.1.6] .lattes-btn .disabled — <span> */
                                         <span className="lattes-btn disabled" title="Currículo Lattes em atualização">
                                             <span>Lattes em atualização</span>
                                         </span>

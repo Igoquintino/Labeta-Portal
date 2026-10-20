@@ -59,7 +59,7 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--text-muted);
-    background-color: rgba(12, 18, 15, 0.7);
+    background-color: var(--bg-surface-elevated);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border-subtle);
@@ -132,7 +132,7 @@
 
     /* [SEÇÃO 1.1.1.2] .mosaic-caption — <figcaption> (JSX: [SEÇÃO 1.1.1.2]) */
     .mosaic-caption {
-        font-size: 0.65rem;
+        font-size: var(--font-xs);
         padding: 2px 5px;
         bottom: 6px;
         left: 6px;

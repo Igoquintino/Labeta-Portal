@@ -8,6 +8,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { Search, Menu, X, Users } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
 import './Navbar.css';
 
 /** [FUNÇÃO] Navbar — renderiza a barra de navegação; recebe callbacks para abrir busca e contatos. */
@@ -127,9 +128,12 @@ export function Navbar({ onOpenSearch, onOpenContact }) {
           </ul>
         </nav>
 
-        {/* 4. AÇÕES RÁPIDAS (Pesquisa e Contatos) */}
+        {/* 4. AÇÕES RÁPIDAS (Alternância de Tema, Pesquisa e Contatos) */}
         {/* [SEÇÃO 1.1.4] .navbar-actions — <div> */}
         <div className="navbar-actions">
+          {/* Alternância de Modo Claro / Escuro */}
+          <ThemeToggle />
+
           {/* [SEÇÃO 1.1.4.1] .action-btn .search-trigger — <button> */}
           <button
             type="button"

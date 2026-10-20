@@ -6,8 +6,9 @@
     position: sticky;
     top: 0;
     width: 100%;
-    background-color: rgba(12, 18, 15, 0.96);
+    background-color: var(--bg-navbar, rgba(12, 18, 15, 0.96));
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-subtle);
     z-index: 100;
 }
@@ -86,7 +87,7 @@
 
 /* [SEÇÃO 1.1.2.2.2] .brand-tagline — <span> (JSX: [SEÇÃO 1.1.2.2.2]) */
 .brand-tagline {
-    font-size: 0.65rem;
+    font-size: var(--font-xs);
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--color-gold);

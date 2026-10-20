@@ -1,65 +1,20 @@
 /* ============================================================
  * [COMPONENTE] AdminModal
- * Descrição: Diálogo modal genérico da área de gestão (Admin Invisível). Recebe o conteúdo via children.
+ * Descrição: Diálogo modal genérico da área de gestão (Admin Invisível).
+ *            Utiliza o hook useFocusTrap para contenção acessível do foco.
  * Rota/Uso: Aberto por FloatingAdminBar e pelas páginas com edição inline.
  * Props: isOpen, onClose, title, children.
  * Dados: nenhum.
  * CSS correlato: AdminModal.css
  * ============================================================ */
-import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import './AdminModal.css';
 
-/** [FUNÇÃO] AdminModal — renderiza o diálogo com foco preso (focus trap), fechamento por Esc e bloqueio de scroll. */
+/** [FUNÇÃO] AdminModal — renderiza o diálogo com foco contido via useFocusTrap. */
 export function AdminModal({ isOpen, onClose, title, children }) {
-    // [ESTADO] Referência ao contêiner do diálogo (usada para foco e focus trap)
-    const modalRef = useRef(null);
-
-    /** [HOOK] useEffect — foca o 1º elemento, trata Esc/Tab e trava o scroll enquanto aberto. */
-    useEffect(() => {
-        if (!isOpen) return;
-
-        // Focus primeiro elemento focável
-        const timer = setTimeout(() => {
-            const firstFocusable = modalRef.current?.querySelector('button, [href], input, select, textarea');
-            firstFocusable?.focus();
-        }, 50);
-
-        /** [FUNÇÃO] handleKeyDown — Esc fecha; Tab/Shift+Tab circula o foco dentro do modal. */
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape') {
-                onClose();
-                return;
-            }
-
-            if (event.key === 'Tab' && modalRef.current) {
-                const focusableElements = modalRef.current.querySelectorAll(
-                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                if (focusableElements.length > 0) {
-                    const firstElement = focusableElements[0];
-                    const lastElement = focusableElements[focusableElements.length - 1];
-
-                    if (event.shiftKey && document.activeElement === firstElement) {
-                        event.preventDefault();
-                        lastElement.focus();
-                    } else if (!event.shiftKey && document.activeElement === lastElement) {
-                        event.preventDefault();
-                        firstElement.focus();
-                    }
-                }
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = 'hidden';
-
-        return () => {
-            clearTimeout(timer);
-            window.removeEventListener('keydown', handleKeyDown);
-            document.body.style.overflow = 'unset';
-        };
-    }, [isOpen, onClose]);
+    // Hook compartilhado de contenção de foco, tecla Esc e trava de rolagem
+    const modalRef = useFocusTrap(isOpen, onClose);
 
     if (!isOpen) return null;
 

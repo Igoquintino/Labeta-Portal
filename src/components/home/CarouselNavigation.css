@@ -1,6 +1,6 @@
-/* [ARQUIVO] CarouselNavigation.css — estilos de CarouselNavigation.jsx. Ordem das seções = ordem do JSX */
+/* [ARQUIVO] CarouselNavigation.css — estilos de CarouselNavigation.jsx com suporte a Peek Lateral e Responsividade */
 
-/* [GLOBAL] @keyframes, :root e regras sem classe */
+/* [GLOBAL] @keyframes */
 @keyframes progressFill {
     from {
         width: 0%;
@@ -16,18 +16,29 @@
     background-color: var(--bg-surface);
     border-top: 1px solid var(--border-subtle);
     border-bottom: 1px solid var(--border-subtle);
-    padding: 3.5rem 1.5rem;
+    padding: 3.5rem 0;
     display: flex;
     justify-content: center;
+    overflow: hidden;
+    position: relative;
+    /* Variáveis responsivas do Carrossel com Peek */
+    --carousel-card-width: 500px;
+    --carousel-gap: 1.5rem;
+}
+
+.carousel-section:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: -2px;
 }
 
 /* [SEÇÃO 1.1] .carousel-container — <div> (JSX: [SEÇÃO 1.1]) */
 .carousel-container {
-    max-width: 1150px;
+    max-width: 1200px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    position: relative;
 }
 
 /* [SEÇÃO 1.1.1] .carousel-top-bar — <div> (JSX: [SEÇÃO 1.1.1]) */
@@ -35,12 +46,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 0.25rem;
+    padding: 0 1.5rem;
 }
 
 /* [SEÇÃO 1.1.1.1] .carousel-section-tag — <span> (JSX: [SEÇÃO 1.1.1.1]) */
 .carousel-section-tag {
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--color-gold);
@@ -52,13 +63,14 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.75rem;
+    font-size: var(--font-xs);
     color: var(--text-muted);
     background-color: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: var(--radius-sm);
     transition: all var(--transition-fast);
+    cursor: pointer;
 }
 
 .carousel-pause-btn:hover {
@@ -66,80 +78,177 @@
     border-color: var(--color-gold);
 }
 
+.carousel-pause-btn:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
 /* [SEÇÃO 1.1.2] .carousel-stage — <div> (JSX: [SEÇÃO 1.1.2]) */
-/* O palco onde ficam os botões de navegação e os cards */
+/* O palco onde ficam o viewport e os botões de navegação */
 .carousel-stage {
+    position: relative;
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1.25rem;
-    width: 100%;
+    justify-content: center;
 }
 
 /* [SEÇÃO 1.1.2.1] .carousel-btn — <button> (JSX: [SEÇÃO 1.1.2.1]) */
 .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     width: 48px;
     height: 48px;
     border-radius: 50%;
     background-color: var(--bg-surface-elevated);
-    border: 1px solid var(--border-subtle);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-gold);
     color: var(--color-gold);
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all var(--transition-fast);
     flex-shrink: 0;
+    z-index: 10;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-btn.btn-prev {
+    left: 1rem;
+}
+
+.carousel-btn.btn-next {
+    right: 1rem;
 }
 
 .carousel-btn:hover {
     background-color: var(--color-brand);
     border-color: var(--color-gold);
     color: var(--text-main);
-    transform: scale(1.06);
+    transform: translateY(-50%) scale(1.08);
 }
 
-/* [SEÇÃO 1.1.2.2] .carousel-cards-grid — <div> (JSX: [SEÇÃO 1.1.2.2]) */
-/* Grid de 3 colunas de cards */
-.carousel-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-    flex: 1;
+.carousel-btn:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
 }
 
-/* [SEÇÃO 1.1.2.2.1] .carousel-card-item — <article> (JSX: [SEÇÃO 1.1.2.2.1]) */
-/* Estilo do card individual */
+/* [SEÇÃO 1.1.2.2] .carousel-viewport — <div> (JSX: [SEÇÃO 1.1.2.2]) */
+.carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+    padding: 1.25rem 0;
+    position: relative;
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 6%,
+        black 94%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 6%,
+        black 94%,
+        transparent 100%
+    );
+}
+
+/* [SEÇÃO 1.1.2.3] .carousel-track — <div> (JSX: [SEÇÃO 1.1.2.3]) */
+/* Trilho horizontal mantendo sempre o alinhamento com peek lateral */
+.carousel-track {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--carousel-gap);
+    width: 100%;
+    will-change: transform;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* [SEÇÃO 1.1.2.3.1] .carousel-card-item — <article> (JSX: [SEÇÃO 1.1.2.3.1]) */
+/* Card individual com suporte a 3 estados visuais: active, peek e outer */
 .carousel-card-item {
+    flex: 0 0 var(--carousel-card-width);
+    max-width: var(--carousel-card-width);
     background-color: var(--bg-primary);
-    border: 1px solid var(--border-gold);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform var(--transition-fast), border-color var(--transition-fast);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.35s ease,
+                border-color 0.35s ease,
+                box-shadow 0.35s ease,
+                filter 0.35s ease;
+    will-change: transform, opacity;
 }
 
-.carousel-card-item:hover {
-    transform: translateY(-4px);
-    border-color: var(--color-accent);
+/* Estado 1: Card Ativo no Centro */
+.carousel-card-item.is-active {
+    transform: scale(1);
+    opacity: 1;
+    border-color: var(--border-gold);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 16px rgba(229, 169, 60, 0.2);
+    z-index: 2;
 }
 
-/* [SEÇÃO 1.1.2.2.1.1] .card-thumb-frame — <div> (JSX: [SEÇÃO 1.1.2.2.1.1]) */
+.carousel-card-item.is-active:hover {
+    transform: scale(1.01) translateY(-3px);
+}
+
+/* Estado 2: Cards com Visão Parcial Lateral (Peek) */
+.carousel-card-item.is-peek {
+    transform: scale(0.92);
+    opacity: 0.45;
+    filter: brightness(0.8);
+    z-index: 1;
+    cursor: pointer;
+}
+
+.carousel-card-item.is-peek:hover {
+    opacity: 0.75;
+    filter: brightness(0.95);
+    transform: scale(0.94);
+    border-color: var(--border-gold);
+}
+
+/* Estado 3: Cards Externos Além da Margem Visível */
+.carousel-card-item.is-outer {
+    transform: scale(0.85);
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* [SEÇÃO 1.1.2.3.1.1] .card-thumb-frame — <div> */
 .card-thumb-frame {
     width: 100%;
-    height: 150px;
+    height: 160px;
     background-color: var(--bg-surface-elevated);
     overflow: hidden;
+    position: relative;
 }
 
-/* [SEÇÃO 1.1.2.2.1.1.1] .card-thumb-img — <img> (JSX: [SEÇÃO 1.1.2.2.1.1.1]) */
+/* [SEÇÃO 1.1.2.3.1.1.1] .card-thumb-img — <img> */
 .card-thumb-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform var(--transition-normal);
 }
 
-/* [SEÇÃO 1.1.2.2.1.2] .card-body — <div> (JSX: [SEÇÃO 1.1.2.2.1.2]) */
+.carousel-card-item.is-active:hover .card-thumb-img {
+    transform: scale(1.04);
+}
+
+/* [SEÇÃO 1.1.2.3.1.2] .card-body — <div> */
 .card-body {
     padding: 1.25rem;
     display: flex;
@@ -148,44 +257,45 @@
     flex: 1;
 }
 
-/* [SEÇÃO 1.1.2.2.1.2.1] .card-tag — <span> (JSX: [SEÇÃO 1.1.2.2.1.2.1]) */
+/* [SEÇÃO 1.1.2.3.1.2.1] .card-tag — <span> */
 .card-tag {
-    font-size: 0.7rem;
+    font-size: var(--font-xs);
     font-weight: 700;
     text-transform: uppercase;
     color: var(--color-accent);
 }
 
-/* [SEÇÃO 1.1.2.2.1.2.2] .card-title — <h3> (JSX: [SEÇÃO 1.1.2.2.1.2.2]) */
+/* [SEÇÃO 1.1.2.3.1.2.2] .card-title — <h3> */
 .card-title {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--text-main);
     line-height: 1.3;
 }
 
-/* [SEÇÃO 1.1.2.2.1.2.3] .card-description — <p> (JSX: [SEÇÃO 1.1.2.2.1.2.3]) */
+/* [SEÇÃO 1.1.2.3.1.2.3] .card-description — <p> */
 .card-description {
-    font-size: 0.85rem;
+    font-size: var(--font-sm);
     color: var(--text-muted);
     line-height: 1.5;
     margin-bottom: 0.75rem;
     flex: 1;
 }
 
-/* [SEÇÃO 1.1.2.2.1.2.4] .card-cta-btn — <Link> (JSX: [SEÇÃO 1.1.2.2.1.2.4]) */
+/* [SEÇÃO 1.1.2.3.1.2.4] .card-cta-btn — <Link> */
 .card-cta-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
     background-color: var(--color-brand);
     color: #ffffff;
-    padding: 6px 14px;
+    padding: 7px 16px;
     border-radius: var(--radius-sm);
-    font-size: 0.82rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     border: 1px solid var(--color-gold);
     align-self: flex-start;
     transition: all var(--transition-fast);
+    text-decoration: none;
 }
 
 .card-cta-btn:hover {
@@ -193,8 +303,48 @@
     color: var(--bg-primary);
 }
 
-/* [SEÇÃO 1.1.3] .carousel-progress-track — <div> (JSX: [SEÇÃO 1.1.3]) */
-/* Barra de Progresso do Auto-play */
+.card-cta-btn:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+/* [SEÇÃO 1.1.3] Indicadores de Paginação (Dots) */
+.carousel-dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+    padding: 0.25rem 0;
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: rgba(214, 194, 143, 0.25);
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    padding: 0;
+}
+
+.carousel-dot:hover {
+    background-color: var(--color-gold);
+}
+
+.carousel-dot:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+.carousel-dot.active {
+    width: 28px;
+    background-color: var(--color-gold);
+    box-shadow: 0 0 10px rgba(229, 169, 60, 0.5);
+}
+
+/* [SEÇÃO 1.1.4] Barra de Progresso do Auto-play */
 .carousel-progress-track {
     width: 100%;
     height: 3px;
@@ -203,7 +353,6 @@
     overflow: hidden;
 }
 
-/* [SEÇÃO 1.1.3.1] .carousel-progress-bar — <div> (JSX: [SEÇÃO 1.1.3.1]) */
 .carousel-progress-bar {
     height: 100%;
     background-color: var(--color-gold);
@@ -214,16 +363,90 @@
     animation-play-state: paused;
 }
 
-/* [RESPONSIVO] @media / @supports — ordem relativa original preservada */
-@media (max-width: 900px) {
-    /* [SEÇÃO 1.1.2.1] .carousel-btn — <button> (JSX: [SEÇÃO 1.1.2.1]) */
+/* ============================================================
+ * [RESPONSIVIDADE & BREAKPOINTS]
+ * Sem empilhamento vertical: mantém o trilho horizontal com peek lateral
+ * ============================================================ */
+
+/* Breakpoint: Tablets e Telas Médias */
+@media (max-width: 1024px) {
+    .carousel-section {
+        --carousel-card-width: 62%;
+        --carousel-gap: 1.25rem;
+    }
+
+    .carousel-btn.btn-prev {
+        left: 0.75rem;
+    }
+
+    .carousel-btn.btn-next {
+        right: 0.75rem;
+    }
+}
+
+/* Breakpoint: Telas Mobile */
+@media (max-width: 640px) {
+    .carousel-section {
+        --carousel-card-width: 74%;
+        --carousel-gap: 0.85rem;
+        padding: 2.25rem 0;
+    }
+
+    .carousel-viewport {
+        mask-image: none;
+        -webkit-mask-image: none;
+        padding: 0.5rem 0;
+    }
+
     .carousel-btn {
         width: 40px;
         height: 40px;
     }
 
-    /* [SEÇÃO 1.1.2.2] .carousel-cards-grid — <div> (JSX: [SEÇÃO 1.1.2.2]) */
-    .carousel-cards-grid {
-        grid-template-columns: 1fr;
+    .carousel-btn.btn-prev {
+        left: 0.35rem;
+    }
+
+    .carousel-btn.btn-next {
+        right: 0.35rem;
+    }
+
+    .card-thumb-frame {
+        height: 140px;
+    }
+
+    .card-body {
+        padding: 1rem;
+        gap: 0.45rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-description {
+        font-size: var(--font-xs);
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Breakpoint: Smartphones Pequenos (<= 380px) */
+@media (max-width: 380px) {
+    .carousel-section {
+        --carousel-card-width: 78%;
+        --carousel-gap: 0.65rem;
+    }
+
+    .carousel-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .carousel-btn.btn-prev {
+        left: 0.2rem;
+    }
+
+    .carousel-btn.btn-next {
+        right: 0.2rem;
     }
 }

@@ -62,7 +62,7 @@
     background-color: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    padding: 1.25rem 1.5rem;
+    padding: 0.5rem;
     transition: border-color var(--transition-fast);
 }
 

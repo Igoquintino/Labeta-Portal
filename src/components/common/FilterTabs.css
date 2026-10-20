@@ -1,0 +1,63 @@
+/* [ARQUIVO] FilterTabs.css — estilos padronizados de abas de filtro */
+
+.ui-filter-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.ui-filter-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: var(--font-sm); /* 0.875rem / 14px */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.ui-filter-tab-btn:hover {
+  border-color: var(--border-gold);
+  color: var(--text-primary);
+  background-color: var(--bg-surface-elevated);
+}
+
+.ui-filter-tab-btn.is-active {
+  background-color: var(--bg-surface-elevated);
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 12px rgba(214, 194, 143, 0.15);
+}
+
+.ui-filter-tab-btn__icon {
+  flex-shrink: 0;
+}
+
+.ui-filter-tab-btn__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: var(--font-xs); /* 0.75rem / 12px */
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  background-color: rgba(214, 194, 143, 0.15);
+  color: var(--color-gold);
+}
+
+.ui-filter-tab-btn.is-active .ui-filter-tab-btn__count {
+  background-color: var(--color-gold);
+  color: var(--bg-canvas);
+}
