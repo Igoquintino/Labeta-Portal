@@ -132,7 +132,7 @@
 
     /* [SEÇÃO 1.1.1.2] .mosaic-caption — <figcaption> (JSX: [SEÇÃO 1.1.1.2]) */
     .mosaic-caption {
-        font-size: 0.65rem;
+        font-size: var(--font-xs);
         padding: 2px 5px;
         bottom: 6px;
         left: 6px;

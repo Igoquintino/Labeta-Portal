@@ -86,7 +86,7 @@
 
 /* [SEÇÃO 1.1.2.2.2] .brand-tagline — <span> (JSX: [SEÇÃO 1.1.2.2.2]) */
 .brand-tagline {
-    font-size: 0.65rem;
+    font-size: var(--font-xs);
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--color-gold);
