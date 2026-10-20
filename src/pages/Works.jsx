@@ -7,10 +7,17 @@
  * CSS correlato: Works.css
  * ============================================================ */
 import { useState, useMemo, useEffect } from 'react';
-import { BookOpen, Clock, CheckCircle2, ExternalLink, Tag, Search, X, Plus, Edit2, Trash2, ShieldCheck } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle2, ExternalLink, Tag, Plus } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { useModalState } from '../hooks/useModalState';
 import { AdminModal } from '../components/admin/AdminModal';
 import { ToastNotification } from '../components/common/ToastNotification';
+import { PageHeader } from '../components/common/PageHeader';
+import { Badge } from '../components/common/Badge';
+import { SearchInput } from '../components/common/SearchInput';
+import { FilterTabs } from '../components/common/FilterTabs';
+import { CardAdminActions } from '../components/common/CardAdminActions';
+import { DeleteConfirmDialog } from '../components/common/DeleteConfirmDialog';
 import { fetchWorks, createWork, updateWork, deleteWork } from '../services/worksService';
 import './Works.css';
 
@@ -25,12 +32,20 @@ export function Works() {
     const [filter, setFilter] = useState('todos');
     // [ESTADO] searchQuery — texto de busca
     const [searchQuery, setSearchQuery] = useState('');
-    // [ESTADO] modalConfig — { isOpen, title, type, data } controla o AdminModal
-    const [modalConfig, setModalConfig] = useState({ isOpen: false, title: '', type: '', data: null });
-    // [ESTADO] formSubmitting — envio do formulário em andamento
-    const [formSubmitting, setFormSubmitting] = useState(false);
-    // [ESTADO] toast — notificação de feedback temporário
-    const [toast, setToast] = useState(null);
+
+    // [HOOK] useModalState — controle unificado do AdminModal e toasts
+    const {
+        modalConfig,
+        isSubmitting,
+        toast,
+        showToast,
+        clearToast,
+        openCreate,
+        openEdit,
+        openDelete,
+        closeModal,
+        setIsSubmitting
+    } = useModalState();
 
     /** [HOOK] useEffect — Carrega os trabalhos na montagem */
     useEffect(() => {
@@ -47,63 +62,27 @@ export function Works() {
         return () => { isMounted = false; };
     }, []);
 
-    /** [FUNÇÃO] openCreateModal — abre o AdminModal em modo "criar" (somente admin). */
-    const openCreateModal = () => {
-        setModalConfig({
-            isOpen: true,
-            title: 'Cadastrar Novo Trabalho / Projeto',
-            type: 'create',
-            data: null
-        });
-    };
-
-    /** [FUNÇÃO] openEditModal — abre o AdminModal em modo "editar" com os dados do item. */
-    const openEditModal = (work) => {
-        setModalConfig({
-            isOpen: true,
-            title: `Editar: ${work.title}`,
-            type: 'edit',
-            data: work
-        });
-    };
-
-    /** [FUNÇÃO] openDeleteModal — abre o AdminModal de confirmação de exclusão. */
-    const openDeleteModal = (work) => {
-        setModalConfig({
-            isOpen: true,
-            title: 'Confirmar Remoção de Trabalho',
-            type: 'delete',
-            data: work
-        });
-    };
-
-    /** [FUNÇÃO] closeModal — fecha o AdminModal e reseta modalConfig. */
-    const closeModal = () => {
-        if (formSubmitting) return;
-        setModalConfig({ isOpen: false, title: '', type: '', data: null });
-    };
-
     /** [FUNÇÃO] handleConfirmDelete — remove o trabalho e atualiza o estado */
     const handleConfirmDelete = async () => {
         if (!modalConfig.data) return;
-        setFormSubmitting(true);
+        setIsSubmitting(true);
         const item = modalConfig.data;
         const { error } = await deleteWork(item.id);
 
         if (error) {
-            setToast({ type: 'error', message: `Erro ao remover trabalho: ${error.message}` });
+            showToast(`Erro ao remover trabalho: ${error.message}`, 'error');
         } else {
             setWorks((prev) => prev.filter((w) => w.id !== item.id));
-            setToast({ type: 'success', message: 'Trabalho removido com sucesso!' });
+            showToast('Trabalho removido com sucesso!', 'success');
             closeModal();
         }
-        setFormSubmitting(false);
+        setIsSubmitting(false);
     };
 
     /** [FUNÇÃO] handleFormSubmit — trata a submissão de cadastro e alteração */
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        setFormSubmitting(true);
+        setIsSubmitting(true);
 
         const formData = new FormData(e.currentTarget);
         const isEdit = modalConfig.type === 'edit';
@@ -123,26 +102,26 @@ export function Works() {
             const currentId = modalConfig.data.id;
             const { data, error } = await updateWork(currentId, payload);
             if (error) {
-                setToast({ type: 'error', message: `Falha ao atualizar trabalho: ${error.message}` });
+                showToast(`Falha ao atualizar trabalho: ${error.message}`, 'error');
             } else {
                 const updated = data || { id: currentId, ...payload };
                 setWorks((prev) => prev.map((w) => (w.id === currentId ? updated : w)));
-                setToast({ type: 'success', message: 'Trabalho atualizado com sucesso!' });
+                showToast('Trabalho atualizado com sucesso!', 'success');
                 closeModal();
             }
         } else {
             const { data, error } = await createWork(payload);
             if (error) {
-                setToast({ type: 'error', message: `Falha ao cadastrar trabalho: ${error.message}` });
+                showToast(`Falha ao cadastrar trabalho: ${error.message}`, 'error');
             } else {
                 const created = data || { id: `local-${Date.now()}`, ...payload };
                 setWorks((prev) => [created, ...prev]);
-                setToast({ type: 'success', message: 'Trabalho cadastrado com sucesso!' });
+                showToast('Trabalho cadastrado com sucesso!', 'success');
                 closeModal();
             }
         }
 
-        setFormSubmitting(false);
+        setIsSubmitting(false);
     };
 
     // Contadores para as abas
@@ -170,220 +149,118 @@ export function Works() {
         });
     }, [works, filter, searchQuery]);
 
+    const tabsConfig = useMemo(() => [
+        { id: 'todos', label: 'Todos os Trabalhos', count: works.length },
+        { id: 'em_andamento', label: 'Em Andamento', count: countAndamento, icon: Clock },
+        { id: 'concluidos', label: 'Concluídos', count: countConcluidos, icon: CheckCircle2 }
+    ], [works.length, countAndamento, countConcluidos]);
+
     return (
-        /* [SEÇÃO 1] .works-page — <main> */
         <main className="works-page" id="main-content">
-            {/* [SEÇÃO 1.1] .works-container — <div> */}
             <div className="works-container">
 
-                {/* Cabeçalho da Página */}
-                {/* [SEÇÃO 1.1.1] .works-header — <header> */}
-                <header className="works-header">
-                    {/* [SEÇÃO 1.1.1.1] .works-badge — <div> */}
-                    <div className="works-badge">
-                        <BookOpen size={16} />
-                        <span>Produção Científica &amp; Extensão</span>
-                    </div>
-                    {/* [SEÇÃO 1.1.1.2] .works-title — <h1> */}
-                    <h1 className="works-title">Trabalhos do Laboratório</h1>
-                    {/* [SEÇÃO 1.1.1.3] .works-subtitle — <p> */}
-                    <p className="works-subtitle">
-                        Catálogo de projetos de pesquisa, dissertações, artigos científicos e inventários taxonômicos desenvolvidos por discentes e pesquisadores do LABETA.
-                    </p>
+                {/* Cabeçalho Unificado com Busca e Abas */}
+                <PageHeader
+                    badgeIcon={BookOpen}
+                    badgeText="Produção Científica & Extensão"
+                    title="Trabalhos do Laboratório"
+                    subtitle="Catálogo de projetos de pesquisa, dissertações, artigos científicos e inventários taxonômicos desenvolvidos por discentes e pesquisadores do LABETA."
+                >
+                    <SearchInput
+                        value={searchQuery}
+                        onChange={setSearchQuery}
+                        placeholder="Buscar por título, autor, metodologia ou palavra-chave..."
+                        ariaLabel="Filtrar trabalhos científicos"
+                        className="works-search-slot"
+                    />
 
-                    {/* Barra de Busca de Trabalhos */}
-                    {/* [SEÇÃO 1.1.1.4] .works-search-wrapper — <div> */}
-                    <div className="works-search-wrapper" role="search">
-                        {/* [SEÇÃO 1.1.1.4.1] .works-search-icon — <Search> */}
-                        <Search size={18} className="works-search-icon" aria-hidden="true" />
-                        {/* [SEÇÃO 1.1.1.4.2] .works-search-input — <input> */}
-                        <input
-                            type="search"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Buscar por título, autor, metodologia ou palavra-chave..."
-                            className="works-search-input"
-                            aria-label="Filtrar trabalhos científicos"
-                        />
-                        {searchQuery && (
-                            /* [SEÇÃO 1.1.1.4.2.1] .works-search-clear — <button> */
-                            <button
-                                type="button"
-                                className="works-search-clear"
-                                onClick={() => setSearchQuery('')}
-                                aria-label="Limpar busca"
-                            >
-                                <X size={16} />
-                            </button>
-                        )}
-                    </div>
+                    <FilterTabs
+                        tabs={tabsConfig}
+                        activeTab={filter}
+                        onChange={setFilter}
+                        ariaLabel="Filtrar trabalhos por status"
+                        className="works-tabs-slot"
+                    />
+                </PageHeader>
 
-                    {/* Navegação por Abas (Filtros de Status) */}
-                    {/* [SEÇÃO 1.1.1.5] .works-tabs — <nav> */}
-                    <nav className="works-tabs" aria-label="Filtrar trabalhos por status">
-                        {/* [SEÇÃO 1.1.1.5.1] .works-tab-btn — <button> */}
-                        <button
-                            type="button"
-                            className={`works-tab-btn ${filter === 'todos' ? 'active' : ''}`}
-                            onClick={() => setFilter('todos')}
-                        >
-                            <span>Todos os Trabalhos</span>
-                            <span className="count-pill">{works.length}</span>
-                        </button>
-                        {/* [SEÇÃO 1.1.1.5.2] .works-tab-btn — <button> */}
-                        <button
-                            type="button"
-                            className={`works-tab-btn ${filter === 'em_andamento' ? 'active' : ''}`}
-                            onClick={() => setFilter('em_andamento')}
-                        >
-                            <Clock size={15} />
-                            <span>Em Andamento</span>
-                            <span className="count-pill">{countAndamento}</span>
-                        </button>
-                        {/* [SEÇÃO 1.1.1.5.3] .works-tab-btn — <button> */}
-                        <button
-                            type="button"
-                            className={`works-tab-btn ${filter === 'concluidos' ? 'active' : ''}`}
-                            onClick={() => setFilter('concluidos')}
-                        >
-                            <CheckCircle2 size={15} />
-                            <span>Concluídos</span>
-                            <span className="count-pill">{countConcluidos}</span>
-                        </button>
-                    </nav>
-                </header>
-
-                {/* Barra de Ações Administrativas */}
+                {/* Barra de Ações Administrativas (Visível apenas para administradores logados) */}
                 {isAdmin && (
-                    /* [SEÇÃO 1.1.1.6] .admin-toolbar — <div> */
-                    <div className="admin-toolbar" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.75rem' }}>
-                        {/* [SEÇÃO 1.1.1.6.1] .admin-btn-primary — <button> */}
+                    <div className="admin-toolbar">
                         <button
                             type="button"
                             className="admin-btn-primary"
-                            onClick={openCreateModal}
+                            onClick={() => openCreate('Cadastrar Novo Trabalho / Projeto', 'create')}
                         >
-                            <Plus size={16} /> Novo Trabalho / Projeto
+                            <Plus size={16} aria-hidden="true" />
+                            <span>Cadastrar Novo Trabalho</span>
                         </button>
                     </div>
                 )}
 
-                {/* Grade de Trabalhos */}
-                {/* [SEÇÃO 1.1.2] .works-grid — <div> */}
+                {/* Grid de Cards de Trabalhos */}
                 <div className="works-grid">
                     {loadingWorks ? (
-                        <div className="no-works-box" style={{ gridColumn: '1 / -1' }}><p>Carregando produções científicas...</p></div>
+                        <div className="works-loading-state">
+                            <p>Carregando produção científica...</p>
+                        </div>
                     ) : filteredWorks.length === 0 ? (
-                        /* [SEÇÃO 1.1.2.1] .no-works-box — <div> */
-                        <div className="no-works-box">
-                            <p>
-                                Nenhum trabalho encontrado
-                                {searchQuery ? ` para a busca "${searchQuery}"` : ''}
-                                {filter !== 'todos' ? ` na categoria selecionada.` : '.'}
-                            </p>
+                        <div className="works-empty-state">
+                            <BookOpen size={48} className="empty-icon" aria-hidden="true" />
+                            <h3>Nenhum trabalho encontrado</h3>
+                            <p>Tente alterar os termos de busca ou selecionar outra aba de status.</p>
                         </div>
                     ) : (
                         filteredWorks.map((work) => (
-                            /* [SEÇÃO 1.1.2.2] .work-card — <article> */
                             <article key={work.id} className="work-card">
                                 {/* Barra de Ações Administrativas do Card */}
                                 {isAdmin && (
-                                    /* [SEÇÃO 1.1.2.2.1] .card-admin-actions — <div> */
-                                    <div className="card-admin-actions">
-                                        {/* [SEÇÃO 1.1.2.2.1.1] .card-admin-badge — <span> */}
-                                        <span className="card-admin-badge">
-                                            <ShieldCheck size={12} aria-hidden="true" />
-                                            <span>Gestão</span>
-                                        </span>
-                                        {/* [SEÇÃO 1.1.2.2.1.2] .card-admin-btns-group — <div> */}
-                                        <div className="card-admin-btns-group">
-                                            {/* [SEÇÃO 1.1.2.2.1.2.1] .admin-action-btn .edit — <button> */}
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn edit"
-                                                title="Editar trabalho"
-                                                onClick={() => openEditModal(work)}
-                                            >
-                                                <Edit2 size={13} />
-                                                <span>Editar</span>
-                                            </button>
-                                            {/* [SEÇÃO 1.1.2.2.1.2.2] .admin-action-btn .delete — <button> */}
-                                            <button
-                                                type="button"
-                                                className="admin-action-btn delete"
-                                                title="Excluir trabalho"
-                                                onClick={() => openDeleteModal(work)}
-                                            >
-                                                <Trash2 size={13} />
-                                                <span>Excluir</span>
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <CardAdminActions
+                                        label="Gestão"
+                                        onEdit={() => openEdit(`Editar: ${work.title}`, 'edit', work)}
+                                        onDelete={() => openDelete('Confirmar Remoção de Trabalho', work)}
+                                        editTitle="Editar trabalho"
+                                        deleteTitle="Excluir trabalho"
+                                    />
                                 )}
 
-                                {/* [SEÇÃO 1.1.2.2.2] .work-card-meta — <div> */}
-                                <div className="work-card-meta">
-                                    {/* [SEÇÃO 1.1.2.2.2.1] .status-pill — <span> */}
-                                    <span className={`status-pill pill-${work.status === 'concluidos' ? 'concluido' : work.status}`}>
-                                        {work.status === 'em_andamento' ? (
-                                            <>
-                                                <Clock size={12} />
-                                                <span>Em Andamento</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <CheckCircle2 size={12} />
-                                                <span>Concluído ({work.year})</span>
-                                            </>
-                                        )}
-                                    </span>
-                                    {/* [SEÇÃO 1.1.2.2.2.2] .work-category — <span className="work-category"> */}
-                                    <span className="work-category">{work.category}</span>
-                                </div>
+                                <header className="work-card-header">
+                                    <Badge
+                                        variant={work.status === 'em_andamento' ? 'gold' : 'green'}
+                                        icon={work.status === 'em_andamento' ? Clock : CheckCircle2}
+                                    >
+                                        {work.status === 'em_andamento' ? 'Em Andamento' : 'Concluído'}
+                                    </Badge>
+                                    <span className="work-year">{work.year}</span>
+                                </header>
 
-                                {/* [SEÇÃO 1.1.2.2.3] .work-title — <h2> */}
                                 <h2 className="work-title">{work.title}</h2>
-                                {/* [SEÇÃO 1.1.2.2.4] .work-authors — <p> */}
-                                <p className="work-authors">
-                                    <strong>Autores:</strong> {work.authors}
-                                </p>
-                                {/* [SEÇÃO 1.1.2.2.5] .work-summary — <p> */}
+                                <p className="work-authors"><strong>Autores:</strong> {work.authors}</p>
                                 <p className="work-summary">{work.summary}</p>
 
-                                {/* Tags Metodológicas */}
-                                {Array.isArray(work.tags) && work.tags.length > 0 && (
-                                    /* [SEÇÃO 1.1.2.2.6] .work-tags — <div className="work-tags"> */
-                                    <div className="work-tags">
-                                        {work.tags.map((tag, idx) => (
-                                            /* [SEÇÃO 1.1.2.2.6.1] .work-tag-item — <span> */
-                                            <span key={idx} className="work-tag-item">
-                                                <Tag size={11} />
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
+                                <div className="work-tags" aria-label="Palavras-chave do trabalho">
+                                    {Array.isArray(work.tags) && work.tags.map((tag, idx) => (
+                                        <Badge key={idx} variant="subtle" icon={Tag}>
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                </div>
 
-                                {/* Links de Acesso */}
                                 {(work.doi || work.externalUrl) && (
-                                    /* [SEÇÃO 1.1.2.2.7] .work-card-footer — <footer className="work-card-footer"> */
                                     <footer className="work-card-footer">
                                         {work.doi && (
-                                            /* [SEÇÃO 1.1.2.2.7.1] .work-link .doi-link — <a> */
                                             <a
-                                                href={`https://doi.org/${work.doi}`}
+                                                href={`https://doi.org/${work.doi.replace(/^https?:\/\/doi\.org\//, '')}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="work-link doi-link"
                                                 title="Acessar publicação via identificador DOI"
-                                                aria-label={`Acessar artigo ${work.title} via DOI: ${work.doi} (abre em nova aba)`}
+                                                aria-label={`Acessar publicação de ${work.title} via DOI (abre em nova aba)`}
                                             >
                                                 <span>DOI: {work.doi}</span>
                                                 <ExternalLink size={13} />
                                             </a>
                                         )}
                                         {work.externalUrl && !work.doi && (
-                                            /* [SEÇÃO 1.1.2.2.7.2] .work-link .external-link — <a> */
                                             <a
                                                 href={work.externalUrl}
                                                 target="_blank"
@@ -410,42 +287,18 @@ export function Works() {
                     title={modalConfig.title}
                 >
                     {modalConfig.type === 'delete' ? (
-                        /* [SEÇÃO 1.1.3.1] .admin-delete-box — <div> */
-                        <div className="admin-delete-box">
-                            {/* [SEÇÃO 1.1.3.1.1] .admin-delete-notice — <p> */}
-                            <p className="admin-delete-notice">
-                                Tem certeza de que deseja remover <strong className="admin-delete-highlight">"{modalConfig.data?.title}"</strong>? Esta pesquisa será excluída do catálogo público.
-                            </p>
-                            {/* [SEÇÃO 1.1.3.1.2] .admin-form-actions — <div> */}
-                            <div className="admin-form-actions">
-                                {/* [SEÇÃO 1.1.3.1.2.1] .admin-btn-cancel — <button> */}
-                                <button
-                                    type="button"
-                                    className="admin-btn-cancel"
-                                    onClick={closeModal}
-                                    disabled={formSubmitting}
-                                >
-                                    Cancelar
-                                </button>
-                                {/* [SEÇÃO 1.1.3.1.2.2] .admin-btn-submit — <button> */}
-                                <button
-                                    type="button"
-                                    className="admin-btn-submit"
-                                    style={{ backgroundColor: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
-                                    onClick={handleConfirmDelete}
-                                    disabled={formSubmitting}
-                                >
-                                    {formSubmitting ? 'Excluindo...' : 'Confirmar Exclusão'}
-                                </button>
-                            </div>
-                        </div>
+                        <DeleteConfirmDialog
+                            title={modalConfig.data?.title}
+                            message={`Tem certeza de que deseja remover "${modalConfig.data?.title}"? Esta pesquisa será excluída do catálogo público.`}
+                            onConfirm={handleConfirmDelete}
+                            onCancel={closeModal}
+                            isSubmitting={isSubmitting}
+                            confirmLabel="Confirmar Exclusão"
+                        />
                     ) : (
                         <form onSubmit={handleFormSubmit}>
-                            {/* [SEÇÃO 1.1.3.2.1] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.3.2.1.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Título da Pesquisa / Trabalho</label>
-                                {/* [SEÇÃO 1.1.3.2.1.2] .admin-form-input — <input> */}
                                 <input
                                     name="title"
                                     type="text"
@@ -456,11 +309,8 @@ export function Works() {
                                 />
                             </div>
 
-                            {/* [SEÇÃO 1.1.3.2.2] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.3.2.2.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Status do Trabalho</label>
-                                {/* [SEÇÃO 1.1.3.2.2.2] .admin-form-select — <select> */}
                                 <select
                                     name="status"
                                     className="admin-form-select"
@@ -471,11 +321,8 @@ export function Works() {
                                 </select>
                             </div>
 
-                            {/* [SEÇÃO 1.1.3.2.3] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.3.2.3.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Autores</label>
-                                {/* [SEÇÃO 1.1.3.2.3.2] .admin-form-input — <input> */}
                                 <input
                                     name="authors"
                                     type="text"
@@ -486,11 +333,8 @@ export function Works() {
                                 />
                             </div>
 
-                            {/* [SEÇÃO 1.1.3.2.4] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.3.2.4.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Resumo Técnico</label>
-                                {/* [SEÇÃO 1.1.3.2.4.2] .admin-form-textarea — <textarea> */}
                                 <textarea
                                     name="summary"
                                     rows="4"
@@ -501,11 +345,8 @@ export function Works() {
                                 />
                             </div>
 
-                            {/* [SEÇÃO 1.1.3.2.5] .admin-form-group — <div> */}
                             <div className="admin-form-group">
-                                {/* [SEÇÃO 1.1.3.2.5.1] .admin-form-label — <label> */}
                                 <label className="admin-form-label">Link Externo / DOI (Opcional)</label>
-                                {/* [SEÇÃO 1.1.3.2.5.2] .admin-form-input — <input> */}
                                 <input
                                     name="externalUrl"
                                     type="url"
@@ -515,24 +356,21 @@ export function Works() {
                                 />
                             </div>
 
-                            {/* [SEÇÃO 1.1.3.2.6] .admin-form-actions — <div> */}
                             <div className="admin-form-actions">
-                                {/* [SEÇÃO 1.1.3.2.6.1] .admin-btn-cancel — <button> */}
                                 <button
                                     type="button"
                                     className="admin-btn-cancel"
                                     onClick={closeModal}
-                                    disabled={formSubmitting}
+                                    disabled={isSubmitting}
                                 >
                                     Cancelar
                                 </button>
-                                {/* [SEÇÃO 1.1.3.2.6.2] .admin-btn-submit — <button> */}
                                 <button
                                     type="submit"
                                     className="admin-btn-submit"
-                                    disabled={formSubmitting}
+                                    disabled={isSubmitting}
                                 >
-                                    {formSubmitting ? 'Salvando...' : 'Salvar Trabalho'}
+                                    {isSubmitting ? 'Salvando...' : 'Salvar Trabalho'}
                                 </button>
                             </div>
                         </form>
@@ -544,7 +382,7 @@ export function Works() {
                     <ToastNotification
                         type={toast.type}
                         message={toast.message}
-                        onClose={() => setToast(null)}
+                        onClose={clearToast}
                     />
                 )}
 
