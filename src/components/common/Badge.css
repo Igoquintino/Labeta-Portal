@@ -1,0 +1,64 @@
+/* [ARQUIVO] Badge.css — estilos padronizados do componente Badge */
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.ui-badge__icon {
+  flex-shrink: 0;
+}
+
+.ui-badge__label {
+  display: inline-block;
+  line-height: 1.2;
+}
+
+/* Tamanhos com garantia de piso de acessibilidade (12px = 0.75rem) */
+.ui-badge--sm {
+  font-size: var(--font-xs); /* 0.75rem / 12px */
+  padding: 3px 8px;
+}
+
+.ui-badge--md {
+  font-size: var(--font-sm); /* 0.875rem / 14px */
+  padding: 5px 12px;
+}
+
+/* Variantes Cromáticas Semânticas */
+.ui-badge--gold {
+  color: var(--color-gold);
+  background-color: rgba(214, 194, 143, 0.12);
+  border: 1px solid var(--border-gold);
+}
+
+.ui-badge--green {
+  color: var(--status-available-text);
+  background-color: var(--status-available-bg);
+  border: 1px solid rgba(78, 168, 110, 0.35);
+}
+
+.ui-badge--blue {
+  color: var(--color-blue-400);
+  background-color: rgba(91, 179, 255, 0.12);
+  border: 1px solid rgba(91, 179, 255, 0.3);
+}
+
+.ui-badge--danger {
+  color: var(--status-busy-text);
+  background-color: var(--status-busy-bg);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.ui-badge--subtle {
+  color: var(--text-secondary);
+  background-color: rgba(160, 176, 164, 0.1);
+  border: 1px solid rgba(160, 176, 164, 0.25);
+}
