@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { PhysicsTracker } from '../src/components/background/engine/PhysicsTracker';
+import { MicroalgaParticle } from '../src/components/background/engine/MicroalgaParticle';
 
 describe('PhysicsTracker', () => {
   let tracker;
@@ -109,5 +110,140 @@ describe('PhysicsTracker', () => {
     expect(removeListenerSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
     expect(removeListenerSpy).toHaveBeenCalledWith('touchmove', expect.any(Function));
     expect(removeListenerSpy).toHaveBeenCalledWith('mouseleave', expect.any(Function));
+  });
+});
+
+describe('MicroalgaParticle', () => {
+  const viewportWidth = 1000;
+  const viewportHeight = 800;
+
+  it('initializes with position inside viewport, species and depth z', () => {
+    const particle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+    });
+
+    expect(particle.x).toBeGreaterThanOrEqual(0);
+    expect(particle.x).toBeLessThanOrEqual(viewportWidth);
+    expect(particle.y).toBeGreaterThanOrEqual(0);
+    expect(particle.y).toBeLessThanOrEqual(viewportHeight);
+    expect(particle.z).toBeGreaterThanOrEqual(0.15);
+    expect(particle.z).toBeLessThanOrEqual(1.0);
+    expect(particle.species).toBeDefined();
+    expect(typeof particle.rotation).toBe('number');
+  });
+
+  it('applies brownian oscillation and rotation during update() without input', () => {
+    const particle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+      x: 500,
+      y: 400,
+      z: 0.8,
+    });
+
+    const mockTracker = {
+      scrollVelocity: 0,
+      isMouseActive: false,
+      mouseX: 0,
+      mouseY: 0,
+    };
+
+    const initialRotation = particle.rotation;
+    particle.update(mockTracker, viewportWidth, viewportHeight, 1000);
+
+    // Rotação axial contínua
+    expect(particle.rotation).not.toBe(initialRotation);
+  });
+
+  it('reacts to hydrodynamic scroll impulse proportional to depth z', () => {
+    const deepParticle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+      x: 500,
+      y: 400,
+      z: 0.2, // Fundo desfocado
+    });
+
+    const focalParticle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+      x: 500,
+      y: 400,
+      z: 0.9, // Plano focal nítido
+    });
+
+    const scrollTracker = {
+      scrollVelocity: 20, // Rápido para baixo
+      isMouseActive: false,
+      mouseX: 0,
+      mouseY: 0,
+    };
+
+    deepParticle.update(scrollTracker, viewportWidth, viewportHeight, 16);
+    focalParticle.update(scrollTracker, viewportWidth, viewportHeight, 16);
+
+    // O deslocamento no plano focal deve ser significativamente maior que no fundo
+    const deepDeltaY = Math.abs(deepParticle.vy);
+    const focalDeltaY = Math.abs(focalParticle.vy);
+    expect(focalDeltaY).toBeGreaterThan(deepDeltaY);
+  });
+
+  it('is repelled radially by active mouse cursor within influence radius', () => {
+    const particle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+      x: 300,
+      y: 300,
+      z: 0.8,
+    });
+
+    const mouseTracker = {
+      scrollVelocity: 0,
+      isMouseActive: true,
+      mouseX: 280, // Cursor a 28px de distância
+      mouseY: 280,
+    };
+
+    particle.update(mouseTracker, viewportWidth, viewportHeight, 16);
+
+    // Partícula deve ser empurrada para longe do cursor (x > 300 e y > 300)
+    expect(particle.vx).toBeGreaterThan(0);
+    expect(particle.vy).toBeGreaterThan(0);
+  });
+
+  it('wraps around toroidally when exceeding viewport boundaries', () => {
+    const particle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+      x: viewportWidth + 150, // Ultrapassou a borda direita
+      y: 400,
+      z: 0.5,
+    });
+
+    const tracker = {
+      scrollVelocity: 0,
+      isMouseActive: false,
+      mouseX: 0,
+      mouseY: 0,
+    };
+
+    particle.update(tracker, viewportWidth, viewportHeight, 16);
+
+    // Deve ter reaparecido na margem esquerda (próximo de 0 ou ligeiramente negativo)
+    expect(particle.x).toBeLessThan(viewportWidth / 2);
+  });
+
+  it('calculates render scale incorporating depth z and optical zoom', () => {
+    const particle = new MicroalgaParticle({
+      viewportWidth,
+      viewportHeight,
+      z: 0.8,
+    });
+
+    const normalScale = particle.getRenderScale(1.0);
+    const zoomedScale = particle.getRenderScale(1.4);
+
+    expect(zoomedScale).toBeGreaterThan(normalScale);
   });
 });
