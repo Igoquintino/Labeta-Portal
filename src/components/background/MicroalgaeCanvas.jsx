@@ -8,6 +8,7 @@
 import { useEffect, useRef } from 'react';
 import { ParticleSystem } from './engine/ParticleSystem';
 import { useTheme } from '../../context/useTheme';
+import { useMicroscope } from '../../context/useMicroscope';
 import './MicroalgaeCanvas.css';
 
 export function MicroalgaeCanvas({
@@ -19,6 +20,24 @@ export function MicroalgaeCanvas({
 }) {
   const canvasRef = useRef(null);
   const systemRef = useRef(null);
+
+  // Consome configurações da ocular via MicroscopeContext com fallback seguro
+  let activeMode = mode;
+  let activeZoom = zoom;
+  let activeIntensity = intensity;
+  let activePaused = isPaused;
+
+  try {
+    const microscope = useMicroscope();
+    if (microscope) {
+      activeMode = microscope.mode ?? mode;
+      activeZoom = microscope.zoom ?? zoom;
+      activeIntensity = microscope.intensity ?? intensity;
+      activePaused = microscope.isPaused ?? isPaused;
+    }
+  } catch {
+    // Utiliza props padrão caso renderizado fora de MicroscopeProvider
+  }
 
   // Consome tema com fallback seguro se testado isoladamente
   let currentTheme = 'dark';
@@ -45,8 +64,8 @@ export function MicroalgaeCanvas({
     // Inicializa a engine
     const system = new ParticleSystem(canvas, {
       theme: currentTheme,
-      zoom,
-      intensity,
+      zoom: activeZoom,
+      intensity: activeIntensity,
       reducedMotion: initialReducedMotion,
     });
     systemRef.current = system;
@@ -64,7 +83,7 @@ export function MicroalgaeCanvas({
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
         system.pause();
-      } else if (!isPaused) {
+      } else if (!activePaused) {
         system.resume();
       }
     };
@@ -101,24 +120,24 @@ export function MicroalgaeCanvas({
   // Sincronização de zoom da ocular
   useEffect(() => {
     if (systemRef.current) {
-      systemRef.current.setZoom(zoom);
+      systemRef.current.setZoom(activeZoom);
     }
-  }, [zoom]);
+  }, [activeZoom]);
 
   // Sincronização de pausa manual
   useEffect(() => {
     if (systemRef.current) {
-      if (isPaused) {
+      if (activePaused) {
         systemRef.current.pause();
       } else {
         systemRef.current.resume();
       }
     }
-  }, [isPaused]);
+  }, [activePaused]);
 
   return (
     <div
-      className={`microscope-container microscope-${mode} ${className}`}
+      className={`microscope-container microscope-${activeMode} ${className}`}
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="microscope-canvas" />
