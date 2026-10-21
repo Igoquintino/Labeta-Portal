@@ -32,6 +32,10 @@ describe('Light Mode Design Tokens (theme.css)', () => {
     expect(lightBlock).toContain('--text-secondary:');
     expect(lightBlock).toContain('--color-gold:');
     expect(lightBlock).toContain('--color-accent:');
+    expect(lightBlock).toContain('--microscope-diatom:');
+    expect(lightBlock).toContain('--microscope-chlorophyll:');
+    expect(lightBlock).toContain('--microscope-cyan:');
+    expect(lightBlock).toContain('--microscope-fluid-opacity:');
   });
 
   it('overrides borders and shadows for soft diffuse depth in Light Mode', () => {

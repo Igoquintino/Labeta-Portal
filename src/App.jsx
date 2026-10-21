@@ -13,6 +13,8 @@ import { RouteLoadingSkeleton } from './components/common/RouteLoadingSkeleton';
 import { ContactModal } from './components/modals/ContactModal';
 import { SpotlightSearch } from './components/modals/SpotlightSearch';
 import { FloatingAdminBar } from './components/admin/FloatingAdminBar';
+import { MicroscopeProvider } from './context/MicroscopeContext';
+import { MicroalgaeCanvas } from './components/background/MicroalgaeCanvas';
 
 // Rotas carregadas sob demanda (code-splitting com React.lazy)
 const Home = lazy(() => import('./pages/Home').then((m) => ({ default: m.Home })));
@@ -44,56 +46,61 @@ export default function App() {
   }, []);
 
   return (
-    <div className="app-layout">
-      {/* Acessibilidade: Pular para o Conteúdo Principal */}
-      <a href="#main-content" className="skip-link">
-        Pular para o conteúdo principal
-      </a>
+    <MicroscopeProvider>
+      <div className="app-layout">
+        {/* Camada Interativa de Fundo: Lâmina Viva (Microscopia Amazônica) */}
+        <MicroalgaeCanvas />
 
-      {/* Barra de Navegação */}
-      <Navbar
-        onOpenSearch={() => setIsSearchOpen(true)}
-        onOpenContact={() => setIsContactOpen(true)}
-      />
+        {/* Acessibilidade: Pular para o Conteúdo Principal */}
+        <a href="#main-content" className="skip-link">
+          Pular para o conteúdo principal
+        </a>
 
-      {/* Roteamento com Lazy Loading e Suspense */}
-      <Suspense fallback={<RouteLoadingSkeleton />}>
-        <Routes>
-          {/* [ROTA 1] / — Home */}
-          <Route path="/" element={<Home />} />
-          {/* [ROTA 2] /trabalhos — Works */}
-          <Route path="/trabalhos" element={<Works />} />
-          {/* [ROTA 3] /pessoas — People */}
-          <Route path="/pessoas" element={<People />} />
-          {/* [ROTA 4] /laboratorio — Lab */}
-          <Route path="/laboratorio" element={<Lab />} />
-          {/* [ROTA 5] /agendamento — Booking */}
-          <Route path="/agendamento" element={<Booking />} />
-          {/* [ROTA 6] /noticias — News */}
-          <Route path="/noticias" element={<News />} />
-          {/* [ROTA 7] /admin — AdminLogin (acesso discreto à gestão) */}
-          <Route path="/admin" element={<AdminLogin />} />
-          {/* [ROTA 8] * — fallback para Home */}
-          <Route path="*" element={<Home />} />
-        </Routes>
-      </Suspense>
+        {/* Barra de Navegação */}
+        <Navbar
+          onOpenSearch={() => setIsSearchOpen(true)}
+          onOpenContact={() => setIsContactOpen(true)}
+        />
 
-      {/* Rodapé Institucional */}
-      <Footer />
+        {/* Roteamento com Lazy Loading e Suspense */}
+        <Suspense fallback={<RouteLoadingSkeleton />}>
+          <Routes>
+            {/* [ROTA 1] / — Home */}
+            <Route path="/" element={<Home />} />
+            {/* [ROTA 2] /trabalhos — Works */}
+            <Route path="/trabalhos" element={<Works />} />
+            {/* [ROTA 3] /pessoas — People */}
+            <Route path="/pessoas" element={<People />} />
+            {/* [ROTA 4] /laboratorio — Lab */}
+            <Route path="/laboratorio" element={<Lab />} />
+            {/* [ROTA 5] /agendamento — Booking */}
+            <Route path="/agendamento" element={<Booking />} />
+            {/* [ROTA 6] /noticias — News */}
+            <Route path="/noticias" element={<News />} />
+            {/* [ROTA 7] /admin — AdminLogin (acesso discreto à gestão) */}
+            <Route path="/admin" element={<AdminLogin />} />
+            {/* [ROTA 8] * — fallback para Home */}
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </Suspense>
 
-      {/* Modais Globais */}
-      <ContactModal
-        isOpen={isContactOpen}
-        onClose={() => setIsContactOpen(false)}
-      />
+        {/* Rodapé Institucional */}
+        <Footer />
 
-      <SpotlightSearch
-        isOpen={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-      />
+        {/* Modais Globais */}
+        <ContactModal
+          isOpen={isContactOpen}
+          onClose={() => setIsContactOpen(false)}
+        />
 
-      {/* Barra de Status e Ações do Administrador (Visível apenas se autenticado) */}
-      <FloatingAdminBar />
-    </div>
+        <SpotlightSearch
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
+
+        {/* Barra de Status e Ações do Administrador (Visível apenas se autenticado) */}
+        <FloatingAdminBar />
+      </div>
+    </MicroscopeProvider>
   );
 }

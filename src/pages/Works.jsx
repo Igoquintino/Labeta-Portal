@@ -19,11 +19,33 @@ import { FilterTabs } from '../components/common/FilterTabs';
 import { CardAdminActions } from '../components/common/CardAdminActions';
 import { DeleteConfirmDialog } from '../components/common/DeleteConfirmDialog';
 import { fetchWorks, createWork, updateWork, deleteWork } from '../services/worksService';
+import { useMicroscope } from '../context/useMicroscope';
 import './Works.css';
 
 /** [FUNÇÃO] Works — renderiza filtros, busca e cards de trabalhos. */
 export function Works() {
     const { isAdmin } = useAuth();
+
+    // Calibração óptica: modo ambiente para foco na leitura científica
+    let setMicroscopeConfig = null;
+    let resetMicroscopeConfig = null;
+    try {
+        const microscope = useMicroscope();
+        setMicroscopeConfig = microscope.setMicroscopeConfig;
+        resetMicroscopeConfig = microscope.resetMicroscopeConfig;
+    } catch {
+        // Fallback seguro caso montado isoladamente em testes
+    }
+
+    useEffect(() => {
+        if (setMicroscopeConfig) {
+            setMicroscopeConfig({ mode: 'ambient', zoom: 1.0, intensity: 0.7 });
+        }
+        return () => {
+            if (resetMicroscopeConfig) resetMicroscopeConfig();
+        };
+    }, [setMicroscopeConfig, resetMicroscopeConfig]);
+
     // [ESTADO] works — lista reativa de produções científicas
     const [works, setWorks] = useState([]);
     // [ESTADO] loadingWorks — indicador de carregamento

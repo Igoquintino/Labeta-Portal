@@ -18,11 +18,33 @@ import { Badge } from '../components/common/Badge';
 import { CardAdminActions } from '../components/common/CardAdminActions';
 import { DeleteConfirmDialog } from '../components/common/DeleteConfirmDialog';
 import { fetchEquipment, createEquipment, updateEquipment, deleteEquipment } from '../services/equipmentService';
+import { useMicroscope } from '../context/useMicroscope';
 import './Booking.css';
 
 /** [FUNÇÃO] Booking — renderiza abas Catálogo/Agenda e modais de gestão. */
 export function Booking() {
     const { isAdmin } = useAuth();
+
+    // Calibração óptica: modo minimalista para preenchimento de formulários e agenda
+    let setMicroscopeConfig = null;
+    let resetMicroscopeConfig = null;
+    try {
+        const microscope = useMicroscope();
+        setMicroscopeConfig = microscope.setMicroscopeConfig;
+        resetMicroscopeConfig = microscope.resetMicroscopeConfig;
+    } catch {
+        // Fallback seguro caso montado isoladamente em testes
+    }
+
+    useEffect(() => {
+        if (setMicroscopeConfig) {
+            setMicroscopeConfig({ mode: 'minimal', zoom: 0.9, intensity: 0.4 });
+        }
+        return () => {
+            if (resetMicroscopeConfig) resetMicroscopeConfig();
+        };
+    }, [setMicroscopeConfig, resetMicroscopeConfig]);
+
     // [ESTADO] equipmentList — lista reativa de equipamentos
     const [equipmentList, setEquipmentList] = useState([]);
     // [ESTADO] loadingEquipment — indicador de carregamento
