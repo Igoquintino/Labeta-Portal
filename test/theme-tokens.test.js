@@ -14,6 +14,10 @@ describe('Design Tokens Architecture (theme.css)', () => {
     expect(themeCss).toContain('--bg-surface-elevated:');
     expect(themeCss).toContain('--text-primary:');
     expect(themeCss).toContain('--text-secondary:');
+    expect(themeCss).toContain('--microscope-diatom:');
+    expect(themeCss).toContain('--microscope-chlorophyll:');
+    expect(themeCss).toContain('--microscope-cyan:');
+    expect(themeCss).toContain('--microscope-fluid-opacity:');
   });
 
   it('defines status tokens for availability, maintenance and busy states', () => {
@@ -36,6 +40,7 @@ describe('Design Tokens Architecture (theme.css)', () => {
   });
 
   it('defines standardized z-index layers', () => {
+    expect(themeCss).toContain('--z-microscope: 0');
     expect(themeCss).toContain('--z-base:');
     expect(themeCss).toContain('--z-sticky:');
     expect(themeCss).toContain('--z-header:');

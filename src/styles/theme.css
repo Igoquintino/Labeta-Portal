@@ -48,6 +48,12 @@
     --border-accent: rgba(78, 168, 110, 0.35);
     --color-danger: var(--color-danger-500);
 
+    /* Tokens da Lâmina Viva (Microscopia Amazônica - Modo Escuro) */
+    --microscope-diatom: var(--color-gold-400);
+    --microscope-chlorophyll: var(--color-green-500);
+    --microscope-cyan: var(--color-blue-400);
+    --microscope-fluid-opacity: 0.35;
+
     /* Tokens Semânticos de Status Operacional */
     --status-available-bg: rgba(78, 168, 110, 0.15);
     --status-available-text: var(--color-green-500);
@@ -84,6 +90,7 @@
     --radius-full: 9999px;
 
     /* Camadas Z-Index Padronizadas */
+    --z-microscope: 0; /* Camada de Fundo Interativo (Lâmina Viva) */
     --z-base: 1;
     --z-sticky: 100;
     --z-header: 500;
@@ -131,6 +138,12 @@
     --accent-gold: #9E6700;
     --color-accent: #1B7340; /* Verde Clorofila Intenso (contraste 4.8:1) */
     --accent-chlorophyll: #1B7340;
+
+    /* Tokens da Lâmina Viva (Microscopia Amazônica - Modo Claro) */
+    --microscope-diatom: #9E6700;
+    --microscope-chlorophyll: #165B33;
+    --microscope-cyan: #0284C7;
+    --microscope-fluid-opacity: 0.18;
 
     /* Bordas e Contornos Diurnos */
     --border-subtle: rgba(22, 91, 51, 0.12);
