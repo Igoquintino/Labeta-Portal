@@ -1,0 +1,60 @@
+/* ==========================================================================
+   [ARQUIVO] MicroalgaeCanvas.css
+   Descrição: Estilos da Lâmina Viva (Microscopia Ficológica Interativa).
+   Posicionamento fixo de fundo (z-index: 0), vinheta da ocular e modos de intensidade.
+   ========================================================================== */
+
+.microscope-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: var(--z-microscope, 0);
+  overflow: hidden;
+  transition: opacity 0.4s ease;
+}
+
+/* Elemento Canvas Acelerado por GPU */
+.microscope-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Vinheta Óptica Suave da Ocular de Microscópio */
+.microscope-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 60%, rgba(12, 18, 15, 0.4) 100%);
+  mix-blend-mode: multiply;
+  transition: background 0.4s ease;
+}
+
+[data-theme='light'] .microscope-vignette {
+  background: radial-gradient(circle at center, transparent 68%, rgba(16, 36, 24, 0.06) 100%);
+  mix-blend-mode: normal;
+}
+
+/* Modos de Intensidade da Lâmina */
+.microscope-cinematic {
+  opacity: 1;
+}
+
+.microscope-ambient {
+  opacity: 0.75;
+}
+
+.microscope-minimal {
+  opacity: 0.4;
+}
+
+/* Respeito a Movimento Reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .microscope-container {
+    transition: none;
+  }
+}
